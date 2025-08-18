@@ -1,0 +1,120 @@
+.calendar {
+  padding: 30px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.days, .dates {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px; /* เพิ่มช่องว่างระหว่างกล่องวันที่ */
+}
+
+.date {
+  padding: 20px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  position: relative; /* เปลี่ยนเป็น relative */
+  font-size: 16px;
+  min-height: 120px; /* เพิ่มความสูงขั้นต่ำให้กล่องวันที่ */
+}
+
+.holiday {
+  background-color: #FFDDC1;
+  color: #FF5733;
+}
+
+.holiday-name {
+  font-size: 12px;
+}
+
+.note {
+  font-size: 10px;
+  /* background-color: #FFD700; */
+  border-radius: 4px;
+  padding: 5px;
+  margin-top: 5px; /* เพิ่มช่องว่างด้านบน */
+  color: #000;
+}
+
+.empty {
+  background-color: transparent;
+  border: none;
+}
+
+.button {
+  padding: 10px 15px; /* เพิ่มขนาดปุ่ม */
+  border: none;
+  background-color: #007BFF;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+/* Media Queries สำหรับมือถือ */
+@media (max-width: 768px) {
+  .days, .dates {
+    grid-template-columns: repeat(4, 1fr); /* ลดจำนวนคอลัมน์ลง */
+  }
+  
+  .date {
+    padding: 15px; /* ปรับ padding */
+    font-size: 14px; /* ลดขนาดฟอนต์ */
+    min-height: 80px; /* ลดความสูงกล่องวันที่ในจอเล็ก */
+  }
+
+  .header h2 {
+    font-size: 16px; /* ลดขนาดหัวเรื่อง */
+  }
+
+  .button {
+    padding: 8px 12px; /* ลดขนาดปุ่ม */
+  }
+}
+
+/* Media Queries สำหรับหน้าจอเล็กมาก (มือถือขนาดเล็ก) */
+@media (max-width: 480px) {
+  .days, .dates {
+    grid-template-columns: repeat(2, 1fr); /* แสดงผลใน 2 คอลัมน์ */
+  }
+
+  .date {
+    padding: 10px;
+    font-size: 12px; /* ลดขนาดฟอนต์เพิ่มเติม */
+    min-height: 60px; /* ปรับความสูงให้เล็กลงในหน้าจอมือถือขนาดเล็ก */
+  }
+
+  .header h2 {
+    font-size: 14px;
+  }
+
+  .button {
+    padding: 6px 10px;
+  }
+}
+
+.square-card {
+  border-radius: 0; /* กำหนดมุมให้เหลี่ยม */
+}
+
+.current-day {
+  background-color: #f39c12; /* เปลี่ยนสีพื้นหลัง */
+  font-weight: bold;         /* ทำให้ตัวหนา */
+  border-radius: 50%;        /* ทำให้มีขอบมน */
+  color: #ffffff;            /* สีตัวหนังสือ */
+}

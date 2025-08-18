@@ -1,0 +1,21 @@
+.custom-hover {
+    text-decoration: none; /* Remove underline */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .custom-hover .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .custom-hover:hover .card {
+    transform: scale(1.05); /* Scale the card slightly */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a shadow */
+  }
+  
+  /* Adjust scaling on smaller screens */
+  @media (max-width: 576px) {
+    .custom-hover:hover .card {
+      transform: scale(1.02); /* Slightly smaller hover effect for mobile */
+    }
+  }
+  

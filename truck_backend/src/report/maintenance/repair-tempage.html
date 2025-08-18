@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8" />
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="repair-tempage.css">
+
+    <title>แบบฟอร์มใบแจ้ง/สั่งซ่อมรถยนต์</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 10mm;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 8pt;
+            /* ใช้ pt แทน px สำหรับ PDF หรือเอกสารที่ต้องการขนาดจริง */
+        }
+
+        .report-container {
+            width: 1500px;
+            height: auto;
+            background-color: #fff;
+            border: 2px solid #000;
+            box-sizing: border-box;
+            /* เพิ่ม padding-top ตรงนี้ */
+            padding: 30px 40px;
+            /* สมมติว่ามี padding เดิม */
+            padding-top: 5px;
+            /* เพิ่มค่า padding-top ให้มากขึ้นกว่าเดิม เช่น 40px */
+            /* หรือถ้าต้องการเพิ่มแค่ top อย่างเดียว: */
+            /* padding-top: 10px; */
+            /* เพิ่มระยะห่างด้านบน 10px */
+        }
+
+        h4 {
+            text-align: center;
+            margin: 2px 0;
+            padding: 0;
+            /* เพิ่ม padding: 0 เพื่อความแน่ใจ */
+        }
+
+        .section {
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+
+
+        .center {
+            text-align: center;
+        }
+
+        p {
+            margin: 6px 0;
+            line-height: 1.5;
+            font-size: 11px;
+        }
+
+        strong {
+            font-weight: bold;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        span {
+            line-height: 1.5;
+            font-size: 11px;
+        }
+
+
+        .right {
+            text-align: right;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            /* จัดให้โลโก้และข้อความอยู่กึ่งกลางแนวตั้ง */
+            gap: 1px;
+            /* ระยะห่างระหว่างโลโก้กับข้อความ */
+            margin-bottom: 1px;
+        }
+
+        .header img {
+            width: 150px;
+            /* **ปรับขนาดโลโก้ให้เหมาะสมกับเอกสาร A4** */
+            height: auto;
+            margin-right: 15px;
+            /* เพิ่มระยะห่างด้านขวาของโลโก้ */
+        }
+
+        .header-text {
+            flex: 1;
+        }
+
+        .header-text h4 {
+            margin: 4px 0;
+            /* ลดช่องว่างแต่ละบรรทัด */
+        }
+
+        .center {
+            font-weight: bold;
+        }
+
+        .front-NCL {
+            font-family: 'Sarabun', sans-serif;
+            font-size: 12pt;
+        }
+
+        .repair-details {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+    </style>
+
+    <style>
+        .custom-checkbox {
+            position: relative;
+            padding-left: 0;
+            /* ไม่ต้อง padding ซ้าย เพราะเราใช้ flex แล้ว */
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+        }
+
+        .custom-checkbox input {
+            position: absolute;
+            opacity: 0;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            position: relative;
+            height: 14px;
+            width: 14px;
+            border: 1px solid #000;
+            display: inline-block;
+            line-height: 14px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .custom-checkbox input:checked+.checkmark::after {
+            content: "✔";
+            color: black;
+            position: absolute;
+            top: -1px;
+            left: 1px;
+            font-size: 12px;
+        }
+
+        .clase-text {
+            margin: 6px 0;
+            line-height: 1.5;
+            font-size: 11px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="report-container">
+        <div class="header">
+            <img src="https://admin.nclthailand.com/uploads/ncl_new_logo_2018_fda5840d3e.jpg" alt="NCL Logo">
+            <div class="header-text">
+                <h4 class="front-NCL">บริษัท เอ็นซีแอล อินเตอร์เนชั่นแนล โลจิสติกส์ จำกัด (มหาชน)</h4>
+                <h4 class="front-NCL">NCL INTERNATIONAL LOGISTICS PUBLIC COMPANY LIMITED</h4>
+            </div>
+        </div>
+
+        <div class="">
+            <h4 class="center front-NCL">แบบฟอร์มใบแจ้ง/สั่งซ่อมรถยนต์</h4>
+        </div>
+
+        <!-- 1 ส่วนของ เรียน ฝ่ายจัดรถ -->
+
+        <div class="section right">
+            <p><strong>เลขที่ใบแจ้งซ่อม:</strong> {{request_no}}</p>
+            <p><strong>วันที่แจ้งซ่อม:</strong> {{request_date}}</p>
+        </div>
+        <style>
+            .requestName-distance-line {
+                margin-left: 30px;
+            }
+
+            .requestName-line {
+                display: inline-block;
+                border-bottom: 1px dotted black;
+                width: 200px;
+                text-align: center;
+                position: relative;
+                top: -3px;
+                /* ปรับให้เส้นอยู่ต่ำลงเล็กน้อย */
+                /* margin-left: 0 8px; */
+            }
+
+            .request2-line {
+                display: inline-block;
+                border-bottom: 1px dotted black;
+                width: 70px;
+                text-align: center;
+                position: relative;
+                top: -3px;
+                /* ปรับให้เส้นอยู่ต่ำลงเล็กน้อย */
+                margin-left: 0 8px;
+            }
+        </style>
+        <div class="section">
+            <p><strong class=""> 1. เรียน แผนกจัดรถ </strong></p>
+
+            <p class="requestName-distance-line">
+                <span>ข้าพเจ้า</span> <span class="requestName-line">{{request_emp_name}}</span>
+                <span>ตำแหน่ง</span> <span class="requestName-line">{{request_emp_name}}</span>
+            </p>
+            <p>
+                <span>มีความประสงค์ขอแจ้งซ่อมรถเลขทะเบียน</span><span class="request2-line">{{reg_number}}</span>
+                <span>เลขไมล์</span><span class="request2-line">{{car_mileage}}</span>
+                <span>สาขา</span><span class="request2-line">{{branch_name}}</span>
+                <span>ประเภทรถ</span> <span class="request2-line">{{car_type_name}}</span>
+                <span>ดังนี้</span>
+            </p>
+        </div>
+
+        <div class="section ">
+            <!-- ตารางรายการซ่อม -->
+            {{systemsName}}
+        </div>
+
+        <!-- ชื่อ วันที่ ผู้แจ้ง -->
+        <div class="section right">
+            <style>
+                .signature-line {
+                    display: inline-block;
+                    border-bottom: 1px dotted black;
+                    width: 240px;
+                    text-align: center;
+                    vertical-align: middle;
+                    position: relative;
+                }
+
+                .signature-line img {
+                    position: absolute;
+                    top: -50px;
+                    /* ทับขึ้นไปด้านบน */
+                    left: 50%;
+                    transform: translateX(-50%);
+                    max-height: 60px;
+                    z-index: 2;
+                    pointer-events: none;
+                }
+
+                .date-line {
+                    display: inline-block;
+                    border-bottom: 1px dotted black;
+                    width: 180px;
+                    text-align: center;
+                    vertical-align: middle;
+                    margin-left: 1px;
+                }
+
+        
+            </style>
+
+            <div class="clase-text">
+                <span>ลงชื่อ</span>
+                <span class="signature-line">
+                   {{request_signature}}
+                </span>
+                <span>ผู้แจ้งซ่อม</span>
+            </div>
+
+            <div class="clase-text">
+                <span>วันที่</span>
+                <span class="date-line">{{request_date}}</span>
+            </div>
+        </div>
+
+
+
+        <!-- 2. แผนกซ่อมบำรุง -->
+        <style>
+            .plan-date-line {
+                display: inline-block;
+                border-bottom: 1px dotted black;
+                width: 240px;
+                text-align: center;
+                position: relative;
+                top: -3px;
+                /* ปรับให้เส้นอยู่ต่ำลงเล็กน้อย */
+                margin-left: 9px;
+            }
+
+            .plan-time-line {
+                display: inline-block;
+                border-bottom: 1px dotted black;
+                width: 60px;
+                text-align: center;
+                position: relative;
+                top: -3px;
+                /* ปรับให้เส้นอยู่ต่ำลงเล็กน้อย */
+                margin-left: 8px;
+            }
+        </style>
+
+        <div class="section">
+            <div class="clase-text"><strong class=""> 2. เรียน แผนกซ่อมบำรุง</strong></div>
+
+            <div class="requestName-distance-line clase-text" style="display: flex; align-items: center; gap: 0.5em;">
+                <label class="custom-checkbox">
+                    <input type="checkbox" {{isChecked_Planning_available}} />
+                    <span class="checkmark"></span>
+                </label>
+                <span class="">
+                    รถว่างสามารถเข้าซ่อมได้ทันที
+                </span>
+            </div>
+
+            <div class="requestName-distance-line clase-text" style="display: flex; align-items: center; gap: 0.5em;">
+                <label class="custom-checkbox">
+                    <input type="checkbox" {{isChecked_Planning_not_available}} />
+                    <span class="checkmark"></span>
+                </label>
+                <span class="">
+                    รถไม่ว่าง จะว่างตั้งแต่ วันที่
+                </span>
+                <span class="plan-date-line">{{planning_event_date}}</span>
+                <span>เวลา</span>
+                <span class="plan-time-line">{{planning_event_time}}</span>
+
+            </div>
+        </div>
+
+        <div class="section right">
+            <div class="clase-text">
+                <span>ลงชื่อ</span>
+                <span class="signature-line">
+                   {{planning_signature}}
+                </span>
+                <span>ผู้จัดรถ</span>
+            </div>
+            <div class="clase-text">
+                <span>วันที่</span>
+                <span class="date-line">{{planning_created_at_dispatch}}</span>
+            </div>
+        </div>
+
+        <!-- 3. ความคิดเห็นของแผนกซ่อมบำรุง -->
+        <style>
+            .al-note-line {
+                display: inline-block;
+                border-bottom: 1px dotted black;
+                width: 550px;
+                text-align: left;
+                position: relative;
+                top: -3px;
+                /* ปรับให้เส้นอยู่ต่ำลงเล็กน้อย */
+                margin-left: 9px;
+            }
+
+            .company-line {
+                display: inline-block;
+                border-bottom: 1px dotted black;
+                width: 350px;
+                text-align: center;
+                position: relative;
+                top: -3px;
+                /* ปรับให้เส้นอยู่ต่ำลงเล็กน้อย */
+                margin-left: 9px;
+            }
+
+            .total-line {
+                display: inline-block;
+                border-bottom: 1px dotted black;
+                width: 80px;
+                text-align: center;
+                position: relative;
+                top: -3px;
+                /* ปรับให้เส้นอยู่ต่ำลงเล็กน้อย */
+                margin-left: 9px;
+            }
+
+            .signature31-line {
+                display: inline-block;
+                border-bottom: 1px dotted black;
+                width: 210px;
+                text-align: center;
+                position: relative;
+                top: -3px;
+                /* ปรับให้เส้นอยู่ต่ำลงเล็กน้อย */
+                margin-left: 8px;
+            }
+
+            .signature32-line {
+                display: inline-block;
+                border-bottom: 1px dotted black;
+                width: 165px;
+                text-align: center;
+                position: relative;
+                top: -3px;
+                /* ปรับให้เส้นอยู่ต่ำลงเล็กน้อย */
+                margin-left: 8px;
+            }
+        </style>
+        <div class="section">
+            <div class="clase-text" style="display: flex; align-items: center; margin-bottom: 0.5em;  gap: 0.5em;">
+                <strong class=""> 3. ความคิดเห็นของแผนกซ่อมบำรุง</strong>
+                <label class="custom-checkbox">
+                    <input type="checkbox" {{is_pm}} />
+                    <span class="checkmark"></span>
+                </label>
+                <strong>PM</strong>
+                <span>(ซ่อมก่อนเสีย)</span>
+                <label class="custom-checkbox">
+                    <input type="checkbox" {{is_cm}} />
+                    <span class="checkmark"></span>
+                </label>
+                <strong>CM</strong>
+                <span>(เสียก่อนซ่อน)</span>
+            </div>
+
+            <div class="requestName-distance-line clase-text"
+                style="display: flex; align-items: center; margin-bottom: 0.5em;  gap: 0.5em;">
+                <label class="custom-checkbox">
+                    <input type="checkbox" {{urgent_repair}} />
+                    <span class="checkmark"></span>
+                </label>
+                <span class="">
+                    3.1 จำเป็นต้องซ่อมด่วนทันที ตั่งแต่
+                </span>
+                <span class="plan-date-line">
+                    {{analysis_date}} {{analysis_time}}
+                </span>
+            </div>
+            <div class="requestName-distance-line clase-text">
+                <span class="">
+                    เนื่องจาก
+                </span>
+                <span class="al-note-line">
+                    {{analysis_remark}}
+                </span>
+            </div>
+
+            <div class="requestName-distance-line clase-text"
+                style="display: flex; align-items: center; margin-bottom: 0.5em;  gap: 0.5em;">
+                <label class="custom-checkbox">
+                    <input type="checkbox" {{inhouse_repair}} />
+                    <span class="checkmark"></span>
+                </label>
+                <span class="">
+                    3.2 แผนกช่าง สามารถซ่อมเองได้
+                </span>
+            </div>
+
+            <div class="requestName-distance-line clase-text"
+                style="display: flex; align-items: center; margin-bottom: 0.5em;  gap: 0.5em;">
+                <label class="custom-checkbox">
+                    <input type="checkbox" {{send_to_garage}} />
+                    <span class="checkmark"></span>
+                </label>
+                <span class="">
+                    ต้องส่งอู่ / บริษัท
+                </span>
+                <span class="company-line">{{vendor_names_all}}</span>
+                <span>ซ่อม ราคา</span>
+                <span class="total-line">{{total_with_vat}}</span>
+            </div>
+        </div>
+
+        <div class="section right">
+            <div class="clase-text">
+                <span>ลงชื่อ</span>
+                <span class="signature-line">
+                    {{analysis_signature}}
+                </span>
+                <span>ผู้ตรวจเช็ครถ</span>
+            </div>
+            <div class="clase-text">
+                <span>วันที่</span>
+                <span class="date-line">{{planning_created_at_dispatch}}</span>
+            </div>
+        </div>
+        <div class="section right">
+            <div class="clase-text">
+                <span>ลงชื่อ</span>
+                <span class="signature-line">
+                    {{ana_approver_signature}}
+                </span>
+                <span>หัวหน้าแผนกซ่อมบำรุง</span>
+            </div>
+            <div class="clase-text">
+                <span>วันที่</span>
+                <span class="date-line">{{planning_created_at_dispatch}}</span>
+            </div>
+        </div>
+
+        <!-- 4  -->
+        <style>
+            /* ส่วนที่คุณให้มาและปรับแก้ */
+            .manager-flex {
+                /* padding: flex; */
+                /* **แก้ไข: นี่คือค่าที่ไม่ถูกต้อง ลบออก** */
+                display: flex;
+                /* **เพิ่ม: เพื่อเปิดใช้งาน Flexbox** */
+                justify-content: space-between;
+                /* **เพิ่ม: จัดช่องว่างระหว่างกลุ่ม checkbox และกลุ่ม signature** */
+                align-items: flex-start;
+                /* **เพิ่ม: จัดให้ content ชิดด้านบนในแนวตั้ง** */
+                margin-bottom: 10px;
+                margin-top: 10px;
+            }
+        </style>
+        <div class="section">
+            <div class="clase-text">
+                <strong>4. เรียน ผู้จัดการฝ่ายขนส่งและคลังสินค้า</strong>
+            </div>
+            <div class="requestName-distance-line clase-text">
+                <span>
+                    เพื่อโปรดพิจารณา ทั้งนี้รถยนต์คันดังกล่าวมีประวัติการซ่อมดังนี้
+                </span>
+            </div>
+        </div>
+
+        <div class="manager-flex">
+            <div class="checkbox-group">
+                <div class="requestName-distance-line clase-text">
+                    <label class="custom-checkbox" style="display: flex; align-items: center; gap: 0.5em;">
+                        <input type="checkbox" {{approval_true}} />
+                        <span class="checkmark"></span>
+                        <strong>อนุมัติ</strong>
+                    </label>
+                </div>
+
+                <div class="requestName-distance-line clase-text">
+                    <label class="custom-checkbox" style="display: flex; align-items: center; gap: 0.5em;">
+                        <input type="checkbox" {{approval_false}} />
+                        <span class="checkmark"></span>
+                        <strong>ไม่อนุมัติ</strong>
+                    </label>
+                </div>
+
+
+            </div>
+
+            <div class="section right signature-date-group">
+                <div class="clase-text">
+                    <span>ลงชื่อ</span>
+                    <span class="signature-line">
+                       {{request_approver}}
+                    </span>
+                    <span>ผู้จัดการ</span>
+                </div>
+                <div class="clase-text">
+                    <span>วันที่</span>
+                    <span class="date-line">{{planning_created_at_dispatch}}</span>
+                </div>
+            </div>
+        </div>
+
+</body>
+
+</html>

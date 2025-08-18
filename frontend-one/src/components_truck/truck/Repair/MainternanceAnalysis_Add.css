@@ -1,0 +1,16 @@
+.compact-input {
+  padding: 0.15rem 0.35rem !important; /* ลด padding */
+  font-size: 0.75rem !important;       /* ลดขนาดตัวอักษร */
+  height: 26px !important;             /* ความสูงของ input */
+}
+
+.compact-label {
+  font-size: 0.7rem !important;        /* ลดขนาด label */
+  margin-bottom: 2px;                  /* ลดช่องว่าง label กับ input */
+}
+
+.compact-select {
+  padding: 0.15rem 0.35rem !important;
+  font-size: 0.75rem !important;
+  height: 26px !important;
+}

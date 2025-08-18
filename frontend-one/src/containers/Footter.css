@@ -1,0 +1,38 @@
+/* Footer styling */
+.footer {
+    background-color: #f8f9fa;
+    color: #343a40;
+  }
+  
+  .footer-logo {
+    max-width: 150px;
+  }
+  
+  .footer-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  
+  .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .social-icon {
+    text-decoration: none;
+    color: #343a40;
+    font-size: 1.5rem;
+  }
+  
+  .social-icon:hover {
+    color: #007bff;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .footer {
+      padding: 1rem;
+    }
+  }
+  

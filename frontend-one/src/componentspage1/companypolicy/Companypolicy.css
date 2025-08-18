@@ -1,0 +1,12 @@
+.custom-link {
+    color: #330066; /* Original color */
+    text-decoration: none; /* No underline by default */
+    transition: color 0.3s ease, text-decoration 0.3s ease; /* Smooth transition */
+  }
+  
+  .custom-link:hover {
+    color: #ff6347; /* Change to a different color on hover */
+    text-decoration: underline; /* Adds underline when hovered */
+    transform: scale(1.05); /* Slight scaling effect */
+  }
+  

@@ -1,0 +1,33 @@
+.custom-checkbox {
+  position: relative;
+  padding-left: 24px;
+  cursor: pointer;
+  display: inline-block;
+  user-select: none;
+}
+
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 16px;
+  width: 16px;
+  border: 1px solid #000;
+}
+
+.custom-checkbox input:checked ~ .checkmark::after {
+  content: "✔";
+  color: black;
+  font-size: 14px;
+  position: absolute;
+  left: 1px;
+  top: -1px;
+}

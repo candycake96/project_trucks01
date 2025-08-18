@@ -1,0 +1,196 @@
+.button-container-td-mileage {
+    display: flex;              /* ใช้ flex เพื่อให้ปุ่มเรียงกันในแถว */
+    gap: 2px;                  /* ระยะห่างระหว่างปุ่ม */
+    justify-content: flex-start; /* จัดปุ่มให้อยู่ที่ซ้าย */
+    align-items: center;      /* จัดตำแหน่งแนวตั้งให้ตรงกลาง */
+    justify-content: flex-end;  /* จัดตำแหน่งปุ่มไปที่ขวาสุด */
+  }
+  
+  .btn-circle {
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;          /* ทำให้ปุ่มเป็นวงกลม */
+    background-color: #939496;
+    color: white;
+    border: none;
+    font-size: 20px;             /* ขนาดของไอคอน */
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-circle:hover {
+    background-color: #0056b3;  /* เปลี่ยนสีเมื่อ hover */
+  }
+  
+  .btn-circle i {
+    pointer-events: none;        /* ป้องกันไม่ให้คลิกที่ไอคอน */
+  }
+
+  .btn-mileage {
+    background: teal;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 128, 128, 0.2);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-mileage i {
+    font-size: 20px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  /* เอฟเฟกต์ Hover */
+  .btn-mileage:hover {
+    background: darkcyan;
+    box-shadow: 0 6px 12px rgba(0, 128, 128, 0.4);
+  }
+  
+  /* ไอคอนเด้งขึ้นเล็กน้อยเมื่อ Hover */
+  .btn-mileage:hover i {
+    transform: translateY(-3px);
+  }
+  
+  /* เอฟเฟกต์เวลากดปุ่ม */
+  .btn-mileage:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 6px rgba(0, 128, 128, 0.4);
+  }
+  
+  /* เอฟเฟกต์แสงวูบวาบเมื่อ Hover */
+  .btn-mileage::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: left 0.4s ease-in-out;
+  }
+  
+  .btn-mileage:hover::before {
+    left: 100%;
+  }
+
+  /* กำหนดสไตล์ให้กับตัวแบ่งหน้า */
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 10px 0;
+}
+
+.pagination li {
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.pagination li a {
+  text-decoration: none;
+  color: #007bff;
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: 1px solid #007bff;
+  transition: all 0.3s ease;
+}
+
+.pagination li a:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.pagination .active a {
+  background-color: #007bff;
+  color: white;
+  border-color: #0056b3;
+}
+
+.pagination .disabled a {
+  color: #ccc;
+  cursor: not-allowed;
+  border-color: #ccc;
+}
+
+  
+.table-header-car {
+  background-color: teal !important;
+  color: white !important;
+}
+
+/* ปุ่ม */
+.btn-mileage-gold {
+  background: gold !important; /* เปลี่ยนเป็นสีทอง */
+  color: black !important; /* ให้ตัวอักษรเป็นสีดำเพื่อให้อ่านง่าย */
+  padding: 12px 20px;
+  border-radius: 9px;
+  text-decoration: none;
+  height: 2%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 8px rgba(218, 165, 32, 0.4); /* สีทองแบบเงา */
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-mileage-gold i {
+  font-size: 20px;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* เอฟเฟกต์ Hover */
+.btn-mileage-gold:hover {
+  background: darkgoldenrod !important; /* สีทองเข้มขึ้นเมื่อ Hover */
+  box-shadow: 0 6px 12px rgba(218, 165, 32, 0.6);
+}
+
+/* ไอคอนเด้งขึ้นเล็กน้อยเมื่อ Hover */
+.btn-mileage-gold:hover i {
+  transform: translateY(-3px);
+}
+
+/* เอฟเฟกต์เวลากดปุ่ม */
+.btn-mileage-gold:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 6px rgba(218, 165, 32, 0.6);
+}
+
+/* เอฟเฟกต์แสงวูบวาบเมื่อ Hover */
+.btn-mileage-gold::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: left 0.4s ease-in-out;
+}
+
+.btn-mileage-gold:hover::before {
+  left: 100%;
+}
+
+
+
+
+

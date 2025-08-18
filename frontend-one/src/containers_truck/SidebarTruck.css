@@ -1,0 +1,80 @@
+
+
+
+/* sidebar.css */
+
+/* สำหรับเมนูที่เลือก */
+/* ป้องกันการซ้อนทับกับ Bootstrap */
+.sidebar-nav .nav-link {
+    color: #333; /* กำหนดสีปกติ */
+    padding: 10px 15px;
+    display: block;
+    transition: background 0.3s;
+    border-top-left-radius: 10px; /* มนเฉพาะมุมซ้ายบน */
+    border-bottom-left-radius: 10px; /* มนเฉพาะมุมซ้ายล่าง */
+  }
+  
+  .sidebar-nav .nav-link.active {
+    background-color: #083b72; /* สีเมื่อ Active */
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    border-top-left-radius: 8px; /* มนเฉพาะด้านซ้าย */
+    border-bottom-left-radius: 8px; /* มนเฉพาะด้านซ้าย */
+  }
+  
+  .sidebar-nav .nav-link:hover {
+    background-color: #cdc4ef;
+  }
+  
+  .sidebar-nav .nav-item button.nav-link {
+    background: none;
+    border: none;
+    text-align: left;
+    width: auto; /* กำหนดความกว้างให้พอดี */
+    width: 100%;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 8px 12px; /* ลด padding ให้ปุ่มเล็กลง */
+  }
+  
+  /* ป้องกันการมีเส้นขอบเวลา Focus */
+  .sidebar-nav .nav-item button.nav-link:focus {
+    outline: none;
+  }
+  
+/* ปรับระยะห่างของเมนูย่อยให้ชิดขึ้น */
+.sidebar-nav .list-unstyled {
+    margin-left: 5px;  /* ลด margin ของเมนูย่อย */
+    padding-left: 10px; /* ลด padding ด้านซ้าย */
+  }
+  
+  
+/* ปรับขนาดของ Sidebar */
+.sidebar-nav {
+    width: 240px; /* ลดขนาด Sidebar ถ้ากว้างเกินไป */
+    padding: 10px 0px; /* ปรับ padding ให้พอดี */
+  }
+
+  /* icon */
+  .sidebar-toggle-icon {
+    font-size: 1rem; /* ขนาดไอคอนใหญ่ขึ้น */
+    color: #083b72; /* สีไอคอน */
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+  
+  .sidebar-toggle-icon:hover {
+    color: #0a4c98; /* เปลี่ยนสีไอคอนเมื่อ hover */
+    transform: scale(1.5); /* ขยายขึ้นเล็กน้อย */
+  }
+  
+  .sidebar-toggle-icon:active {
+    transform: scale(0.9); /* กดแล้วหดลง */
+  }
+  
+  /* หมุนไอคอนตอน Sidebar ปิด */
+  .sidebar-toggle-icon.collapsed {
+    transform: rotate(180deg);
+  }
+  

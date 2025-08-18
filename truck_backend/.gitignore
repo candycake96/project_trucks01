@@ -1,0 +1,10 @@
+# Env files
+.env
+.env.*.local
+
+# Uploads
+uploads/
+uploads/**
+
+# Docker
+docker-compose.override.yml

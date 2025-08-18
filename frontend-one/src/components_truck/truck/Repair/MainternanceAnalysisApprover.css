@@ -1,0 +1,20 @@
+.compact-label {
+  font-size: 0.7rem;
+  margin-bottom: 2px;
+  white-space: nowrap;
+}
+.compact-input,
+.compact-select {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.35rem;
+  height: 28px;
+}
+.part-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  min-width: 1400px; /* ให้มีความกว้างพอสำหรับเลื่อน */
+}
+.part-col {
+  flex: 0 0 auto;
+}

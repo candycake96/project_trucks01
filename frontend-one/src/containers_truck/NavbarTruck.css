@@ -1,0 +1,90 @@
+/* เพิ่มคลาสเฉพาะเจาะจงมากขึ้น */
+.custom-navbar-brand {
+    font-size: 0.93rem; /* ขนาดตัวอักษรเล็ก */
+  }
+  
+  /* Media Queries สำหรับหน้าจอขนาดเล็ก */
+  @media (max-width: 576px) {
+    .custom-navbar-brand {
+      font-size: 0.6rem; /* ปรับขนาดตัวอักษรสำหรับหน้าจอขนาดเล็ก */
+    }
+  }
+
+  .custom-navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* ระยะห่างระหว่างชื่อและไอคอน */
+    padding: 8px 16px;
+    border-radius: 8px; /* ทำให้ขอบมน */
+    background-color: #f8f9fa; /* สีพื้นหลังอ่อน */
+    color: #083b72; /* สีน้ำเงินเข้ม */
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .custom-navbar-brand:hover {
+    background-color: #083b72; /* เปลี่ยนเป็นสีน้ำเงินเข้ม */
+    color: white;
+    text-decoration: none;
+  }
+  
+  .custom-navbar-brand i {
+    font-size: 1.2rem; /* ปรับขนาดไอคอน */
+  }
+
+
+  /* ในไฟล์ NavbarTruck.css */
+.btn-outline-secondary:active, 
+.btn-outline-secondary:focus, 
+.btn-outline-secondary:hover {
+  background-color: #6c757d;
+  color: white;
+  border-color: #6c757d;
+}
+
+.navbar-brand:active, 
+.navbar-brand:focus, 
+.navbar-brand:hover {
+  color: #007bff !important;
+  text-decoration: underline;
+}
+
+.navbar-brand button:active, 
+.navbar-brand button:focus, 
+.navbar-brand button:hover {
+  color: #dc3545 !important;
+}
+
+.text-Teal {
+  color: Teal;
+}
+
+.text-Navy {
+  color: #083b72;
+}
+
+/* ///////// */
+
+.dropdown-menu-navbar-A {
+  background-color: #007bff !important; /* สีฟ้า */
+  color: white !important; /* ตัวอักษรสีขาว */
+  min-width: 300px !important;
+}
+
+.dropdown-item-navbar-A {
+  color: white !important;
+}
+
+.dropdown-item-navbar-A:hover {
+  background-color: #0056b3 !important; /* สีฟ้าเข้มเมื่อ Hover */
+}
+
+
+/* //////// */
+
+.dropdown-item-navbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
