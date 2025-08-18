@@ -1,6 +1,6 @@
 # Env files
-.env
-.env.*.local
+# .env
+# .env.*.local
 
 # Uploads
 truck_backend/src/uploads/.gitkeep
