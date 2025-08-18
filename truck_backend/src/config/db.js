@@ -3,10 +3,10 @@ const sql = require("mssql");
 
 // Configuration for EmployeeAccessDB
 const configEmployeeAccessDB = {
-  server: process.env.DB_SERVER, // หรือ IP Address เช่น "127.0.0.1"
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  server: process.env.DB_SERVER,   // ต้องเป็น string
   database: process.env.DB_NAME,
-  user: process.env.DB_USER, // ตรวจสอบชื่อผู้ใช้
-  password: process.env.DB_PASSWORD, // ตรวจสอบรหัสผ่าน
   options: {
     encrypt: false, // ปิดการเข้ารหัสหากไม่จำเป็น
     trustServerCertificate: true, // หากใช้ self-signed certificate
