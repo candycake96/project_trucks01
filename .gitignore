@@ -15,12 +15,9 @@ yarn-debug.log*
 .env.* 
 
 # Backend uploads (ไม่เก็บไฟล์ผู้ใช้)
-src/uploads/
-# หรือเจาะจง subfolders ถ้าอยากละเอียด
-# src/uploads/emp_profile/
-# src/uploads/emp_signature/
-# src/uploads/vehicle_doc/
-# src/controllers/truck/upload/
+src/uploads/*
+!src/uploads/.gitkeep
+
 
 # IDE / Editor
 .vscode/

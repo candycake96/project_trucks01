@@ -3,8 +3,15 @@
 .env.*.local
 
 # Uploads
-uploads/
-uploads/**
+truck_backend/src/uploads/.gitkeep
+truck_backend/src/uploads/emp_profile/.gitkeep
+truck_backend/src/uploads/emp_signature/.gitkeep
+truck_backend/src/uploads/others/.gitkeep
+truck_backend/src/uploads/vehicle_doc/.gitkeep
+
 
 # Docker
 docker-compose.override.yml
+
+
+
