@@ -27,17 +27,3 @@ jobs:
       - name: Run tests
         run: npm test
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build-test
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Deploy to Server
-        run: |
-          echo "🚀 Deploying to server..."
-          # ตัวอย่าง: copy ไฟล์ไป server
-          # rsync -avz ./ user@your-server:/var/www/app
