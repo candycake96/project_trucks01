@@ -27,7 +27,7 @@ app.use(bodyParser.json({
 
 
 
-// // เปิดใช้งาน CORS ให้ทุก domain หรือกำหนดพอร์ตที่ frontend ใช้ (ในที่นี้คือ 8080)
+// // เปิดใช้งาน CORS ให้ทุก domain หรือกำหนดพอร์ตที่ frontend ใช้ (ในที่นี้คือ 8080) 
 // app.use(cors({
 //   origin: 'http://localhost:5173',  // ระบุ URL ของ frontend
 //   methods: ['GET', 'POST'],  // เลือกเฉพาะ methods ที่อนุญาต
