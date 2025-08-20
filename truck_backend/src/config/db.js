@@ -8,7 +8,7 @@ const configEmployeeAccessDB = {
   server: process.env.DB_SERVER,   // ต้องเป็น string
   database: process.env.DB_NAME,
   options: {
-    encrypt: false, // ปิดการเข้ารหัสหากไม่จำเป็น
+    encrypt: false, // ปิดการเข้ารหัสหากไม่จำเป็น // สำหรับ SQL Server 2012 ไม่ใช้ SSL
     trustServerCertificate: true, // หากใช้ self-signed certificate
     enableArithAbort: true, // ปรับให้คำนวณกรณีที่เกิดข้อผิดพลาดทางคณิตศาสตร์
   },

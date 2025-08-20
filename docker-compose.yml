@@ -4,7 +4,7 @@ services:
     ports:
       - "3333:3333"
     env_file:
-      - ./truck_backend/.env.dev   # สำหรับ prod
+      - ./truck_backend/.env.prod   # สำหรับ prod
     depends_on:
       - mssql
 
@@ -14,17 +14,4 @@ services:
       - "3001:3000"
     depends_on:
       - backend
-
-  mssql:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: mssql
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=isylzjko@1234
-    ports:
-      - "1433:1433"
-    volumes:
-      - mssql_data:/var/opt/mssql
-volumes:
-  mssql_data:
-  
+      
