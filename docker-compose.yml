@@ -13,7 +13,7 @@ services:
   frontend:
     build: ./frontend-one
     ports:
-      - "3001:3000"
+      - "3001:80"
     depends_on:
       - backend
 
