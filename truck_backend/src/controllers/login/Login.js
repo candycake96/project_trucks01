@@ -10,49 +10,49 @@ module.exports = {
             return res.status(400).json({ message: 'กรุณากรอก email และ password' });
         }
 
+        // ✅ แก้ query ให้รองรับ SQL Server 2012 (แทน STRING_AGG)
         const userQuery = `
-      SELECT 
-        e.id_emp, e.email, e.fname, e.lname, e.nickname, e.gender, 
-        e.date_job, e.id_branch, e.id_department, e.id_position, 
-        e.identification_number, e.phone, e.status, p.password, 
-        e.company_id, p1.name_position, d.name_department,
-        STRING_AGG(er.role_id, ',') AS roles
-      FROM employees e
-      JOIN password p ON e.id_emp = p.id_emp
-      JOIN employee_roles er ON e.id_emp = er.id_emp
-      JOIN positions p1 ON p1.id_position = e.id_position
-      JOIN departments d ON d.id_department = e.id_department
-      WHERE e.email = @email
-      GROUP BY 
-        e.id_emp, e.email, e.fname, e.lname, e.nickname, e.gender,
-        e.date_job, e.id_branch, e.id_department, e.id_position,
-        e.identification_number, e.phone, e.status, p.password,
-        e.company_id, p1.name_position, d.name_department
-    `;
+        SELECT 
+            e.id_emp, e.email, e.fname, e.lname, e.nickname, e.gender, 
+            e.date_job, e.id_branch, e.id_department, e.id_position, 
+            e.identification_number, e.phone, e.status, p.password, 
+            e.company_id, p1.name_position, d.name_department,
+            -- ใช้ STUFF + FOR XML PATH แทน STRING_AGG
+            STUFF((
+                SELECT ',' + CAST(er2.role_id AS VARCHAR)
+                FROM employee_roles er2
+                WHERE er2.id_emp = e.id_emp
+                FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)')
+            , 1, 1, '') AS roles
+        FROM employees e
+        JOIN password p ON e.id_emp = p.id_emp
+        JOIN positions p1 ON p1.id_position = e.id_position
+        JOIN departments d ON d.id_department = e.id_department
+        WHERE e.email = @email
+        GROUP BY 
+            e.id_emp, e.email, e.fname, e.lname, e.nickname, e.gender,
+            e.date_job, e.id_branch, e.id_department, e.id_position,
+            e.identification_number, e.phone, e.status, p.password,
+            e.company_id, p1.name_position, d.name_department
+        `;
 
         const permissionQuery = `
-  SELECT 
-        epa.permission_code,
-
-        f.menu_id,
-        f.name AS function_name,
-        f.function_id,
-		f.code AS function_code,
-
-        -- s.menu_id AS submenu_id,
-        s.name AS submenu_name,
-		s.module_id,
-
-        m.name AS module_name
-
-      FROM employee_permission_access epa
-      LEFT JOIN permission_functions f ON epa.permission_code = f.code
-      JOIN permission_submenus s ON f.menu_id = s.menu_id 
-
-      JOIN permission_modules m ON s.module_id = m.module_id 
-      WHERE epa.emp_id = @emp_id
-      ORDER BY m.module_id, f.menu_id 
-    `;
+        SELECT 
+            epa.permission_code,
+            f.menu_id,
+            f.name AS function_name,
+            f.function_id,
+            f.code AS function_code,
+            s.name AS submenu_name,
+            s.module_id,
+            m.name AS module_name
+        FROM employee_permission_access epa
+        LEFT JOIN permission_functions f ON epa.permission_code = f.code
+        JOIN permission_submenus s ON f.menu_id = s.menu_id 
+        JOIN permission_modules m ON s.module_id = m.module_id 
+        WHERE epa.emp_id = @emp_id
+        ORDER BY m.module_id, f.menu_id 
+        `;
 
         try {
             const users = await executeQueryEmployeeAccessDB(userQuery, { email });
