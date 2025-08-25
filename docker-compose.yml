@@ -14,8 +14,8 @@ services:
     build: ./frontend-one
     ports:
       - "3001:80"
-    env_file:
-      - ./frontend-one/.env.prod
+    # env_file:
+    #   - ./frontend-one/.env.prod
     depends_on:
       - backend
     
