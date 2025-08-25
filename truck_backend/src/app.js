@@ -29,7 +29,7 @@ app.use(bodyParser.json({
 
 // เปิดใช้งาน CORS ให้ทุก domain หรือกำหนดพอร์ตที่ frontend ใช้ (ในที่นี้คือ 8080) 
 app.use(cors({
-  origin: 'https://192.168.16.198:4441',  // ระบุ URL ของ frontend
+  origin: 'https://192.168.16.198:12345',  // ระบุ URL ของ frontend
   credentials: true,
   methods: ['GET', 'POST'],  // เลือกเฉพาะ methods ที่อนุญาต
   allowedHeaders: ['Content-Type', 'Authorization']  // เลือก headers ที่อนุญาต
