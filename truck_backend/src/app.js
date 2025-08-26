@@ -48,9 +48,9 @@ connectEmployeeAccessDB()
 
 
 // ให้ express สามารถเข้าถึงไฟล์ในโฟลเดอร์ uploads - ข้อมูลรูปภาพโปรไฟล์ emp
-app.use('/uploads/emp_profile', express.static(path.join(__dirname, './uploads/emp_profile')));
+app.use('/uploads/emp_profile', express.static(path.join(__dirname, '../uploads/emp_profile')));
 //  ลายเซ็น
-app.use('/uploads/signature', express.static(path.join(__dirname, './uploads/emp_signature')));
+app.use('/uploads/signature', express.static(path.join(__dirname, '../uploads/emp_signature')));
 // ให้ express สามารถเข้าถึงไฟล์ในโฟลเดอร์ uploads
 const vehicleUploadsPath = path.join(__dirname, './controllers/truck/upload/vehicle_doc');
 console.log('Vehicle Upload Path:', vehicleUploadsPath); // ตรวจสอบ path
