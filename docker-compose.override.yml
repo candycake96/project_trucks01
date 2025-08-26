@@ -13,7 +13,7 @@ services:
     ports:
       - "3001:80"
     env_file:
-      - ./frontend-one/.env.dev
+      - ./frontend-one/.env
     depends_on:
       - backend
 
