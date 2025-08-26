@@ -9,6 +9,9 @@ services:
       - ./truck_backend/.env.prod
     depends_on:
       - mssql
+    volumes:
+      - ./img/logo:/app/img/logo
+      - ./uploads/emp_profile:/app/uploads/emp_profile
 
   frontend:
     build: ./frontend-one
@@ -30,8 +33,6 @@ services:
       - "1433:1433"
     volumes:
       - mssql_data:/var/opt/mssql
-      - ./img/logo:/app/img/logo
-      - ./uploads/emp_profile:/app/uploads/emp_profile
 
 volumes:
   mssql_data:
