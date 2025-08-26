@@ -1,5 +1,6 @@
 const { executeQueryEmployeeAccessDB } = require('../../config/db');
 const bcrypt = require('bcryptjs'); // Import bcrypt for password hashing
+const baseUrl = process.env.BASE_URL;
 
 module.exports = {
 
@@ -36,7 +37,7 @@ module.exports = {
             const empWithImageUrl = result.map(emp => ({
                 ...emp, // คัดลอกข้อมูลเดิม
                 image: emp.image
-                    ? `${req.protocol}://${req.get('host')}/uploads/${emp.image}`
+                    ? `${baseUrl}/uploads/${emp.image}`
                     : null, // ตรวจสอบว่ามีรูปภาพหรือไม่
             }));
 
