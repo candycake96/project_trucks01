@@ -14,7 +14,7 @@ const getUploadPath = (file, fieldName) => {
     }
 
     // ถ้าไม่ตรงเงื่อนไขให้เก็บในโฟลเดอร์อื่น
-    return 'upload/others/';
+    return 'uploads/others/';
 };
 
 // ตั้งค่าการเก็บไฟล์ในโฟลเดอร์ uploads

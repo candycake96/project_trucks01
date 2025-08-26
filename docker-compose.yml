@@ -10,8 +10,12 @@ services:
     depends_on:
       - mssql
     volumes:
-      - ./img/logo:/app/img/logo
-      - ./uploads/emp_profile:/app/uploads/emp_profile
+      - /home/lkb-tuck/projects/project_trucks01/truck_backend/src/uploads:/app/src/uploads
+      # - ./img/logo:/app/img/logo
+      # - ./uploads/emp_profile:/app/uploads/emp_profile
+    environment:
+      - NODE_ENV=production
+
 
   frontend:
     build: ./frontend-one
