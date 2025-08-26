@@ -1,0 +1,2 @@
+*.js text eol=lf
+*.env text eol=lf
