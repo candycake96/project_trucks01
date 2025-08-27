@@ -55,9 +55,10 @@ app.use('/api/uploads/signature', express.static(path.join(__dirname, './uploads
 const vehicleUploadsPath = path.join(__dirname, './uploads/vehicle_doc');
 console.log('Vehicle Upload Path:', vehicleUploadsPath); // ตรวจสอบ path
 // ให้ express สามารถเข้าถึงไฟล์ในโฟลเดอร์ uploads
-app.use('/api/company/imglogo', express.static(logoPath));
+
 const logoPath = path.join(__dirname, './uploads/logo');
 console.log('Logo Upload Path:', logoPath); // ตรวจสอบ path 
+app.use('/api/company/imglogo', express.static(logoPath));
 
 app.use('/api/vehicle/uploads', express.static(vehicleUploadsPath));
 
