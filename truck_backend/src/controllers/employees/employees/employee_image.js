@@ -21,6 +21,7 @@ module.exports = {
             // ตรวจสอบและดึงชื่อไฟล์ใหม่จาก req.files
             image = req.files?.image?.[0]?.filename || null;
 
+
             // ลบรูปภาพเก่าถ้ามี และไม่ใช่ default
             if (oldImage && oldImage !== "default.jpg") {
                 const imagePath = path.join(__dirname, '../../../uploads/emp_profile', oldImage);
@@ -28,6 +29,7 @@ module.exports = {
                     fs.unlinkSync(imagePath);
                 }
             }
+            
 
             // อัปเดตรูปภาพใหม่ในฐานข้อมูล
             const updateQuery = `UPDATE employees SET image = @image WHERE id_emp = @id`;

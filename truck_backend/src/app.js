@@ -50,7 +50,7 @@ connectEmployeeAccessDB()
 // ให้ express สามารถเข้าถึงไฟล์ในโฟลเดอร์ uploads - ข้อมูลรูปภาพโปรไฟล์ emp
 app.use('/api/emp_profile', express.static(path.join(__dirname, './uploads/emp_profile')));
 //  ลายเซ็น
-app.use('/api/signature', express.static(path.join(__dirname, './uploads/emp_signature')));
+app.use('/api/uploads/signature', express.static(path.join(__dirname, './uploads/emp_signature')));
 // ให้ express สามารถเข้าถึงไฟล์ในโฟลเดอร์ uploads
 const vehicleUploadsPath = path.join(__dirname, './controllers/truck/upload/vehicle_doc');
 console.log('Vehicle Upload Path:', vehicleUploadsPath); // ตรวจสอบ path
@@ -72,7 +72,6 @@ app.use('/api/insurance_doc', express.static(path.join(__dirname, './controllers
 app.use('/api/vendor_doc', express.static(path.join(__dirname, './controllers/truck/upload/vendor_doc')));
 // 
 app.use('/api/QT_MTN', express.static(path.join(__dirname, './controllers/truck/upload/QT_MTN')));
-
 
 
 // Example Routes

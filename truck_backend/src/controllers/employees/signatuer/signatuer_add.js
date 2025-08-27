@@ -43,7 +43,7 @@ ORDER BY created_at DESC;
                 const fileUrl = result.map(reg => ({
                     ...reg, // คัดลอกข้อมูลเดิม
                     signature: reg.signature
-                        ? `${req.protocol}://${req.get('host')}/uploads/signature/${reg.signature}`
+                        ? `${req.protocol}://${req.get('host')}/api/uploads/signature/${reg.signature}`
                         : null, // ตรวจสอบว่ามีรูปภาพหรือไม่
                 }));
                 res.status(200).json(fileUrl);

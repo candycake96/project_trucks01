@@ -37,7 +37,7 @@ module.exports = {
             const empWithImageUrl = result.map(emp => ({
                 ...emp, // คัดลอกข้อมูลเดิม
                 image: emp.image
-                    ? `${baseUrl}/uploads/emp_profile/${emp.image}`
+                    ? `${baseUrl}/api/emp_profile/${emp.image}`
                     : null, // ตรวจสอบว่ามีรูปภาพหรือไม่
             }));
 

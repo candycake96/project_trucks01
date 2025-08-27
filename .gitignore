@@ -12,8 +12,9 @@ yarn-debug.log*
 
 # Environment files
 # (ยกเลิกการ ignore .env เพื่อให้เก็บไฟล์นี้ด้วย)
-# .env
-# .env.* 
+.env
+.env.* 
+!.env.example
 
 # Backend uploads (ไม่เก็บไฟล์ผู้ใช้)
 src/uploads/*
