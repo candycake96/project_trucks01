@@ -1,4 +1,6 @@
 const { executeQueryEmployeeAccessDB } = require('../../../config/db');
+const baseUrl = process.env.BASE_URL;
+
 
 module.exports = {
     VehicleGet: async (req, res) => {
@@ -50,7 +52,7 @@ LEFT JOIN branches b ON t.id_branch = b.id_branch
             const fileUrl = result.map(reg => ({
                 ...reg, // คัดลอกข้อมูลเดิม
                 file_download: reg.file_download 
-                    ? `${req.protocol}://${req.get('host')}/vehicle/uploads/${reg.file_download}`
+                    ? `${baseUrl}/api/vehicle/uploads/${reg.file_download}`
                     : null, // ตรวจสอบว่ามีรูปภาพหรือไม่
             }));
 

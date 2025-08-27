@@ -1,4 +1,5 @@
 const { executeQueryEmployeeAccessDB } = require('../../../config/db');
+const baseUrl = process.env.BASE_URL;
 
 module.exports = {
 
@@ -74,7 +75,7 @@ WHERE v.vendor_id = @vendor_id;
                 const fileUrl = result.map(reg => ({
                     ...reg, // คัดลอกข้อมูลเดิม
                     file_vendor: reg.file_vendor 
-                        ? `${req.protocol}://${req.get('host')}/api/vendor_doc/${reg.file_vendor}`
+                        ? `${baseUrl}/api/vendor_doc/${reg.file_vendor}`
                         : null, // ตรวจสอบว่ามีรูปภาพหรือไม่
                 }));
     

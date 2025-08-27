@@ -1,4 +1,5 @@
 const { executeQueryEmployeeAccessDB } = require('../../../config/db');
+const baseUrl = process.env.BASE_URL;
 
 module.exports = {
 
@@ -21,7 +22,7 @@ module.exports = {
             const fileUrl = result.map(reg => ({
                 ...reg, // คัดลอกข้อมูลเดิม
                 file_status: reg.file_status 
-                    ? `${req.protocol}://${req.get('host')}/api/status_doc/${reg.file_status}`
+                    ? `${baseUrl}/api/status_doc/${reg.file_status}`
                     : null, // ตรวจสอบว่ามีรูปภาพหรือไม่
             }));
                 res.status(200).json(fileUrl);

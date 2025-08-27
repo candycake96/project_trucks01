@@ -1,4 +1,5 @@
 const { executeQueryEmployeeAccessDB } = require('../../../../config/db');
+const baseUrl = process.env.BASE_URL;
 
 module.exports = {
 
@@ -72,7 +73,7 @@ module.exports = {
                 return {
                     ...quotation,
                     quotation_file: quotation.quotation_file
-                        ? `${req.protocol}://${req.get('host')}/api/QT_MTN/${quotation.quotation_file}`
+                        ? `${baseUrl}/api/QT_MTN/${quotation.quotation_file}`
                         : null,
                     parts: await executeQueryEmployeeAccessDB(sqlParts, { quotation_id: quotation.quotation_id })
                 };

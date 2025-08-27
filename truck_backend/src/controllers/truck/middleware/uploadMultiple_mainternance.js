@@ -3,19 +3,20 @@ const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
+
 // กำหนดที่เก็บไฟล์ตามชื่อฟิลด์
 const getUploadPath = (fieldName) => {
   console.log('DEBUG fieldName:', fieldName); // เพิ่มบรรทัดนี้
   if (fieldName && fieldName.includes('quotation_file')) {
-    return 'upload/QT_MTN/';
+    return 'uploads/QT_MTN/';
   }
-  return 'upload/others/';
+  return 'uploads/others/';
 };
 
 // import p from '../upload/'
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, '../', getUploadPath(file.fieldname));
+    const uploadDir = path.join(__dirname, '../../../', getUploadPath(file.fieldname));
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }

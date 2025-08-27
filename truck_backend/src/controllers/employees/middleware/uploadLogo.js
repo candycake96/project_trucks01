@@ -3,12 +3,11 @@ const path = require('path');
 const fs = require('fs'); // สำหรับตรวจสอบและสร้างโฟลเดอร์
 const { v4: uuidv4 } = require('uuid'); // ใช้ UUID สำหรับชื่อไฟล์
 
-
 // ตั้งค่าการเก็บไฟล์ในโฟลเดอร์ uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         // ตรวจสอบว่าโฟลเดอร์ uploads มีหรือไม่ ถ้าไม่มีก็สร้าง
-        const uploadDir = path.join(__dirname, '../img/logo');
+        const uploadDir = path.join(__dirname, '../../../uploads/logo');
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir, { recursive: true });
         }

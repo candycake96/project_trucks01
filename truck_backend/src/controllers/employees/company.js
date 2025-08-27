@@ -16,7 +16,7 @@ module.exports = {
                 const fileUrl = result.map(reg => ({
                     ...reg, // คัดลอกข้อมูลเดิม
                     company_logo: reg.company_logo
-                        ? `${baseUrl}/company/imglogo/${reg.company_logo}`
+                        ? `${baseUrl}/api/company/imglogo/${reg.company_logo}`
                         : null, // ตรวจสอบว่ามีรูปภาพหรือไม่
                 }));
 
@@ -48,7 +48,7 @@ module.exports = {
                 const fileUrl = result.map(reg => ({
                     ...reg, // คัดลอกข้อมูลเดิม
                     company_logo: reg.company_logo
-                        ? `${baseUrl}/company/imglogo/${reg.company_logo}`
+                        ? `${baseUrl}/api/company/imglogo/${reg.company_logo}`
                         : null, // ตรวจสอบว่ามีรูปภาพหรือไม่
                 }));
 

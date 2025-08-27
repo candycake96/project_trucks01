@@ -6,49 +6,49 @@ const { v4: uuidv4 } = require('uuid');
 // ฟังก์ชันสำหรับการกำหนดที่เก็บไฟล์
 const getUploadPath = (file, fieldName) => {
     if (fieldName === 'file_download') {
-        return 'upload/vehicle_doc/';
+        return 'uploads/vehicle_doc/';
     }
 
     if (fieldName === 'file_finance') {
-        return 'upload/finance/';
+        return 'uploads/finance/';
     }
 
     if (fieldName === 'file_status') {
-        return 'upload/status_doc/';
+        return 'uploads/status_doc/';
     }
 
     if (fieldName === 'insurance_file') {
-        return 'upload/insurance_doc/';
+        return 'uploads/insurance_doc/';
     }
 
     if (fieldName === 'insurance_goods_file') {
-        return 'upload/insurance_doc/';
+        return 'uploads/insurance_doc/';
     }
 
     // -ข้อมูลไฟล์เอกสาร vendor 
     if (fieldName === 'file_vendor') {
-        return 'upload/vendor_doc/';
+        return 'uploads/vendor_doc/';
     }
 
     // ถ้าเป็นไฟล์ใบเสนอราคา ให้เก็บในโฟลเดอร์ quotation_doc
     if (fieldName === 'quotation_file') {
-        return 'upload/quotationMainternance/';
+        return 'uploads/quotationMainternance/';
     }
 
         // ถ้าเป็นไฟล์ใบเสนอราคา ให้เก็บในโฟลเดอร์ quotation_doc
     if (fieldName === 'close_file') {
-        return 'upload/Close_job_mainternence/';
+        return 'uploads/Close_job_mainternence/';
     }
 
     // ถ้าไม่ตรงเงื่อนไขให้เก็บในโฟลเดอร์อื่น
-    return 'upload/others/';
+    return 'uploads/others/';
 };
 
 // การตั้งค่าการจัดเก็บไฟล์
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         // ส่ง file.fieldname เข้าไปใน getUploadPath
-        const uploadDir = path.join(__dirname, '../', getUploadPath(file, file.fieldname));
+        const uploadDir = path.join(__dirname, '../../../', getUploadPath(file, file.fieldname));
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir, { recursive: true });
         }

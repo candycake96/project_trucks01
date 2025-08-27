@@ -52,26 +52,24 @@ app.use('/api/emp_profile', express.static(path.join(__dirname, './uploads/emp_p
 //  ลายเซ็น
 app.use('/api/uploads/signature', express.static(path.join(__dirname, './uploads/emp_signature')));
 // ให้ express สามารถเข้าถึงไฟล์ในโฟลเดอร์ uploads
-const vehicleUploadsPath = path.join(__dirname, './controllers/truck/upload/vehicle_doc');
+const vehicleUploadsPath = path.join(__dirname, './uploads/vehicle_doc');
 console.log('Vehicle Upload Path:', vehicleUploadsPath); // ตรวจสอบ path
 // ให้ express สามารถเข้าถึงไฟล์ในโฟลเดอร์ uploads
-const logoPath = path.join(__dirname, './controllers/employees/img/logo');
+app.use('/api/company/imglogo', express.static(logoPath));
+const logoPath = path.join(__dirname, './uploads/logo');
 console.log('Logo Upload Path:', logoPath); // ตรวจสอบ path 
 
 app.use('/api/vehicle/uploads', express.static(vehicleUploadsPath));
-app.use('/api/company/imglogo', express.static(logoPath))
-
-// import d from './controllers/truck/upload/vehicle_doc'
 
 
 // ให้ express สามารถเข้าถึงไฟล์ในโฟลเดอร์ uploads
-app.use('/api/status_doc', express.static(path.join(__dirname, './controllers/truck/upload/status_doc')));
+app.use('/api/status_doc', express.static(path.join(__dirname, './uploads/status_doc')));
 // ให้ express สามารถเข้าถึงไฟล์ในโฟลเดอร์ uploads
-app.use('/api/insurance_doc', express.static(path.join(__dirname, './controllers/truck/upload/insurance_doc')));
+app.use('/api/insurance_doc', express.static(path.join(__dirname, './uploads/insurance_doc')));
 // ให้ express สามารถเข้าถึงไฟล์ในโฟลเดอร์ uploads
-app.use('/api/vendor_doc', express.static(path.join(__dirname, './controllers/truck/upload/vendor_doc')));
+app.use('/api/vendor_doc', express.static(path.join(__dirname, './uploads/vendor_doc')));
 // 
-app.use('/api/QT_MTN', express.static(path.join(__dirname, './controllers/truck/upload/QT_MTN')));
+app.use('/api/QT_MTN', express.static(path.join(__dirname, './uploads/QT_MTN')));
 
 
 // Example Routes
