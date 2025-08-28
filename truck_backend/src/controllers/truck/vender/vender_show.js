@@ -32,37 +32,39 @@ module.exports = {
     vendor_show_details: async (req, res) => {
         const { id } = req.params;
         const query = `
-SELECT 
-    v.vendor_id,
-    v.vendor_type_id,
-    v.organization_type_id,
-    v.vendor_name,
-    v.contact_person,
-    v.phone,
-    v.email,
-    v.address,
-    v.delivery_address,
-    v.tax_id,
-    v.file_vendor,
-    v.credit_terms,
-    v.status,
-    v.warranty_policy,
-    v.remarks,
-    o.organization_type_name,
-    vt.vendor_type_name,
-    STUFF((
-        SELECT ', ' + st.service_name --วนลูปรายการบริการ แล้วใส่ , หน้าทุกชื่อ
-        FROM Truck_vendor_services vs 
-        LEFT JOIN Truck_vendor_service_types st ON st.service_id = vs.service_id
-        WHERE vs.vendor_id = v.vendor_id
-        FOR XML PATH(''), TYPE --ทำให้ผลลัพธ์รวมอยู่ในแถวเดียวกัน (เป็น XML แต่ไม่มี tag)
-    ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS service_list --แปลง XML กลับเป็น string ปกติ STUFF(..., 1, 2, '')	ตัด , หน้าสุดที่เกินออก
-FROM Truck_vendor v
-INNER JOIN Truck_vendor_organization_type o ON o.organization_type_id = v.organization_type_id
-INNER JOIN Truck_vendor_types vt ON vt.vendor_type_id = v.vendor_type_id
-WHERE v.vendor_id = @vendor_id;
-
-        `;
+                        SELECT 
+                            v.vendor_id,
+                            v.vendor_type_id,
+                            v.organization_type_id,
+                            v.vendor_name,
+                            v.contact_person,
+                            v.phone,
+                            v.email,
+                            v.address,
+                            v.delivery_address,
+                            v.tax_id,
+                            v.file_vendor,
+                            v.credit_terms,
+                            v.status,
+                            v.warranty_policy,
+                            v.remarks,
+                            o.organization_type_name,
+                            vt.vendor_type_name,
+                            STUFF((
+                                SELECT ',' + CAST(st.service_id AS NVARCHAR) + ':' + st.service_name
+                                FROM Truck_vendor_services vs
+                                LEFT JOIN Truck_vendor_service_types st 
+                                    ON st.service_id = vs.service_id
+                                WHERE vs.vendor_id = v.vendor_id
+                                FOR XML PATH(''), TYPE
+                            ).value('.', 'NVARCHAR(MAX)'), 1, 1, '') AS service_list
+                        FROM Truck_vendor v
+                        INNER JOIN Truck_vendor_organization_type o 
+                            ON o.organization_type_id = v.organization_type_id
+                        INNER JOIN Truck_vendor_types vt 
+                            ON vt.vendor_type_id = v.vendor_type_id
+                        WHERE v.vendor_id = @vendor_id;
+                     `;
         
         try {
             const result = await executeQueryEmployeeAccessDB(query, {
