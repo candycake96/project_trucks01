@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { authenticateToken  } = require('../../jwt/AuthToken')
 const vendor_addController = require('../../controllers/truck/vender/vendor_add');
+const vender_updateController = require('../../controllers/truck/vender/vendor_update');
 const vender_showController = require('../../controllers/truck/vender/vender_show');
 const vender_typeController = require('../../controllers/truck/vender/vender_type');
 const vendor_service_showController = require('../../controllers/truck/vender/vendor_service_show');
@@ -15,6 +16,7 @@ router.get('/vendor_show_details/:id', authenticateToken, vender_showController.
 router.post('/vendor_add', authenticateToken, uploadMultiple, vendor_addController.vendor_add);
 // ลบข้อมูล
 // แก้ไขข้อมูล
+router.post('/vendor_update/:id', authenticateToken, uploadMultiple, vender_updateController.vendor_update);
 // ดึงข้อมูล
 
 
