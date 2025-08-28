@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { apiUrl } from "../../../config/apiConfig";
+
 import Modal_orginization_type_details from "./modal/Modal_orginization_type_details";
 import Modal_vandor_type from "./modal/Modal_vander_type";
 import Modal_service_type from "./modal/Modal_service_type";
+import { apiUrl } from "../../../config/apiConfig";
 
 const Vendor_add = ({ onVendorAdded }) => {
     const [message, setMessage] = useState("");
@@ -11,6 +12,7 @@ const Vendor_add = ({ onVendorAdded }) => {
     const [isVendorType, setVendorType] = useState([]);
     const [isOrganization, setOrganization] = useState([]);
     const [isVendorSeviceType, setVandorServiceType] = useState([]);
+
     const [formDataVendor, setFormDataVendor] = useState({
         vendor_name: "",
         contact_person: "",
@@ -28,14 +30,16 @@ const Vendor_add = ({ onVendorAdded }) => {
         service_id: [],
     });
 
-// ประเภทองค์กร
+
+    const [errors, setErrors] = useState({});
+
+    // ประเภทองค์กร
     const [isOpenModalOrganizition, setOpenModalOrganizition] = useState(false);
-// หมวดหมู่
+    // หมวดหมู่
     const [isOpenModalVendolType, setOpenModalVendolType] = useState(false);
-// ประเภทบริการ
+    // ประเภทบริการ
     const [isOpenModalServiceType, setOpenModalServitType] = useState(false);
 
-    
     const handleChange = (e) => {
         const { name, value, type, files } = e.target;
         if (type === "file") {
@@ -43,15 +47,39 @@ const Vendor_add = ({ onVendorAdded }) => {
         } else {
             setFormDataVendor({ ...formDataVendor, [name]: value });
         }
+
+        // ✅ real-time validation
+        if (errors[name]) {
+            setErrors({ ...errors, [name]: "" });
+        }
     };
 
+    // ✅ validate form
+    const validateForm = () => {
+        const newErrors = {};
+        if (!formDataVendor.vendor_name) newErrors.vendor_name = "กรุณากรอกชื่อผู้ขาย / อู่";
+        if (!formDataVendor.phone) newErrors.phone = "กรุณากรอกเบอร์โทร";
+        if (!formDataVendor.organization_type_id) newErrors.organization_type_id = "กรุณาเลือกประเภทองค์กร";
+        if (!formDataVendor.vendor_type_id) newErrors.vendor_type_id = "กรุณาเลือกหมวดหมู่";
+        if (!formDataVendor.email) {
+            newErrors.email = "กรุณากรอกอีเมล";
+        } else if (!/\S+@\S+\.\S+/.test(formDataVendor.email)) {
+            newErrors.email = "อีเมลไม่ถูกต้อง";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("📦 Form Submitted:", formDataVendor);
+
+        if (!validateForm()) {
+            alert("กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน");
+            return;
+        }
 
         const payload = new FormData();
-
         Object.keys(formDataVendor).forEach((key) => {
             if (key === "file_vendor" && formDataVendor[key]) {
                 payload.append(key, formDataVendor[key]);
@@ -60,9 +88,8 @@ const Vendor_add = ({ onVendorAdded }) => {
             }
         });
 
-        console.log("payload to be sent:", payload);
         payload.append('formDataVendor', JSON.stringify(formDataVendor)); // ใช้ JSON.stringify()
-
+        
         try {
             const response = await axios.post(
                 `${apiUrl}/api/vendor_add`,
@@ -74,9 +101,8 @@ const Vendor_add = ({ onVendorAdded }) => {
                     },
                 }
             );
-            alert("บันทึกสำเร็จ");
 
-            // ✅ Optional: Reset form
+            alert("บันทึกสำเร็จ");
             setFormDataVendor({
                 vendor_name: "",
                 contact_person: "",
@@ -90,14 +116,12 @@ const Vendor_add = ({ onVendorAdded }) => {
                 credit_terms: "",
                 warranty_policy: "",
                 vendor_type_id: "",
-                remarks: ""
+                remarks: "",
+                service_id: [],
             });
             setMessage(response.data.message || "บันทึกข้อมูลสำเร็จ");
             setMessageType("success");
-
-
-
-
+            setErrors({});
         } catch (error) {
             console.error("เกิดข้อผิดพลาดในการส่งข้อมูล", error);
             alert("เกิดข้อผิดพลาดในการบันทึก");
@@ -106,53 +130,31 @@ const Vendor_add = ({ onVendorAdded }) => {
         }
     };
 
-
     const fetchVendorType = async () => {
         try {
-            const response = await axios.get(
-                `${apiUrl}/api/vendor_type_show`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-                    },
-                }
-            );
+            const response = await axios.get(`${apiUrl}/api/vendor_type_show`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` },
+            });
             setVendorType(response.data);
-        } catch (error) {
-
-        }
+        } catch (error) { }
     };
 
     const fetchOrganizationType = async () => {
         try {
-            const response = await axios.get(
-                `${apiUrl}/api/vendor_organization_type_show`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-                    },
-                }
-            );
+            const response = await axios.get(`${apiUrl}/api/vendor_organization_type_show`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` },
+            });
             setOrganization(response.data);
-        } catch (error) {
-
-        }
+        } catch (error) { }
     };
 
     const fetchVendorServiceType = async () => {
         try {
-            const response = await axios.get(
-                `${apiUrl}/api/vendor_service_types_show`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-                    },
-                }
-            );
+            const response = await axios.get(`${apiUrl}/api/vendor_service_types_show`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` },
+            });
             setVandorServiceType(response.data);
-        } catch (error) {
-
-        }
+        } catch (error) { }
     };
 
     useEffect(() => {
@@ -178,85 +180,55 @@ const Vendor_add = ({ onVendorAdded }) => {
         }
     };
 
-// ประเภทองค์กร
-    const handleOpenModalOrpganizition = (data) => {
-        setOpenModalOrganizition(true);
-    };
-    const handleClossModalOrganizition = () => {
-        setOpenModalOrganizition(false);
-    };
+    // modal handlers
+    const handleOpenModalOrpganizition = () => setOpenModalOrganizition(true);
+    const handleClossModalOrganizition = () => setOpenModalOrganizition(false);
 
-// หมวดหมู่
-    const handleOpenModalVendorType = () => {
-        setOpenModalVendolType(true);
-    };
-    const handleClossModalVerdorType = () => {
-        setOpenModalVendolType(false);
-    }
+    const handleOpenModalVendorType = () => setOpenModalVendolType(true);
+    const handleClossModalVerdorType = () => setOpenModalVendolType(false);
 
-// xประเภทบริการ
-    const handleOpenModaalServiceType = () => {
-        setOpenModalServitType(true);
-    }
-    const handleClossModalServiceType = () => {
-        setOpenModalServitType(false);
-    }
+    const handleOpenModaalServiceType = () => setOpenModalServitType(true);
+    const handleClossModalServiceType = () => setOpenModalServitType(false);
 
     return (
         <div className="container">
-            <div className=" p-3">
+            <div className="p-3">
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                    <p className="mb-0 mb-bolder fs-5">เพิ่มข้อมูลผู้จำหน่ายสินค้า / อู่ซ่อม</p>
-
+                    <p className="mb-0 fw-bold fs-5">เพิ่มข้อมูลผู้จำหน่ายสินค้า / อู่ซ่อม</p>
                     <a
                         role="button"
                         className="link-primary text-decoration-underline"
                         onClick={() => window.history.back()}
-                        style={{ cursor: 'pointer' }}
+                        style={{ cursor: "pointer" }}
                     >
                         <i className="bi bi-arrow-left-circle me-1"></i> ย้อนกลับ
                     </a>
                 </div>
 
                 <div className="d-flex mb-1">
-                    <button
-                        type="button"
-                        className="btn btn-secondary px-4 me-1"
-                        onClick={()=>handleOpenModalOrpganizition()}
-                    >
+                    <button type="button" className="btn btn-secondary px-4 me-1" onClick={handleOpenModalOrpganizition}>
                         ประเภทองค์กร
                     </button>
-                    <button
-                        type="button"
-                        className="btn btn-secondary px-4 me-1"
-                        onClick={()=>handleOpenModalVendorType()}
-                    >
+                    <button type="button" className="btn btn-secondary px-4 me-1" onClick={handleOpenModalVendorType}>
                         หมวดหมู่
                     </button>
-                    <button
-                        type="button"
-                        className="btn btn-secondary px-4 me-1"
-                        onClick={()=>handleOpenModaalServiceType()}
-                    >
+                    <button type="button" className="btn btn-secondary px-4 me-1" onClick={handleOpenModaalServiceType}>
                         ประเภทการบริการ
                     </button>
                 </div>
                 <hr />
             </div>
+
             <div className="mb-3">
                 <form onSubmit={handleSubmit}>
                     <div className="card p-3 shadow-sm">
                         <h6 className="mb-4 fw-bold">เพิ่มข้อมูลผู้จำหน่ายสินค้า / อู่ซ่อม</h6>
 
+                        {/* ✅ แจ้งเตือน */}
                         {message && (
                             <div className="p-1">
                                 <div
                                     className={`alert ${messageType === "success" ? "alert-success" : "alert-danger"}`}
-                                    style={{
-                                        backgroundColor: messageType === "success" ? "#d4edda" : "#f8d7da",
-                                        color: messageType === "success" ? "#155724" : "#721c24",
-                                        border: `1px solid ${messageType === "success" ? "#c3e6cb" : "#f5c6cb"}`,
-                                    }}
                                 >
                                     {message}
                                 </div>
@@ -264,17 +236,19 @@ const Vendor_add = ({ onVendorAdded }) => {
                         )}
 
                         <div className="row g-2 mb-3">
-
+                            {/* vendor_name */}
                             <div className="col-sm-6">
-                                <label className="form-label">ชื่อผู้ขาย / อู่</label>
+                                <label className="form-label">ชื่อผู้ขาย / อู่ <span className="text-danger">*</span></label>
                                 <input
-                                    className="form-control"
+                                    className={`form-control ${errors.vendor_name ? "is-invalid" : ""}`}
                                     name="vendor_name"
                                     value={formDataVendor.vendor_name}
                                     onChange={handleChange}
                                 />
+                                {errors.vendor_name && <div className="invalid-feedback">{errors.vendor_name}</div>}
                             </div>
 
+                            {/* tax_id */}
                             <div className="col-sm-6">
                                 <label className="form-label">เลขผู้เสียภาษี</label>
                                 <input
@@ -285,16 +259,19 @@ const Vendor_add = ({ onVendorAdded }) => {
                                 />
                             </div>
 
+                            {/* phone */}
                             <div className="col-sm-4">
-                                <label className="form-label">เบอร์โทร</label>
+                                <label className="form-label">เบอร์โทร <span className="text-danger">*</span></label>
                                 <input
-                                    className="form-control"
+                                    className={`form-control ${errors.phone ? "is-invalid" : ""}`}
                                     name="phone"
                                     value={formDataVendor.phone}
                                     onChange={handleChange}
                                 />
+                                {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
                             </div>
 
+                            {/* contact_person */}
                             <div className="col-sm-4">
                                 <label className="form-label">ผู้ติดต่อ</label>
                                 <input
@@ -305,17 +282,20 @@ const Vendor_add = ({ onVendorAdded }) => {
                                 />
                             </div>
 
+                            {/* email */}
                             <div className="col-sm-4">
-                                <label className="form-label">อีเมล</label>
+                                <label className="form-label">อีเมล <span className="text-danger">*</span></label>
                                 <input
                                     type="email"
-                                    className="form-control"
+                                    className={`form-control ${errors.email ? "is-invalid" : ""}`}
                                     name="email"
                                     value={formDataVendor.email}
                                     onChange={handleChange}
                                 />
+                                {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                             </div>
 
+                            {/* credit_terms */}
                             <div className="col-sm-4">
                                 <label className="form-label">เครดิต (วัน)</label>
                                 <input
@@ -327,10 +307,11 @@ const Vendor_add = ({ onVendorAdded }) => {
                                 />
                             </div>
 
+                            {/* organization_type_id */}
                             <div className="col-sm-4">
-                                <label className="form-label">ประเภทองค์กร</label>
+                                <label className="form-label">ประเภทองค์กร <span className="text-danger">*</span></label>
                                 <select
-                                    className="form-select"
+                                    className={`form-select ${errors.organization_type_id ? "is-invalid" : ""}`}
                                     name="organization_type_id"
                                     value={formDataVendor.organization_type_id}
                                     onChange={handleChange}
@@ -342,12 +323,16 @@ const Vendor_add = ({ onVendorAdded }) => {
                                         </option>
                                     ))}
                                 </select>
+                                {errors.organization_type_id && (
+                                    <div className="invalid-feedback">{errors.organization_type_id}</div>
+                                )}
                             </div>
 
+                            {/* vendor_type_id */}
                             <div className="col-sm-4">
-                                <label className="form-label">หมวดหมู่</label>
+                                <label className="form-label">หมวดหมู่ <span className="text-danger">*</span></label>
                                 <select
-                                    className="form-select"
+                                    className={`form-select ${errors.vendor_type_id ? "is-invalid" : ""}`}
                                     name="vendor_type_id"
                                     value={formDataVendor.vendor_type_id}
                                     onChange={handleChange}
@@ -359,8 +344,12 @@ const Vendor_add = ({ onVendorAdded }) => {
                                         </option>
                                     ))}
                                 </select>
+                                {errors.vendor_type_id && (
+                                    <div className="invalid-feedback">{errors.vendor_type_id}</div>
+                                )}
                             </div>
 
+                            {/* address */}
                             <div className="col-sm-6">
                                 <label className="form-label">ที่อยู่</label>
                                 <textarea
@@ -372,6 +361,7 @@ const Vendor_add = ({ onVendorAdded }) => {
                                 />
                             </div>
 
+                            {/* delivery_address */}
                             <div className="col-sm-6">
                                 <label className="form-label">ที่อยู่จัดส่ง</label>
                                 <textarea
@@ -383,6 +373,7 @@ const Vendor_add = ({ onVendorAdded }) => {
                                 />
                             </div>
 
+                            {/* warranty_policy */}
                             <div className="col-sm-6">
                                 <label className="form-label">การรับประกัน</label>
                                 <textarea
@@ -394,6 +385,7 @@ const Vendor_add = ({ onVendorAdded }) => {
                                 />
                             </div>
 
+                            {/* remarks */}
                             <div className="col-sm-6">
                                 <label className="form-label">หมายเหตุ</label>
                                 <textarea
@@ -405,6 +397,7 @@ const Vendor_add = ({ onVendorAdded }) => {
                                 />
                             </div>
 
+                            {/* file */}
                             <div className="col-sm-6">
                                 <label className="form-label">ไฟล์แนบ</label>
                                 <input
@@ -415,6 +408,8 @@ const Vendor_add = ({ onVendorAdded }) => {
                                 />
                             </div>
                         </div>
+
+                        {/* Service type */}
                         <div className="mb-3">
                             <label className="form-label">ประเภทการบริการ</label>
                             <div>
@@ -436,11 +431,6 @@ const Vendor_add = ({ onVendorAdded }) => {
                             </div>
                         </div>
 
-
-
-
-
-
                         <div className="text-center justify-content-end mb-3">
                             <button type="submit" className="btn btn-success px-3">
                                 บันทึก
@@ -450,15 +440,19 @@ const Vendor_add = ({ onVendorAdded }) => {
                 </form>
             </div>
 
-{isOpenModalOrganizition && (
-    <Modal_orginization_type_details isOpen={isOpenModalOrganizition} onClose={handleClossModalOrganizition} />
-)}
-{isOpenModalVendolType && (
-    <Modal_vandor_type isOpen={isOpenModalVendolType} onClose={handleClossModalVerdorType} />
-)}
-{isOpenModalServiceType && (
-    <Modal_service_type isOpen={isOpenModalServiceType} onClose={handleClossModalServiceType} />
-)}
+            {/* modals */}
+            {isOpenModalOrganizition && (
+                <Modal_orginization_type_details
+                    isOpen={isOpenModalOrganizition}
+                    onClose={handleClossModalOrganizition}
+                />
+            )}
+            {isOpenModalVendolType && (
+                <Modal_vandor_type isOpen={isOpenModalVendolType} onClose={handleClossModalVerdorType} />
+            )}
+            {isOpenModalServiceType && (
+                <Modal_service_type isOpen={isOpenModalServiceType} onClose={handleClossModalServiceType} />
+            )}
         </div>
     );
 };
