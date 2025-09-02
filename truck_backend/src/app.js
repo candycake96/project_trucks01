@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const {  connectTruck, connectEmployeeAccessDB } = require("./config/db");
 const multer = require("multer");
 const path = require("path")
-
+const baseUrl = process.env.BASE_URL;
 
 
 // Middleware
@@ -29,7 +29,7 @@ app.use(bodyParser.json({
 
 // เปิดใช้งาน CORS ให้ทุก domain หรือกำหนดพอร์ตที่ frontend ใช้ (ในที่นี้คือ 8080) 
 app.use(cors({
-  origin: 'http://202.183.178.248:59599',  // ระบุ URL ของ frontend
+  origin: `${baseUrl}`,  // ระบุ URL ของ frontend
   credentials: true,
   methods: ['GET', 'POST'],  // เลือกเฉพาะ methods ที่อนุญาต
   allowedHeaders: ['Content-Type', 'Authorization']  // เลือก headers ที่อนุญาต

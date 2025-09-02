@@ -186,7 +186,7 @@ const Modal_vehicle_part_edit = ({isOpen, onClose, onData, onSuccess}) => {
 
                         <div className="col-lg-4 mb-3">
                             <label htmlFor="price" className="form-label">ราคา</label>
-                            <input type="number" name="price" id="price" className="form-control" value={partsData.price} onChange={handleChange} />
+                            <input type="number" name="price" id="price" className="form-control" value={partsData.price} onChange={handleChange} step="0.01" />
                         </div>
 
                         <div className="col-lg-4 mb-3">

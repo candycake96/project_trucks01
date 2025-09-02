@@ -85,16 +85,15 @@ const Modal_orginization_type_details = ({ isOpen, onClose }) => {
             ariaHideApp={false}
             contentLabel="Manage Vehicle Status"
             style={{
-                content: {
+               content: {
                     width: "100%",
                     maxWidth: "950px",
-                    maxHeight: "60vh",
-                    height: "auto",
+                    maxHeight: "80vh",
                     margin: "auto",
                     padding: "0",
                     border: "none",
-                    borderRadius: "0.5rem",
-                    overflowY: "auto",
+                    borderRadius: "0.75rem",
+                    overflow: "hidden",
                 },
                 overlay: {
                     backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -107,85 +106,98 @@ const Modal_orginization_type_details = ({ isOpen, onClose }) => {
         >
 
             <div className="p-3">
-                <div className="text-center mb-3">
-                    <div className="fw-bolder">
-                        <p>ประเภทองค์กร</p>
-                    </div>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h5 className="fw-bold mb-0">จัดการประเภทองค์กร</h5>
+                    <button className="btn-close" onClick={onClose}></button>
                 </div>
+
                 <div className="mb-3">
                     <div className="row">
                         <div className="col-lg-7">
-                            <table className="table table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>ลำดับ</th>
-                                        <th>ประเภทองค์กร</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {isOrganization.map((row, index) => (
-                                        <tr key={index}>
-                                            <td>{index + 1}</td>
-                                            <td>{row.organization_type_name}</td>
-                                            <td className="text-end">
-                                                <button className="btn btn-sm btn-outline-primary rounded-circle me-1"><i class="bi bi-trash-fill"></i></button>
-                                                <button
-                                                    className="btn btn-sm btn-outline-primary rounded-circle me-1"
-                                                    onClick={() => {
-                                                        setOrganizationTypeName(row.organization_type_name); // โหลดข้อมูลเดิม
-                                                        setEditId(row.organization_type_id); // เซ็ตโหมดแก้ไข
-                                                    }}
-                                                >
-                                                    <i className="bi bi-pencil-square"></i>
+                            <div className="card">
+                                <div className="card-header">
+                                    รายการประเภทองค์กร
+                                </div>
+                                <div className="card-body" style={{ maxHeight: "60vh", overflowY: "auto" }}>
+                                    <table className="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>ลำดับ</th>
+                                                <th>ประเภทองค์กร</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {isOrganization.map((row, index) => (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{row.organization_type_name}</td>
+                                                    <td className="text-end">
+                                                        <button className="btn btn-sm btn-outline-primary rounded-circle me-1"><i class="bi bi-trash-fill"></i></button>
+                                                        <button
+                                                            className="btn btn-sm btn-outline-primary rounded-circle me-1"
+                                                            onClick={() => {
+                                                                setOrganizationTypeName(row.organization_type_name); // โหลดข้อมูลเดิม
+                                                                setEditId(row.organization_type_id); // เซ็ตโหมดแก้ไข
+                                                            }}
+                                                        >
+                                                            <i className="bi bi-pencil-square"></i>
+                                                        </button>
+
+                                                    </td>
+
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-lg-5">
+                            <div className="card">
+                                <div className="card-header">
+                                    เพิ่มประเภทองค์กร
+                                </div>
+                                <div className="card-body">
+                                    <form action="" onSubmit={handleOrganizationTypeAdd}>
+                                        <div className="mb-3">
+                                            <label className="form-label">ชื่อประเภทองค์กร</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={organizationTypeName}
+                                                onChange={(e) => setOrganizationTypeName(e.target.value)}
+                                                placeholder="เช่น บริษัทจำกัด, หจก."
+                                            />
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="text-center">
+                                                <button className="btn btn-primary me-2">
+                                                    {editId ? "บันทึกการแก้ไข" : "บันทึก"}
                                                 </button>
 
-                                            </td>
+                                                {editId && (
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-secondary"
+                                                        onClick={() => {
+                                                            setEditId(null);
+                                                            setOrganizationTypeName("");
+                                                            setMessage("");
+                                                        }}
+                                                    >
+                                                        ยกเลิก
+                                                    </button>
+                                                )}
+                                            </div>
 
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div className="col-lg-5">
-                            <form action="" onSubmit={handleOrganizationTypeAdd}>
-                                <div className="">
-                                    <p className="fw-bolder">เพิ่มข้อมูล</p>
+                                            {message && <div className="mt-3 alert alert-info">{message}</div>}
+                                        </div>
+                                    </form>
                                 </div>
-                                <div className="mb-3">
-                                    <label className="form-label">ชื่อประเภทองค์กร</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        value={organizationTypeName}
-                                        onChange={(e) => setOrganizationTypeName(e.target.value)}
-                                        placeholder="เช่น บริษัทจำกัด, หจก."
-                                    />
-                                </div>
-                                <div className="text-center">
-                                    <div className="text-center">
-                                        <button className="btn btn-primary me-2">
-                                            {editId ? "บันทึกการแก้ไข" : "บันทึก"}
-                                        </button>
+                            </div>
 
-                                        {editId && (
-                                            <button
-                                                type="button"
-                                                className="btn btn-secondary"
-                                                onClick={() => {
-                                                    setEditId(null);
-                                                    setOrganizationTypeName("");
-                                                    setMessage("");
-                                                }}
-                                            >
-                                                ยกเลิก
-                                            </button>
-                                        )}
-                                    </div>
-
-                                    {message && <div className="mt-3 alert alert-info">{message}</div>}
-                                </div>
-                            </form>
                         </div>
                     </div>
                 </div>

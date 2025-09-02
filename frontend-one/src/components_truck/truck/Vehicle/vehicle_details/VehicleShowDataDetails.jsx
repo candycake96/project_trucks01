@@ -39,9 +39,9 @@ const VehicleShowDataDetails = () => {
         <div className="p-4 container">
             {/* Vehicle Info Card */}
             <div className="card shadow-sm mb-4">
-                <div className="card-header bg-light fw-bold fs-5">
+                {/* <div className="card-header bg-light fw-bold fs-5">
                     ข้อมูลรถ
-                </div>
+                </div> */}
                 <div className="card-body">
                     {vehicleData && vehicleData.length > 0 && vehicleData.map((row, index) => (
                         <div className="row" key={index}>
