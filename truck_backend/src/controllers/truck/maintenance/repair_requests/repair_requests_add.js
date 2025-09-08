@@ -127,9 +127,9 @@ module.exports = {
             if (Array.isArray(parts) && parts.length > 0) {
                 const sqlParts = `
                     INSERT INTO Truck_repair_parts_used
-                    (request_id, part_id, repair_part_name, maintenance_type, repair_part_price, repair_part_unit, repair_part_qty, repair_part_vat, item_id) 
+                    (request_id, part_id, repair_part_name, maintenance_type, repair_part_price, repair_part_unit, repair_part_qty, repair_part_vat) 
                     VALUES 
-                    (@request_id, @part_id, @repair_part_name, @maintenance_type, @repair_part_price, @repair_part_unit, @repair_part_qty, @repair_part_vat, @item_id)
+                    (@request_id, @part_id, @repair_part_name, @maintenance_type, @repair_part_price, @repair_part_unit, @repair_part_qty, @repair_part_vat)
                 `;
 
                 for (const part of parts) {
@@ -142,7 +142,7 @@ module.exports = {
                         repair_part_unit: part.unit,
                         repair_part_qty: part.qty,
                         repair_part_vat: part.vat || 0,
-                        item_id: part.item_id || '',
+                        // item_id: part.item_id || '',
                     };
                     await executeQueryEmployeeAccessDB(sqlParts, valueParts);
                 }
