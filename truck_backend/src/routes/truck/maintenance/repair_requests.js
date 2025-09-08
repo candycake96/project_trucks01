@@ -8,6 +8,7 @@ const repair_requests_editController = require('../../../controllers/truck/maint
 // แสดง
 router.get('/repair_requests_detail', authenticateToken, repair_requests_detailsController.repair_requests_detail); //แสดงข้อมูลเปิดการแจ้งซ่อมแสดงตารางส่วนแรก
 router.get('/repair_requests_and_part_detail/:id', authenticateToken, repair_requests_detailsController.repair_requests_and_part_detail); //แสดงข้อมูลแจ้งซ่อมและอะไหล่ที่มีการบันทึกไว้
+router.get('/repair_requests_detail_id/:id', authenticateToken, repair_requests_detailsController.repair_requests_detail_id); //แสดงข้อมูลงานแจ้งซ่อมใน datasbase โดยระบุ ID
 
 // เพิ่มข้อมูล
 router.post('/repair_requests_add', authenticateToken, repair_requests_addController.repair_requests_add);

@@ -442,11 +442,11 @@ const RepairRequestFormEdit = () => {
                                                 value={part.item_id}
                                                 onChange={(e) => handleChange(index, "item_id", e.target.value)}
                                             >
-                                                <option value=""></option>
+                                                <option value="">ไม่ต้องการ</option>
                                                 {dataItem.map((row, ndx) => (
                                                     <option value={row.item_id} key={ndx}> {row.item_name}</option>
                                                 ))}
-                                                <option value="อื่นๆ">อื่นๆ</option>
+                                                
                                             </select>
                                         </div>
 

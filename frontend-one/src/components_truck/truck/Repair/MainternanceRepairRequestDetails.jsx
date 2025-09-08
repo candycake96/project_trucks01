@@ -63,7 +63,7 @@ const MainternanceRepairRequestDetails = ({ parts, summary, formData, user, perm
                         <div className="row">
                             <div className="col-lg-3 mb-3">
                                 <label className="form-label">เลขที่ใบแจ้งซ่อม</label>
-                                <input type="text" className="form-control" valulabele={formData?.request_no || ""} disabled />
+                                <input type="text" className="form-control" value={formData?.request_no || ""} disabled />
                             </div>
                             <div className="col-lg-3 mb-3">
                                 <label className="form-label">วันที่แจ้ง</label>
@@ -143,7 +143,6 @@ const MainternanceRepairRequestDetails = ({ parts, summary, formData, user, perm
                                             <option value="PM">PM</option>
                                         </select>
                                     </div>
-
                                     
 
                                     <div className="col-lg-2">

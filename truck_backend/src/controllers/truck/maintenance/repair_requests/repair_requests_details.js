@@ -36,6 +36,42 @@ module.exports = {
         }
     },
 
+    repair_requests_detail_id: async (req, res) => {
+        try {
+            const {id} = req.params;
+            const sqlInsert = `
+                SELECT 
+                r1.request_id, 
+                r1.request_informer_emp_id, 
+                r1.request_no, 
+                r1.request_date, 
+                r1.status, 
+                r1.reg_id, 
+                r1.car_mileage,
+                r1.updated_at,
+                emp.fname ,
+                emp.lname,
+                v.reg_number
+                 FROM Truck_repair_requests r1
+                 INNER JOIN employees emp ON emp.id_emp = r1.request_informer_emp_id
+                 INNER JOIN Truck_vehicle_registration v ON v.reg_id = r1.reg_id
+                 WHERE request_id = @request_id
+            `;
+            const value = {request_id: id}
+            const result =  await executeQueryEmployeeAccessDB(sqlInsert, value);
+            if ( result && result.length > 0 ) {
+                res.status(200).json(result);
+            } else {
+                res.status(404).json({ message: "ไม่สามารถบันทึกข้อมูลได้"})
+            }
+
+        } catch (error) {
+            console.error("Error in repair_requests_add:", error);
+            res.status(500).json({ message: "เกิดข้อผิดพลาด",  error: error.message  });
+        }
+    },
+
+
     repair_requests_and_part_detail: async (req, res) => {
         const {id} = req.params;
         try {
