@@ -5,6 +5,7 @@ import axios from "axios";
 import { apiUrl } from "../../../config/apiConfig";
 import Modal_Check_PM from "./Mobal/Modal_Check_PM";
 import { useLocation } from "react-router-dom";
+import Modal_pm_show_all from "../PreventiveMaintenance/Modal/Modal_pm_show_all";
 
 const RepairRequestForm = () => {
 
@@ -309,7 +310,7 @@ const RepairRequestForm = () => {
 
                                 <div className="row  mb-3" key={index}>
                                     <input type="hidden" value={part.part_id} onChange={(e) => handleChange(index, "part_id", e.target.value)} /> {/* part_id */}
-                                    <div className="col-lg-1">
+                                    <div className="col-lg-2">
                                         <label className="form-label text-sm">ระบบ</label>
                                         <input
                                             type="text"
@@ -353,7 +354,7 @@ const RepairRequestForm = () => {
                                         </select>
                                     </div>
 
-                                    <div className="col-lg-2">
+                                    {/* <div className="col-lg-2">
                                         <label className="form-label text-sm">ข้อมูลเชิงวิเคราะห์ <span className="" style={{ color: "red" }}>*</span></label>
                                         <select
                                             className="form-select  mb-3  form-select-sm"
@@ -361,15 +362,14 @@ const RepairRequestForm = () => {
                                             value={part.item_id}
                                             onChange={(e) => handleChange(index, "item_id", e.target.value)}
                                         >
-                                            <option value=""></option>
+                                            <option value="">ไม่ต้องการ</option>
                                             {dataItem.map((row, ndx) => (
                                                 <option value={row.item_id} key={ndx}> {row.item_name}</option>
                                             ))}
-                                            <option value="อื่นๆ">อื่นๆ</option>
                                         </select>
-                                    </div>
+                                    </div> */}
 
-                                    <div className="col-lg-1">
+                                    <div className="col-lg-2">
                                         <label className="form-label text-sm">ราคา <span className="" style={{ color: "red" }}>*</span></label>
                                         <input
                                             type="number"
@@ -471,7 +471,8 @@ const RepairRequestForm = () => {
             )}
 
             {isOpenCheckPM && (
-                <Modal_Check_PM isOpen={isOpenCheckPM} onClose={handleClossModalChackPM} />
+                <Modal_pm_show_all isOpen={isOpenCheckPM} onClose={handleClossModalChackPM} />
+                // <Modal_Check_PM isOpen={isOpenCheckPM} onClose={handleClossModalChackPM} />
             )}
         </div>
 

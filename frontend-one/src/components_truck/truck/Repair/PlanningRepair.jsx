@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { apiUrl } from "../../../config/apiConfig";
 import '../Repair/PlanningReqair.css'
+import Status_Mainternance from "./Status_Mainternance/Status_Mainternance";
 
 const PlanningRepair = ({ maintenanceJob }) => {
 
@@ -544,7 +545,9 @@ const PlanningRepair = ({ maintenanceJob }) => {
 
                 </>
             ) : (
-                null
+                <>
+                <Status_Mainternance requestID={maintenanceJob}  />
+                </>
             )}
 
 

@@ -13,6 +13,7 @@ import MainternanceApprover_mgr_add from "./MainternanceApprover_mgr_add";
 import { Table, Button, Spinner } from "react-bootstrap";
 import Modal_Closing from "./CloseList/modal/Modal_Closing";
 import Modal_repair_cancel_ganaral from "./Cancel/Modal/Modal_repair_canael_genaral";
+import MainternanceApprover_mgr_main from "./MainternanceApprover_mgr_main";
 
 const MaintenanceJob = () => {
 
@@ -504,13 +505,12 @@ useEffect(() => {
                         {activeForm === 'MainternanceAnalysisApprover' && (
                             <MainternanceAnalysisApproverMain maintenanceJob={formData} />
                             // <MainternanceAnalysisApprover maintenanceJob={formData} />
-
                         )}
 
                         {activeForm === 'ApproveMainternanceForm' && (
-                            <MainternanceApprover_mgr_add maintenanceJob={formData} user={user} />
+                            <MainternanceApprover_mgr_main maintenanceJob={formData} user={user} />
+                            // <MainternanceApprover_mgr_add maintenanceJob={formData} user={user} />
                         )}
-
 
                     </div>
                 </div>
