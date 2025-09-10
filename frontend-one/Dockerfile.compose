@@ -1,0 +1,19 @@
+FROM node:20-bullseye
+
+WORKDIR /app
+
+# คัดลอก package.json เพื่อติดตั้ง dependencies
+COPY package*.json ./
+RUN npm install
+
+# คัดลอก source code ทั้งหมด
+COPY . .
+
+# ตั้ง environment เป็น development
+ENV NODE_ENV=development
+
+# เปิด port สำหรับ frontend dev server
+EXPOSE 3000
+
+# ใช้ npm run dev สำหรับ hot reload
+CMD ["npm", "run", "dev"]

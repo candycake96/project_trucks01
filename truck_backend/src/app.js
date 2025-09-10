@@ -25,6 +25,13 @@ app.use(bodyParser.json({
     }
 }));
 
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.message === 'Invalid JSON') {
+    return res.status(400).json({ error: 'Invalid JSON format' });
+  }
+  next(err);
+});
+
 
 
 // เปิดใช้งาน CORS ให้ทุก domain หรือกำหนดพอร์ตที่ frontend ใช้ (ในที่นี้คือ 8080) 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import MainternanceAnalysisApprover from "./MainternanceAnalysisApprover";
 import MainternanceAnalysisApproverShowEdit from "./MainternanceAnalysisApproverShowEdit";
 import Status_Mainternance from "./Status_Mainternance/Status_Mainternance";
+
 import axios from "axios";
 import { apiUrl } from "../../../config/apiConfig";
 
@@ -47,58 +48,59 @@ const MainternanceAnalysisApproverMain = ({ maintenanceJob }) => {
     if (maintenanceJob?.request_id) {
       fetchApproverShowData();
     }
-  }, [maintenanceJob, hasAnalysis]);
+  }, [maintenanceJob]); // ✅ เอา hasAnalysis ออกเพื่อไม่ loop
 
   // รอโหลด user และข้อมูล API
   if (loading || !user) return <div>Loading...</div>;
 
   const status = maintenanceJob?.status;
 
-  // ✅ ผู้มีสิทธิ์ MA-COST-VEHICCLE → ต้องเห็นเสมอ (Add ถ้ายังไม่มีข้อมูล, Edit ถ้ามีแล้ว)
-  if (hasPermission("MA-COST-VEHICCLE") ) {
-    return hasAnalysis ? (
-      <MainternanceAnalysisApproverShowEdit
-        maintenanceJob={maintenanceJob}
-        isApproverShowData={isApproverShowData}
-        hasPermission={hasPermission}
-      />
-    ) : (
-      <MainternanceAnalysisApprover
-        maintenanceJob={maintenanceJob}
-        onSaved={(newData) => {
-          setHasAnalysis(true);
-          setApprovershowData({ approvers: newData });
-        }}
-      />
-    );
+  // -------- Logic --------
+  switch (status) {
+    case "แจ้งซ่อม":
+    case "จัดรถ":  
+      return <Status_Mainternance requestID={maintenanceJob} />;
+
+    case "ตรวจเช็ครถ":
+      if (hasPermission("MA-COST-VEHICCLE")) {
+        return hasAnalysis ? (
+          <MainternanceAnalysisApproverShowEdit
+            maintenanceJob={maintenanceJob}
+            isApproverShowData={isApproverShowData}
+            hasPermission={hasPermission}
+          />
+        ) : (
+          <MainternanceAnalysisApprover
+            maintenanceJob={maintenanceJob}
+            onSaved={(newData) => {
+              setHasAnalysis(true);
+              setApprovershowData({ approvers: newData });
+            }}
+          />
+        );
+      } else {
+        return <Status_Mainternance requestID={maintenanceJob} />;
+      }
+
+    case "อนุมัติผลตรวจ":
+      return (
+        <MainternanceAnalysisApproverShowEdit
+          maintenanceJob={maintenanceJob}
+          isApproverShowData={isApproverShowData}
+          hasPermission={hasPermission}
+        />
+      );
+
+    default:
+      // 🚩 สถานะอื่น ๆ → แสดง ShowEdit ถ้ามีข้อมูล
+      return (
+        <MainternanceAnalysisApproverShowEdit
+          maintenanceJob={maintenanceJob}
+          isApproverShowData={isApproverShowData}
+          hasPermission={hasPermission}
+        />
+      );
   }
-
-
-  
-  // ถ้ามีข้อมูลแล้ว → ให้ดู ShowEdit ได้
-  if (hasAnalysis) {
-    return (
-      <MainternanceAnalysisApproverShowEdit
-        maintenanceJob={maintenanceJob}
-        isApproverShowData={isApproverShowData}
-        hasPermission={hasPermission}
-      />
-    );
-  }
-
-  // ✅ ไม่มีสิทธิ์ → ทำตามสถานะ
-  if (status === "แจ้งซ่อม" || status === "จัดรถ" || status === "ตรวจเช็ครถ" && !hasPermission("MA-COST-VEHICCLE") ) {
-    return <Status_Mainternance requestID={maintenanceJob} />;
-  }
-
-  if (status === "ตรวจเช็ครถ") {
-    // ไม่มีสิทธิ์และยังอยู่ตรวจเช็ครถ → ดูได้แค่ Status
-    return <Status_Mainternance requestID={maintenanceJob} />;
-  }
-
-
-  // ถ้าไม่มีสิทธิ์และไม่มีข้อมูลเลย → Status
-  return <Status_Mainternance requestID={maintenanceJob} />;
 };
 
 export default MainternanceAnalysisApproverMain;

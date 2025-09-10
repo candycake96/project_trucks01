@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./truck_backend
+      dockerfile: Dockerfile.compose
+    ports:
+      - "3333:3333"
+    volumes:
+      - ./truck_backend:/app
+      - /app/node_modules
+    env_file:
+      - ./truck_backend/.env.compose
+    command: ["npx", "nodemon", "src/index.js"]
+    depends_on:
+      - mssql
+
+  frontend:
+    build:
+      context: ./frontend-one
+      dockerfile: Dockerfile.compose
+    ports:
+      - "5173:3000"
+    volumes:
+      - ./frontend-one:/app
+      - /app/node_modules
+    env_file:
+      - ./frontend-one/.env
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]
+    depends_on:
+      - backend
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=isylzjko@1234
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    user: "0:0"
+
+volumes:
+  mssql_data: {}

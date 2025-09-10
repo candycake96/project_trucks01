@@ -100,7 +100,7 @@ useEffect(() => {
       <ul className="nav flex-column mb-auto sidebar-nav">
         <li className="nav-item">
           <Link to="/truck" className={`nav-link ${location.pathname === "/truck" ? "active" : ""}`}>
-            <i className="bi bi-robot"></i> หน้าแรก
+            <i className="bi bi-robot"></i> หน้าแรก 000
           </Link>
         </li>
 

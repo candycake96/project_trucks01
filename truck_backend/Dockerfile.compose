@@ -1,0 +1,25 @@
+FROM node:20-bullseye
+
+WORKDIR /app
+
+# ติดตั้ง dependencies ของระบบ (Linux packages)
+RUN apt-get update && apt-get install -y \
+    python3 make g++ curl unixodbc-dev wget gnupg \
+    libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 \
+    libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 \
+    libgbm1 libasound2 libpangocairo-1.0-0 libpango-1.0-0 libgtk-3-0 libx11-xcb1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# คัดลอก package.json เพื่อติดตั้ง dependencies
+COPY package*.json ./
+RUN npm install
+RUN npm install -g nodemon
+
+# คัดลอก source code ทั้งหมด
+COPY . .
+
+# เปิด port สำหรับ backend
+EXPOSE 3333
+
+# ใช้ nodemon สำหรับ dev hot reload
+CMD ["npx", "nodemon", "src/index.js"]
