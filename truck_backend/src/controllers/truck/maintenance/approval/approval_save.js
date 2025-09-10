@@ -38,7 +38,7 @@ module.exports = {
             });
 
             const sqlRQ = `UPDATE Truck_repair_requests SET status = @status WHERE  request_id = @request_id`;
-            const valueRQ = { status: "ผู้จัดการฝ่ายขนส่งและคลังสินค้า", request_id: request_id };
+            const valueRQ = { status: "ผู้จัดการอนุมัติ", request_id: request_id };
             await executeQueryEmployeeAccessDB(sqlRQ, valueRQ);
 
             const sqlLog = `INSERT INTO Truck_repair_logs ( 
@@ -60,7 +60,7 @@ module.exports = {
             const valueLog = {
                 request_id: id,
                 action: 'ผู้จัดการฝ่ายแก้ไข',
-                action_by: req.body.analysis_emp_id,
+                action_by: id,
                 action_by_role: 'ผู้จัดการฝ่าย ',
                 status: 'ตรวจสอบโดยผู้จัดการฝ่าย',
                 remarks: 'แก้ไขจากผู้จัดการ'

@@ -168,7 +168,7 @@ module.exports = {
                 if (quotation.parts && Array.isArray(quotation.parts)) {
                     for (const part of quotation.parts) {
                         const valuesParts = {
-                            item_id: part.item_id || '',
+                            item_id: part.item_id || null,
                             quotation_id: quotation_id, // ใช้ quotation_id ที่ได้จากการบันทึก
                             part_id: part.part_id || '', // ถ้าไม่มี part_id ให้เป็นค่าว่าง
                             part_name: part.part_name || '', // ถ้าไม่มีชื่ออะไหล่ให้เป็นค่าว่าง
@@ -187,7 +187,7 @@ module.exports = {
             }
 
             const sqlRQ = `UPDATE Truck_repair_requests SET status = @status WHERE  request_id = @request_id`;
-            const valueRQ = { status: "วิเคราะห์แผนกซ่อมบำรุง", request_id: id };
+            const valueRQ = { status: "ตรวจเช็ครถ", request_id: id };
             await executeQueryEmployeeAccessDB(sqlRQ, valueRQ);
 
             const sqlLog = `INSERT INTO Truck_repair_logs ( 

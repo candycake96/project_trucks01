@@ -183,7 +183,7 @@ module.exports = {
                     }
 
                     const partData = {
-                        item_id: part.item_id || '',
+                        item_id: part.item_id || null,
                         quotation_parts_id: part.quotation_parts_id ? Number(part.quotation_parts_id) : undefined,
                         quotation_id: quotationId,
                         part_id: part.part_id ? Number(part.part_id) : null,

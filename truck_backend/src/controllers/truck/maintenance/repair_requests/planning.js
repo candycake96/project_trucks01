@@ -139,7 +139,7 @@ ORDER BY r1.request_id DESC;
 
             // 
             const sqlRQ = `UPDATE Truck_repair_requests SET status = @status WHERE  request_id = @request_id`;
-            const valueRQ = {status: "แผนกจัดรถตรวจสอบ", request_id: request_id};
+            const valueRQ = {status: "จัดรถ", request_id: request_id};
              await executeQueryEmployeeAccessDB(sqlRQ, valueRQ);
 
             //  
@@ -165,7 +165,7 @@ ORDER BY r1.request_id DESC;
                 action: 'วางแผนจัดรถ',
                 action_by: planning_emp_id,
                 action_by_role: 'ผู้จัดรถ ',
-                status: 'วางแผน',
+                status: 'จัดรถ',
                 remarks: 'บันทึกจัดรถ'
             };
 

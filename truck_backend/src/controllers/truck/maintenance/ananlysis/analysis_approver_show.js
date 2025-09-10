@@ -69,7 +69,7 @@ module.exports = {
                     q.note,
                     q.is_selected,
                     q.quotation_vat,
-                    q.vendor_name,
+                    q.vendor_name,                    
                     a.request_id
              FROM Truck_repair_garage_quotation q
             INNER JOIN Truck_repair_analysis a ON a.analysis_id = q.analysis_id
@@ -97,14 +97,15 @@ module.exports = {
              WHERE p1.quotation_id = @quotation_id`;
 
             // 3. ดึงข้อมูล approver
-            const sqlApprover = `SELECT TOP 1 a1.*
+            const sqlApprover = `
+            SELECT TOP 1 a1.*, e.fname, e.lname
 FROM Truck_repair_analysis_approver a1
 INNER JOIN Truck_repair_analysis a ON a.analysis_id = a1.analysis_id
-WHERE a.request_id = @request_id 
-ORDER BY a1.approval_date DESC; 
+INNER JOIN employees e ON a1.approver_emp_id = e.id_emp
+WHERE a.request_id = @request_id
+ORDER BY a1.approval_date DESC;
 `;
             const approvers = await executeQueryEmployeeAccessDB(sqlApprover, { request_id: id });
-
             // 3. ใส่ parts ลงในแต่ละ quotation
             for (let quotation of quotations) {
                 const parts = await executeQueryEmployeeAccessDB(sqlParts, { quotation_id: quotation.quotation_id });

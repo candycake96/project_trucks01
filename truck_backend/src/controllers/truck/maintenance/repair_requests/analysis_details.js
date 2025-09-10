@@ -1,32 +1,26 @@
 const { executeQueryEmployeeAccessDB } = require('../../../../config/db');
 
 module.exports = {
-
-    // ตารางก่อนตรวจสอบ
-    analysis_details: async (req, res) => {
+    repair_requests_detail: async (req, res) => {
         try {
           
             const sqlInsert = `
                 SELECT 
-  r1.request_id, 
-  r1.request_informer_emp_id, 
-  r1.request_no, 
-  r1.request_date, 
-  CASE 
-    WHEN r1.status = 'แผนกจัดรถตรวจสอบ' THEN 'รอการตรวจสอบ'
-    ELSE r1.status
-  END AS status,
-  r1.reg_id,
-  r1.car_mileage,
-  emp.fname,
-  emp.lname,
-  v.reg_number
-FROM Truck_repair_requests r1
-INNER JOIN employees emp ON emp.id_emp = r1.request_informer_emp_id
-INNER JOIN Truck_vehicle_registration v ON v.reg_id = r1.reg_id
-WHERE r1.status = 'แผนกจัดรถตรวจสอบ'
-ORDER BY r1.request_id DESC;
-
+                r1.request_id, 
+                r1.request_informer_emp_id, 
+                r1.request_no, 
+                r1.request_date, 
+                r1.status, 
+                r1.reg_id, 
+                r1.car_mileage,
+                emp.fname ,
+                emp.lname,
+                v.reg_number
+                 FROM Truck_repair_requests r1
+                 INNER JOIN employees emp ON emp.id_emp = r1.request_informer_emp_id
+                 INNER JOIN Truck_vehicle_registration v ON v.reg_id = r1.reg_id
+                 WHERE r1.status NOT IN ('ปิดงานซ่อม', 'ยกเลิกงานซ่อม')
+                 ORDER BY r1.request_id DESC
             `;
 
             const result =  await executeQueryEmployeeAccessDB(sqlInsert);
@@ -42,34 +36,29 @@ ORDER BY r1.request_id DESC;
         }
     },
 
-
-    // ตารางเมื่อตรวจสอบแล้ว
- analysis_details_table_active: async (req, res) => {
+    repair_requests_detail_id: async (req, res) => {
         try {
-          
+            const {id} = req.params;
             const sqlInsert = `
                 SELECT 
-  r1.request_id, 
-  r1.request_informer_emp_id, 
-  r1.request_no, 
-  r1.request_date, 
-  CASE 
-    WHEN r1.status = 'วิเคราะห์แผนกซ่อมบำรุง' THEN 'วิเคราะห์แผนกซ่อมบำรุง'
-    ELSE r1.status
-  END AS status,
-  r1.reg_id,
-  r1.car_mileage,
-  emp.fname,
-  emp.lname,
-  v.reg_number
-FROM Truck_repair_requests r1
-INNER JOIN employees emp ON emp.id_emp = r1.request_informer_emp_id
-INNER JOIN Truck_vehicle_registration v ON v.reg_id = r1.reg_id
-WHERE r1.status = 'วิเคราะห์แผนกซ่อมบำรุง'
-ORDER BY r1.request_id DESC;
+                r1.request_id, 
+                r1.request_informer_emp_id, 
+                r1.request_no, 
+                r1.request_date, 
+                r1.status, 
+                r1.reg_id, 
+                r1.car_mileage,
+                r1.updated_at,
+                emp.fname ,
+                emp.lname,
+                v.reg_number
+                 FROM Truck_repair_requests r1
+                 INNER JOIN employees emp ON emp.id_emp = r1.request_informer_emp_id
+                 INNER JOIN Truck_vehicle_registration v ON v.reg_id = r1.reg_id
+                 WHERE request_id = @request_id
             `;
-
-            const result =  await executeQueryEmployeeAccessDB(sqlInsert);
+            const value = {request_id: id}
+            const result =  await executeQueryEmployeeAccessDB(sqlInsert, value);
             if ( result && result.length > 0 ) {
                 res.status(200).json(result);
             } else {
@@ -83,8 +72,7 @@ ORDER BY r1.request_id DESC;
     },
 
 
-
-    4: async (req, res) => {
+    repair_requests_and_part_detail: async (req, res) => {
         const {id} = req.params;
         try {
             const values = {request_id: id};
@@ -105,7 +93,6 @@ ORDER BY r1.request_id DESC;
                  INNER JOIN Truck_vehicle_registration v ON v.reg_id = r1.reg_id
                  WHERE request_id = @request_id    
                  ORDER BY r1.request_no ASC
-                        
             `;
 
             const sqlParts = `SELECT 
@@ -118,6 +105,7 @@ ORDER BY r1.request_id DESC;
                                 p1.repair_part_unit,
                                 p1.repair_part_qty,
                                 p1.repair_part_vat,
+                                p1.item_id,
                                 p2.system_id,
                                 s.system_name
                             FROM  Truck_repair_parts_used p1

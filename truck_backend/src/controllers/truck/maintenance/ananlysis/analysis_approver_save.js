@@ -69,12 +69,13 @@ module.exports = {
             let status = '';
 
             if (approver.approval_status === 'approved') {
-                status = 'ผ่านอนุมัตผลตรวจหัวหน้าแผนกช่าง';
+                status = 'อนุมัติตรวจเช็ครถ';
             } else if (approver.approval_status === 'rejected') {
-                status = 'ไม่ผ่านอนุมัตผลตรวจหัวหน้าแผนกช่าง';
+                status = 'รอแก้ไขผลตรวจเช็ครถ';
             } else {
-                status = 'ส่งแก้ไขผลตรวจ';
+                status = 'รอแก้ไขผลตรวจเช็ครถ';
             }
+
 
 
             const sqlRQ = `UPDATE Truck_repair_requests SET status = @status WHERE  request_id = @request_id`;
