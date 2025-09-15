@@ -35,9 +35,21 @@ const getUploadPath = (file, fieldName) => {
         return 'uploads/quotationMainternance/';
     }
 
-        // ถ้าเป็นไฟล์ใบเสนอราคา ให้เก็บในโฟลเดอร์ quotation_doc
+    // ถ้าเป็นไฟล์ใบเสนอราคา ให้เก็บในโฟลเดอร์ quotation_doc
     if (fieldName === 'close_file') {
         return 'uploads/Close_job_mainternence/';
+    }
+
+    if (fieldName === 'tax_doc') {
+        return 'uploads/tax_doc/';
+    }
+
+    if (fieldName === 'act_doc') {
+        return 'uploads/act_doc/';
+    }
+
+    if (fieldName === 'vehicle_img') {
+        return 'uploads/vehicle_img/';
     }
 
     // ถ้าไม่ตรงเงื่อนไขให้เก็บในโฟลเดอร์อื่น
@@ -89,6 +101,9 @@ const uploadMultiple = upload.fields([
     { name: 'file_vendor', maxCount: 1 }, // กำหนดฟิลด์ 'file_vendor' รองรับได้สูงสุด 1 ไฟล์ 
     { name: 'quotation_file', maxCount: 1 }, // กำหนดฟิลด์ 'file_vendor' รองรับได้สูงสุด 1 ไฟล์ 
     { name: 'close_file', maxCount: 1 }, // กำหนดฟิลด์ 'file_vendor' รองรับได้สูงสุด 1 ไฟล์ 
+    { name: 'tax_doc', maxCount: 1 }, // กำหนดฟิลด์ 'file_vendor' รองรับได้สูงสุด 1 ไฟล์ 
+    { name: 'act_doc', maxCount: 1 }, // กำหนดฟิลด์ 'file_vendor' รองรับได้สูงสุด 1 ไฟล์ 
+    { name: 'vehicle_img', maxCount: 10 }, // กำหนดฟิลด์ 'file_vendor' รองรับได้สูงสุด 1 ไฟล์ 
 ]);
 
 module.exports = { uploadMultiple }; 

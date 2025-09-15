@@ -3,29 +3,27 @@ import React, { useEffect, useState } from "react";
 import ReactModal from "react-modal";
 import { apiUrl } from "../../../../../config/apiConfig";
 
-const Modal_UpdateTax = ({ isOpen, onClose, dataTax, onSaved }) => {
+const Modal_tax_add = ({ isOpen, onClose, dataVehicle, onSaved  }) => {
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("");
     const [formData, setFormData] = useState({
         tax_date_end: "",
         price: "",
-        tax_doc: null
+        tax_doc: null, // เก็บไฟล์
     });
 
+    // โหลดค่าเดิมเข้ามา
     useEffect(() => {
-        if (dataTax) {
-            const taxDate = dataTax.tax_date_end
-                ? new Date(dataTax.tax_date_end).toISOString().split("T")[0]
-                : "";
-            setFormData({
-                tax_date_end: taxDate,
-                price: dataTax.price || "",
-                tax_doc: null, // ถ้าไม่มีไฟล์ก็เป็น null
-            });
+        if (dataVehicle) {
+            setFormData((prev) => ({
+                ...prev,
+                tax_date_end: dataVehicle.tax_end ? dataVehicle.tax_end.split("T")[0] : "",
+                price: dataVehicle.price || "",
+            }));
         }
-    }, [dataTax]);
+    }, [dataVehicle]);
 
-    // handleChange สำหรับ input และไฟล์
+    // handle input change
     const handleChange = (e) => {
         const { name, value, files } = e.target;
         if (name === "tax_doc") {
@@ -35,23 +33,20 @@ const Modal_UpdateTax = ({ isOpen, onClose, dataTax, onSaved }) => {
         }
     };
 
-    const handleSubmitUpdateTax = async (e) => {
+    // submit
+    const handleSubmitTaxAdd = async (e) => {
         e.preventDefault();
         try {
-            const dataToSend = new FormData();
-            dataToSend.append("formData", JSON.stringify({
-                tax_date_end: formData.tax_date_end,
-                price: formData.price,
-                tax_doc: dataTax.tax_doc || null // ส่งไฟล์เดิมเป็นค่า null หากไม่มี
-            }));
-
+            const formDataToSend = new FormData();
+            formDataToSend.append("price", formData.price);
+            formDataToSend.append("tax_date_end", formData.tax_date_end);
             if (formData.tax_doc) {
-                dataToSend.append("tax_doc", formData.tax_doc);
+                formDataToSend.append("tax_doc", formData.tax_doc);
             }
 
-            await axios.put(
-                `${apiUrl}/api/tax_update/${dataTax.tax_id}`,
-                dataToSend,
+            const response = await axios.post(
+                `${apiUrl}/api/tax_add/${dataVehicle.reg_id}`,
+                formDataToSend,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -60,13 +55,20 @@ const Modal_UpdateTax = ({ isOpen, onClose, dataTax, onSaved }) => {
                 }
             );
 
+            setMessage(response.data.message || "อัปเดตข้อมูลภาษีสำเร็จ!");
+            setMessageType("success");
             alert("อัปเดตข้อมูลภาษีสำเร็จ!");
-            onClose();
-            if (onSaved) onSaved(); // โหลดข้อมูลใหม่
+                        // ✅ แจ้ง parent component ให้โหลดข้อมูลใหม่
+            if (onSaved) {
+                onSaved(response.data);
+            }
 
+            onClose();
+            
         } catch (error) {
-            console.error("Error updating Tax :", error);
-            alert("Error updating Tax");
+            console.error("Error updating Tax:", error);
+            setMessage("Error updating Tax");
+            setMessageType("error");
         }
     };
 
@@ -97,7 +99,16 @@ const Modal_UpdateTax = ({ isOpen, onClose, dataTax, onSaved }) => {
             <div>
                 <h5 className="text-center mb-3 fw-bold">แก้ไขข้อมูลภาษี</h5>
 
-                <form onSubmit={handleSubmitUpdateTax}>
+                {/* success/error message */}
+                {message && (
+                    <div
+                        className={`alert ${messageType === "success" ? "alert-success" : "alert-danger"}`}
+                    >
+                        {message}
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmitTaxAdd}>
                     <div className="row">
                         <div className="col-md-6 mb-3">
                             <label htmlFor="tax_date_end" className="form-label fw-medium">
@@ -133,14 +144,6 @@ const Modal_UpdateTax = ({ isOpen, onClose, dataTax, onSaved }) => {
                         <label htmlFor="tax_doc" className="form-label fw-medium">
                             อัพโหลดเอกสารภาษี
                         </label>
-                        {dataTax?.tax_doc && !formData.tax_doc && (
-                            <div className="mb-1">
-                                <span>ไฟล์เดิม: </span>
-                                <a href={dataTax.tax_doc} target="_blank" rel="noopener noreferrer">
-                                    {dataTax.tax_doc.split("/").pop()}
-                                </a>
-                            </div>
-                        )}
                         <input
                             type="file"
                             id="tax_doc"
@@ -164,4 +167,4 @@ const Modal_UpdateTax = ({ isOpen, onClose, dataTax, onSaved }) => {
     );
 };
 
-export default Modal_UpdateTax;
+export default Modal_tax_add;

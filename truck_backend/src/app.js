@@ -69,6 +69,9 @@ app.use('/api/company/imglogo', express.static(logoPath));
 
 app.use('/api/vehicle/uploads', express.static(vehicleUploadsPath));
 
+app.use('/api/uploads/tax_doc', express.static(path.join(__dirname, './uploads/tax_doc')));
+app.use('/api/uploads/act_doc', express.static(path.join(__dirname, './uploads/act_doc')));
+app.use('/api/uploads/vehicle_img', express.static(path.join(__dirname, './uploads/vehicle_img')));
 
 // ให้ express สามารถเข้าถึงไฟล์ในโฟลเดอร์ uploads
 app.use('/api/status_doc', express.static(path.join(__dirname, './uploads/status_doc')));
@@ -248,6 +251,16 @@ app.use("/api", setting_mainternance_distancesRoutes);
 // ตั้งค่า pm เพื่อแจ้งเตือน
 const pm_plansRoutes = require("./routes/truck/preventive_maintenance/pm_plans");
 app.use("/api", pm_plansRoutes);
+
+// พรบ
+const car_actRoutes = require("./routes/truck/car_act");
+app.use("/api", car_actRoutes);
+
+// รูปรถ
+const img_vehicleRoutes = require("./routes/truck/img_vehicle/img_vehicle");
+app.use("/api", img_vehicleRoutes);
+
+
 
 //  รายงาน
 const repairsRoutes = require("./routes/report/maintenance/repair");
