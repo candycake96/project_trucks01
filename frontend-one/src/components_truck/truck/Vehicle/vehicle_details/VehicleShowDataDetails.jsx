@@ -81,7 +81,7 @@ const VehicleShowDataDetails = () => {
   const handleCloseModalImage = () => setOpenModalImage(false);
   const handleOpenModalBook = (data) => {
     setOpenModalBook(true);
-    setIsOpenModalBookData(data);
+    setOpenModalBookData(data);
   };
   const handleCloseModalBook = () => setOpenModalBook(false);
 
