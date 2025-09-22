@@ -40,7 +40,6 @@ const MainternanceRepairRequestDetails = ({ parts, summary, formData, user, perm
 
 
 
-
     return (
         <>
             <div className=" mb-3">
