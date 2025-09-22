@@ -40,12 +40,16 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
         remark: "",    // หมายเหตุ
         is_pm: false,   // ซ่อมก่อนเสีย
         is_cm: false,   // ซ่อมหลังเสีย
+        fname: "",
+        lname: ""
     });
 
     // คอนฟิกข้อมูลที่จะส่งไปยัง API
     const dataToSend = {
         // รวมข้อมูลจาก analysisData เพื่อส่งไปยัง API
         ...analysisData,
+        fname: analysisData.fname || "",
+        lname: analysisData.lname || "",
         analysis_id: analysisData.analysis_id || "",
         request_id: analysisData.request_id || "",
         analysis_emp_id: analysisData.analysis_emp_id || (user ? user.id_emp : ""),
@@ -121,7 +125,7 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
     const handleAddPart = (quotationIndex) => {
         const updatedQuotations = [...quotations];
         updatedQuotations[quotationIndex].parts.push({
-           item_id: "", request_id: "", parts_used_id: "", part_id: "", system_name: "", part_name: "", price: "", unit: "", maintenance_type: "", qty: "", discount: "", vat: "", total: ""
+            item_id: "", request_id: "", parts_used_id: "", part_id: "", system_name: "", part_name: "", price: "", unit: "", maintenance_type: "", qty: "", discount: "", vat: "", total: ""
         });
         setQuotations(updatedQuotations);
     };
@@ -194,18 +198,18 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
             const vatVal = subtotal * vat / 100;
 
             total += subtotal;
-            vatAmountPerItem += vatVal; 
+            vatAmountPerItem += vatVal;
         });
 
-        const vatRate = parseFloat(quotation_vat) || 0; 
-        const extraVat = total * vatRate / 100; 
+        const vatRate = parseFloat(quotation_vat) || 0;
+        const extraVat = total * vatRate / 100;
 
-        const vatAmount = vatAmountPerItem + extraVat; 
+        const vatAmount = vatAmountPerItem + extraVat;
 
         return {
-            total: total.toFixed(2), 
-            vat: vatAmount.toFixed(2), 
-            grandTotal: (total + vatAmount).toFixed(2), 
+            total: total.toFixed(2),
+            vat: vatAmount.toFixed(2),
+            grandTotal: (total + vatAmount).toFixed(2),
         };
     };
 
@@ -250,7 +254,7 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
         }
     }, [maintenanceJob]);
 
-        const [dataItem, setDataItem] = useState([]);
+    const [dataItem, setDataItem] = useState([]);
 
     const fetchDataItem = async () => {
         try {
@@ -381,6 +385,8 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
             // กรณี data มีโครงสร้าง { analysis: {...}, quotations: [...] }
             if (data.analysis) {
                 setAnalysisData({
+                    fname: data.analysis.fname || "",
+                    lname: data.analysis.lname || "",
                     analysis_id: data.analysis.analysis_id || "",
                     request_id: data.analysis.request_id || "",
                     analysis_emp_id: data.analysis.analysis_emp_id || "",
@@ -445,6 +451,8 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
         if (data) {
             if (data.analysis) {
                 setAnalysisData({
+                    fname: data.analysis.fname || "",
+                    lname: data.analysis.lname || "",
                     request_id: data.analysis.request_id || "",
                     analysis_emp_id: data.analysis.analysis_emp_id || "",
                     is_quotation_required: !!data.analysis.is_quotation_required,
@@ -600,20 +608,20 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
 
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <p className="mb-0 fw-bold text-dark ">รายการตรวจเช็ครถและใบเสนอราคารายการซ่อม</p>
-                 {hasPermission("EDIT_CAR_CHECK") && (
-                !isEditing && (
-                    <div className="">
-                        <button
-                            type="button"
-                            className="btn btn-success btn-sm"
-                            onClick={() => setIsEditing(true)}
-                            style={{ whiteSpace: 'nowrap' }}
-                        >
-                            <i className="bi bi-pencil-fill me-1"></i>  แก้ไข
-                        </button>
-                    </div>
-                )
-                 )}
+                {hasPermission("EDIT_CAR_CHECK") && (
+                    !isEditing && (
+                        <div className="">
+                            <button
+                                type="button"
+                                className="btn btn-success btn-sm"
+                                onClick={() => setIsEditing(true)}
+                                style={{ whiteSpace: 'nowrap' }}
+                            >
+                                <i className="bi bi-pencil-fill me-1"></i>  แก้ไข
+                            </button>
+                        </div>
+                    )
+                )}
             </div>
 
             <form onSubmit={handleSubmit} className="">
@@ -628,18 +636,19 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
 
                             <div className="row mb-3 align-items-center" >
                                 <div className="col-lg-4 mb-3">
-                                    <label htmlFor="reporter" className="form-label">
+                                    <label htmlFor="name" className="form-label">
                                         ผู้ตรวจเช็ครถ <span className="text-danger">*</span>
                                     </label>
                                     <input
                                         type="text"
-                                        name="reporter"
-                                        id="reporter"
+                                        name="name"
+                                        id="name"
                                         className="form-control"
-                                        readOnly
-                                        disabled
-                                        value={(user?.fname || "") + " " + (user?.lname || "")}
+                                        value={`${analysisData.fname || ""} ${analysisData.lname || ""}`.trim()}  // ✅ ใช้ value แทน checked
+                                        onChange={handleAnalysisInputChange}
+                                        disabled   // ✅ disabled ไม่ใช่ disable
                                     />
+
                                 </div>
                                 <div className="col-lg-4 mb-3">
                                     <label className="form-label mb-2">ประเภทการซ่อม</label>
@@ -988,23 +997,23 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
                                                 </select>
                                             </div>
 
-                                            
-                                        <div className="col-lg-1">
-                                            <label className="form-label text-sm">ตัดรอบ PM <span className="" style={{ color: "red" }}>*</span></label>
-                                            <select
-                                                className="form-select  mb-3  form-select-sm"
-                                                aria-label="Large select example"
-                                                value={part.item_id}
-                                                onChange={e => handleChange(idx, partIdx, "item_id", e.target.value)}
-                                                disabled={!isEditing}
-                                            >
-                                                <option value=""></option>
-                                                {dataItem.map((row, ndx) => (
-                                                    <option value={row.item_id} key={ndx}> {row.item_name}</option>
-                                                ))}
-                                                <option value="อื่นๆ">อื่นๆ</option>
-                                            </select>
-                                        </div>
+
+                                            <div className="col-lg-1">
+                                                <label className="form-label text-sm">ตัดรอบ PM <span className="" style={{ color: "red" }}>*</span></label>
+                                                <select
+                                                    className="form-select  mb-3  form-select-sm"
+                                                    aria-label="Large select example"
+                                                    value={part.item_id}
+                                                    onChange={e => handleChange(idx, partIdx, "item_id", e.target.value)}
+                                                    disabled={!isEditing}
+                                                >
+                                                    <option value=""></option>
+                                                    {dataItem.map((row, ndx) => (
+                                                        <option value={row.item_id} key={ndx}> {row.item_name}</option>
+                                                    ))}
+                                                    <option value="อื่นๆ">อื่นๆ</option>
+                                                </select>
+                                            </div>
 
                                             <div className="col-lg-1">
                                                 <label className="form-label text-sm">ราคา <span style={{ color: "red" }}>*</span></label>

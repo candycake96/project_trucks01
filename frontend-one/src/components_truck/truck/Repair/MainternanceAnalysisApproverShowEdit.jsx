@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { apiUrl } from "../../../config/apiConfig";
 
-const MainternanceAnalysisApproverShowEdit = ({ maintenanceJob, isApproverShowData }) => {
+const MainternanceAnalysisApproverShowEdit = ({ maintenanceJob, isApproverShowData, hasPermission }) => {
 
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("");
@@ -34,6 +34,9 @@ const MainternanceAnalysisApproverShowEdit = ({ maintenanceJob, isApproverShowDa
         approval_status: "",
         approval_date: "",
         remark: "",
+
+
+        
     });
 
     // เพิ่ม state สำหรับใบเสนอราคาแบบ array
@@ -310,6 +313,7 @@ const MainternanceAnalysisApproverShowEdit = ({ maintenanceJob, isApproverShowDa
                     <p className="mb-0 fw-bold text-dark ">รายการตรวจสอบการแจ้งซ่อมและใบเสนอราคาเพื่ออนุมัติ</p>
                     {!isEditing ? (
                         <div className="col-lg-4 mb-3 d-flex justify-content-lg-end justify-content-start">
+                            {hasPermission("ADD_TECH_APPROVAL") && (
                             <button
                                 type="button"
                                 className="btn btn-success btn-sm"
@@ -318,6 +322,7 @@ const MainternanceAnalysisApproverShowEdit = ({ maintenanceJob, isApproverShowDa
                             >
                                 <i className="bi bi-pencil-fill me-1"></i> แก้ไข
                             </button>
+                            )}
                         </div>
                     ) : (
                         <div className="col-lg-4 mb-3 d-flex justify-content-lg-end justify-content-start">

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { apiUrl } from "../../../config/apiConfig";
 import MainternanceRequest_table from "./MaintenanceRequest_table";
-import Modal_setting_doc_repair from "./Mobal/Modal_setting_doc_repair";
+import Modal_setting_doc_repair from "./Mobal/Modal_setting_doc_Repair";
 
 const MaintenanceRequest = () => {
 

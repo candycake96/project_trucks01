@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { apiUrl } from "../../../config/apiConfig";
 import '../Repair/MainternanceAnalysisApprover.css';
 
-const MainternanceAnalysisApprover = ({ maintenanceJob }) => {
+const MainternanceAnalysisApprover = ({ maintenanceJob, onSaved }) => {
 
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("");
@@ -270,6 +270,9 @@ const MainternanceAnalysisApprover = ({ maintenanceJob }) => {
                 console.log("Response:", response.data);
                 setMessage(response.data.message);
                 setMessageType("success");
+                 if (onSaved) {
+                                onSaved(response.data.data); // API ควรส่งข้อมูลใหม่ของ analysis
+                            }
             } else {
                 alert("❌ ไม่สามารถอนุมัติได้");
             }
