@@ -106,6 +106,7 @@ WHERE a.request_id = @request_id
 ORDER BY a1.approval_date DESC;
 `;
             const approvers = await executeQueryEmployeeAccessDB(sqlApprover, { request_id: id });
+
             // 3. ใส่ parts ลงในแต่ละ quotation
             for (let quotation of quotations) {
                 const parts = await executeQueryEmployeeAccessDB(sqlParts, { quotation_id: quotation.quotation_id });
