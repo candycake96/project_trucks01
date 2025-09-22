@@ -37,7 +37,7 @@ module.exports = {
                 plan_date: req.body.plan_date,
                 remark: req.body.remark,
                 is_quotation_required: req.body.is_quotation_required,
-                analysis_emp_id: id,
+                analysis_emp_id: req.body.analysis_emp_id,
                 urgent_repair: req.body.urgent_repair,
                 inhouse_repair: req.body.inhouse_repair,
                 send_to_garage: req.body.send_to_garage,
@@ -87,11 +87,11 @@ module.exports = {
                             quotation_vat = @quotation_vat,
                             note = @note,
                             is_selected = @is_selected,
-                            vendor_name = @vendor_name,
+                            vendor_name = @vendor_name
                         WHERE quotation_id = @quotation_id`,
                         {
                             quotation_id: quotationId,
-                            analysis_id: Number(quotation.analysis_id),
+                            analysis_id: id,
                             vendor_id: Number(quotation.vendor_id),
                             quotation_file: quotation.quotation_file,
                             quotation_date: quotation.quotation_date,

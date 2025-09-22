@@ -81,6 +81,7 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
     const [quotations, setQuotations] = useState([
         {
             quotation_id: "",
+            analysis_id: "",
             vendor_id: "",
             quotation_date: "",
             quotation_file: null,
@@ -100,6 +101,7 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
             ...quotations,
             {
                 quotation_id: "",
+                analysis_id: "",
                 vendor_id: "",
                 quotation_date: "",
                 quotation_file: null,
@@ -405,6 +407,7 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
                 setQuotations(
                     data.quotations.map(q => ({
                         quotation_id: q.quotation_id || "",
+                        analysis_id: q.analysis_id || "",
                         vendor_id: q.vendor_id || "",
                         garage_name: q.vendor_name || "",
                         quotation_date: q.quotation_date ? q.quotation_date.substring(0, 10) : "",
@@ -470,6 +473,7 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
                 setQuotations(
                     data.quotations.map(q => ({
                         quotation_id: q.quotation_id || "",
+                        analysis_id: q.analysis_id || "",
                         vendor_id: q.vendor_id || "",
                         garage_name: q.vendor_name || "",
                         quotation_date: q.quotation_date ? q.quotation_date.substring(0, 10) : "",
