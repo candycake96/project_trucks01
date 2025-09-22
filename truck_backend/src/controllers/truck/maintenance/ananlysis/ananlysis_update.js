@@ -80,7 +80,7 @@ module.exports = {
                 if (quotationId) {
                     await executeQueryEmployeeAccessDB(
                         `UPDATE Truck_repair_garage_quotation SET
-                            analysis_id = @analysis_id,
+                           
                             vendor_id = @vendor_id,
                             quotation_file = @quotation_file,
                             quotation_date = @quotation_date,
@@ -91,7 +91,7 @@ module.exports = {
                         WHERE quotation_id = @quotation_id`,
                         {
                             quotation_id: quotationId,
-                            analysis_id: id,
+                            
                             vendor_id: Number(quotation.vendor_id),
                             quotation_file: quotation.quotation_file,
                             quotation_date: quotation.quotation_date,
