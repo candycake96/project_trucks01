@@ -106,7 +106,7 @@ const RepairRequestFormEdit = () => {
                     const subtotal = price * qty;
                     const total = subtotal + (subtotal * vat / 100);
                     return {
-                        item_id: item.item_id || "",
+                        // item_id: item.item_id || "",
                         request_id: item.request_id || "",
                         parts_used_id: item.parts_used_id || "",
                         part_id: item.part_id || "",
@@ -139,11 +139,11 @@ const RepairRequestFormEdit = () => {
     const [selectedPartIndex, setSelectedPartIndex] = useState(null);
 
     const [parts, setParts] = useState([
-        { item_id: "", request_id: "", parts_used_id: "", part_id: "", system_name: "", part_name: "", price: "", unit: "", maintenance_type: "", qty: "", discount: "", vat: "", total: "" },
+        {  request_id: "", parts_used_id: "", part_id: "", system_name: "", part_name: "", price: "", unit: "", maintenance_type: "", qty: "", discount: "", vat: "", total: "" },
     ]);
 
     const handleAddPart = () => {
-        setParts([...parts, { item_id: "", request_id: "", parts_used_id: "", part_id: "", system_name: "", part_name: "", price: "", unit: "", maintenance_type: "", qty: "", discount: "", vat: "", total: "" }]);
+        setParts([...parts, {  request_id: "", parts_used_id: "", part_id: "", system_name: "", part_name: "", price: "", unit: "", maintenance_type: "", qty: "", discount: "", vat: "", total: "" }]);
     };
 
 
