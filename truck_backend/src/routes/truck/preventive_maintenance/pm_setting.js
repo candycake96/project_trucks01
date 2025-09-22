@@ -20,7 +20,6 @@ const partsController = require('../../../controllers/truck/maintenance/parts/pa
 // router.post('/parts_search', authenticateToken, partsController.parts_search);
 
 
-
 // ดึงข้อมูล
 
 
