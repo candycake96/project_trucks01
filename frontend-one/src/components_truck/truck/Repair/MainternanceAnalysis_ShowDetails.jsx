@@ -30,11 +30,11 @@ const MainternanceAnanlysis_ShowDetails = ({ maintenanceJob }) => {
 
       setDataAnanlysis(response.data);
 
-      const isValid = Array.isArray(response.data)
-        ? response.data.length > 0
-        : Boolean(
-            response.data?.analysis_id || response.data?.quotations?.length
-          );
+      const isValid = Boolean(
+        response.data?.analysis?.analysis_id || response.data?.quotations?.length
+      );
+
+
 
       setHasAnalysis(isValid);
     } catch (error) {
@@ -84,7 +84,7 @@ const MainternanceAnanlysis_ShowDetails = ({ maintenanceJob }) => {
       }
 
     case "ตรวจเช็ครถ":
-       return (
+      return (
         <MainternanceAnalysis_showEdit
           maintenanceJob={maintenanceJob}
           data={dataAnanlysis}
