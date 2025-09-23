@@ -637,7 +637,6 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
                     <div className="mb-3">
                         <div className="">
 
-
                             <div className="row mb-3 align-items-center" >
                                 <div className="col-lg-4 mb-3">
                                     <label htmlFor="name" className="form-label">
