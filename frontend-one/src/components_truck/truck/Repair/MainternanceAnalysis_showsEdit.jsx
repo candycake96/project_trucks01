@@ -458,7 +458,7 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
                     lname: data.analysis.lname || "",
                     request_id: data.analysis.request_id || "",
                     analysis_emp_id: data.analysis.analysis_emp_id || "",
-                    is_quotation_required: !!data.analysis.is_quotation_required,
+                    is_quotation_required: !!data.        analysis.is_quotation_required,
                     urgent_repair: !!data.analysis.urgent_repair,
                     inhouse_repair: !!data.analysis.inhouse_repair,
                     send_to_garage: !!data.analysis.send_to_garage,
@@ -593,7 +593,7 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
     return (
         <div className=" mb-4 ">
 
-{analysisData.analysis_id || "ไม่มีข้อมูล analysis_id"} 
+{analysisData.analysis_id}
             {/* Display success or error message */}
             {message && (
                 <div
