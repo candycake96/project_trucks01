@@ -11,11 +11,11 @@ import '../Repair/MainternanceAnalysis_showsEdit.css'
 
 
 const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) => {
+
 if (!data) return null;
+
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("");
-
-
 
     // ดึงข้อมูลผู้ใช้จาก localStorage
     const [user, setUser] = useState(null);  //token
@@ -593,7 +593,7 @@ if (!data) return null;
     return (
         <div className=" mb-4 ">
 
-{analysisData.analysis_id ? (<><p>True</p></>): (<><p>NO</p></>)}
+{analysisData ? (<><p>True</p></>): (<><p>NO</p></>)}
             {/* Display success or error message */}
             {message && (
                 <div
