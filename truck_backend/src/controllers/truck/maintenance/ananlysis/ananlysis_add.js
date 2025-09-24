@@ -81,13 +81,13 @@ module.exports = {
                 quotations: JSON.stringify(quotations), // แปลงเป็น string ก่อนบันทึก
                 plan_date: req.body.plan_date || '', // ถ้าไม่มีค่าให้เป็นค่าว่าง
                 plan_time: req.body.plan_time ? req.body.plan_time : null, // ถ้าไม่มีค่าให้เป็นค่าว่าง
-                remark: req.body.remark || '', // ถ้าไม่มีค่าให้เป็นค่าว่าง
-                is_pm: req.body.is_pm || '', // ค่าเริ่มต้นเป็น 0
-                is_cm: req.body.is_cm || '', // ค่าเริ่มต้นเป็น 0
-                is_quotation_required: req.body.is_quotation_required || '', // ค่าเริ่มต้นเป็น 0
-                urgent_repair: req.body.urgent_repair || '', // ค่าเริ่มต้นเป็น 0
-                inhouse_repair: req.body.inhouse_repair || '', // ค่าเริ่มต้นเป็น 0
-                send_to_garage: req.body.send_to_garage || '', // ค่าเริ่มต้นเป็น 0
+                remark: req.body.remark || 0, // ถ้าไม่มีค่าให้เป็นค่าว่าง
+                is_pm: req.body.is_pm || 0, // ค่าเริ่มต้นเป็น 0
+                is_cm: req.body.is_cm || 0, // ค่าเริ่มต้นเป็น 0
+                is_quotation_required: req.body.is_quotation_required || 0, // ค่าเริ่มต้นเป็น 0
+                urgent_repair: req.body.urgent_repair || 0, // ค่าเริ่มต้นเป็น 0
+                inhouse_repair: req.body.inhouse_repair || 0, // ค่าเริ่มต้นเป็น 0
+                send_to_garage: req.body.send_to_garage || 0, // ค่าเริ่มต้นเป็น 0
             };
             // log ค่าที่จะถูกบันทึกลงฐานข้อมูล
             console.log("ValuesAnalysis to be inserted into database:", valuesAnalysis);
@@ -152,9 +152,9 @@ module.exports = {
                     vendor_id: quotation.vendor_id || '',   //
                     quotation_file: quotation.quotation_file || '', // ถ้าไม่มีไฟล์ให้เป็นค่าว่าง
                     quotation_date: quotation.quotation_date || '', //
-                    quotation_vat: quotation.quotation_vat || 0, // ถ้าไม่มี VAT ให้เป็น 0
+                    quotation_vat: Number(quotation.quotation_vat || 0), // ถ้าไม่มี VAT ให้เป็น 0
                     note: quotation.note || 0, //
-                    is_selected: quotation.is_selected || 0,
+                    is_selected: Number(quotation.is_selected || 0),
                     vendor_name: quotation.vendor_name || '',
                     // quotation_name: quotation.quotation_name || '', // ถ้าไม่มีชื่อให้เป็นค่าว่าง
                 };
@@ -170,13 +170,13 @@ module.exports = {
                         const valuesParts = {
                             item_id: part.item_id || null,
                             quotation_id: quotation_id, // ใช้ quotation_id ที่ได้จากการบันทึก
-                            part_id: part.part_id || '', // ถ้าไม่มี part_id ให้เป็นค่าว่าง
+                            part_id: Number(part.part_id || 0), // ถ้าไม่มี part_id ให้เป็นค่าว่าง
                             part_name: part.part_name || '', // ถ้าไม่มีชื่ออะไหล่ให้เป็นค่าว่าง
                             maintenance_type: part.maintenance_type || '',
-                            part_price: part.price || 0, // ถ้าไม่มีราคาอะไหล่ให้เป็น 0
-                            part_vat: part.vat || 0, // ถ้าไม่มี VAT ให้เป็น 0
+                            part_price: Number(part.price || 0), // ถ้าไม่มีราคาอะไหล่ให้เป็น 0
+                            part_vat: Number(part.vat || 0), // ถ้าไม่มี VAT ให้เป็น 0
                             part_unit: part.unit || '', // ถ้าไม่มีหน่วยให้เป็นค่าว่าง
-                            part_qty: part.qty || 0 , 
+                            part_qty: Number(part.qty || 0 ), 
                         };
                         // log ค่าที่จะถูกบันทึกลงฐานข้อมูลสำหรับแต่ละ part 
                         console.log("ValuesParts to be inserted into database:", valuesParts);
