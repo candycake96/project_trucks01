@@ -12,7 +12,7 @@ import '../Repair/MainternanceAnalysis_showsEdit.css'
 
 const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) => {
 
-if (!data) return null;
+    if (!data) return null;
 
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("");
@@ -454,21 +454,26 @@ if (!data) return null;
         if (data) {
             if (data?.analysis) {
                 setAnalysisData({
-                    fname: data?.analysis?.fname || "",
-                    lname: data?.analysis?.lname || "",
-                    request_id: data?.analysis?.request_id || "",
-                    analysis_emp_id: data?.analysis?.analysis_emp_id || "",
-                    is_quotation_required: !!data?.        analysis.is_quotation_required,
-                    urgent_repair: !!data?.analysis?.urgent_repair,
-                    inhouse_repair: !!data?.analysis?.inhouse_repair,
-                    send_to_garage: !!data?.analysis?.send_to_garage,
-                    plan_date: data?.analysis?.plan_date ? data?.analysis.plan_date.substring(0, 10) : "",
-                    plan_time: data?.analysis?.plan_time ? data?.analysis.plan_time.substring(11, 16) : "",
-                    remark: data?.analysis?.remark || "",
-                    is_pm: !!data?.analysis?.is_pm,
-                    is_cm: !!data?.analysis?.is_cm,
+                    fname: data.analysis.fname || "",
+                    lname: data.analysis.lname || "",
+                    request_id: data.analysis.request_id || "",
+                    analysis_emp_id: data.analysis.analysis_emp_id || "",
+                    is_quotation_required: !!data.analysis.is_quotation_required,
+                    urgent_repair: !!data.analysis.urgent_repair,
+                    inhouse_repair: !!data.analysis.inhouse_repair,
+                    send_to_garage: !!data.analysis.send_to_garage,
+                    plan_date: data.analysis.plan_date
+                        ? data.analysis.plan_date.substring(0, 10)
+                        : "",
+                    plan_time: data.analysis.plan_time
+                        ? data.analysis.plan_time.substring(11, 16)
+                        : "",
+                    remark: data.analysis.remark || "",
+                    is_pm: !!data.analysis.is_pm,
+                    is_cm: !!data.analysis.is_cm,
                 });
             }
+
             if (Array.isArray(data?.quotations)) {
                 setQuotations(
                     data?.quotations.map(q => ({
@@ -593,7 +598,7 @@ if (!data) return null;
     return (
         <div className=" mb-4 ">
 
-{analysisData ? (<><p>True</p></>): (<><p>NO</p></>)}
+            {analysisData ? (<><p>True</p></>) : (<><p>NO</p></>)}
             {/* Display success or error message */}
             {message && (
                 <div
