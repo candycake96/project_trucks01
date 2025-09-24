@@ -11,8 +11,7 @@ import '../Repair/MainternanceAnalysis_showsEdit.css'
 
 
 const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) => {
-
-    if (!data) return null;
+if (!data) return null;
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("");
 
@@ -386,27 +385,27 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
     useEffect(() => {
         if (data) {
             // กรณี data มีโครงสร้าง { analysis: {...}, quotations: [...] }
-            if (data.analysis) {
+            if (data?.analysis) {
                 setAnalysisData({
-                    fname: data.analysis.fname || "",
-                    lname: data.analysis.lname || "",
-                    analysis_id: data.analysis.analysis_id || "",
-                    request_id: data.analysis.request_id || "",
-                    analysis_emp_id: data.analysis.analysis_emp_id || "",
-                    is_quotation_required: !!data.analysis.is_quotation_required,
-                    urgent_repair: !!data.analysis.urgent_repair,
-                    inhouse_repair: !!data.analysis.inhouse_repair,
-                    send_to_garage: !!data.analysis.send_to_garage,
-                    plan_date: data.analysis.plan_date ? data.analysis.plan_date.substring(0, 10) : "",
-                    plan_time: data.analysis.plan_time ? data.analysis.plan_time.substring(11, 16) : "",
-                    remark: data.analysis.remark || "",
-                    is_pm: !!data.analysis.is_pm,
-                    is_cm: !!data.analysis.is_cm,
+                    fname: data?.analysis?.fname || "",
+                    lname: data?.analysis?.lname || "",
+                    analysis_id: data?.analysis?.analysis_id || "",
+                    request_id: data?.analysis?.request_id || "",
+                    analysis_emp_id: data?.analysis?.analysis_emp_id || "",
+                    is_quotation_required: !!data?.analysis?.is_quotation_required,
+                    urgent_repair: !!data?.analysis?.urgent_repair,
+                    inhouse_repair: !!data?.analysis?.inhouse_repair,
+                    send_to_garage: !!data?.analysis?.send_to_garage,
+                    plan_date: data?.analysis?.plan_date ? data?.analysis.plan_date.substring(0, 10) : "",
+                    plan_time: data?.analysis?.plan_time ? data?.analysis.plan_time.substring(11, 16) : "",
+                    remark: data?.analysis?.remark || "",
+                    is_pm: !!data?.analysis?.is_pm,
+                    is_cm: !!data?.analysis?.is_cm,
                 });
             }
-            if (Array.isArray(data.quotations)) {
+            if (Array.isArray(data?.quotations)) {
                 setQuotations(
-                    data.quotations.map(q => ({
+                    data?.quotations.map(q => ({
                         quotation_id: q.quotation_id || "",
                         analysis_id: q.analysis_id || "",
                         vendor_id: q.vendor_id || "",
@@ -453,26 +452,26 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
     // เพิ่มฟังก์ชันรีเซ็ตข้อมูล
     const resetFormToInitial = () => {
         if (data) {
-            if (data.analysis) {
+            if (data?.analysis) {
                 setAnalysisData({
-                    fname: data.analysis.fname || "",
-                    lname: data.analysis.lname || "",
-                    request_id: data.analysis.request_id || "",
-                    analysis_emp_id: data.analysis.analysis_emp_id || "",
-                    is_quotation_required: !!data.        analysis.is_quotation_required,
-                    urgent_repair: !!data.analysis.urgent_repair,
-                    inhouse_repair: !!data.analysis.inhouse_repair,
-                    send_to_garage: !!data.analysis.send_to_garage,
-                    plan_date: data.analysis.plan_date ? data.analysis.plan_date.substring(0, 10) : "",
-                    plan_time: data.analysis.plan_time ? data.analysis.plan_time.substring(11, 16) : "",
-                    remark: data.analysis.remark || "",
-                    is_pm: !!data.analysis.is_pm,
-                    is_cm: !!data.analysis.is_cm,
+                    fname: data?.analysis?.fname || "",
+                    lname: data?.analysis?.lname || "",
+                    request_id: data?.analysis?.request_id || "",
+                    analysis_emp_id: data?.analysis?.analysis_emp_id || "",
+                    is_quotation_required: !!data?.        analysis.is_quotation_required,
+                    urgent_repair: !!data?.analysis?.urgent_repair,
+                    inhouse_repair: !!data?.analysis?.inhouse_repair,
+                    send_to_garage: !!data?.analysis?.send_to_garage,
+                    plan_date: data?.analysis?.plan_date ? data?.analysis.plan_date.substring(0, 10) : "",
+                    plan_time: data?.analysis?.plan_time ? data?.analysis.plan_time.substring(11, 16) : "",
+                    remark: data?.analysis?.remark || "",
+                    is_pm: !!data?.analysis?.is_pm,
+                    is_cm: !!data?.analysis?.is_cm,
                 });
             }
-            if (Array.isArray(data.quotations)) {
+            if (Array.isArray(data?.quotations)) {
                 setQuotations(
-                    data.quotations.map(q => ({
+                    data?.quotations.map(q => ({
                         quotation_id: q.quotation_id || "",
                         analysis_id: q.analysis_id || "",
                         vendor_id: q.vendor_id || "",
