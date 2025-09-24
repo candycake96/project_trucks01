@@ -73,15 +73,16 @@ const MainternanceAnalysisApproverShowEdit = ({ maintenanceJob, isApproverShowDa
         }
     ]);
 
-    useEffect(() => {
-        setDataApprover({
-            request_id: maintenanceJob?.request_id,
-            approver_emp_id: user?.id_emp,
-            approver_name: `${user?.fname || ""} ${user?.lname || ""}`,
-        });
-    }, [maintenanceJob, user]);
 
-
+useEffect(() => {
+    if (maintenanceJob && user) {
+        setAnalysisData(prev => ({
+            ...prev, // เก็บค่าที่มีอยู่แล้ว
+            request_id: maintenanceJob.request_id || "",
+            analysis_emp_id: user.id_emp || "",
+        }));
+    }
+}, [maintenanceJob, user]);
 
 
 
