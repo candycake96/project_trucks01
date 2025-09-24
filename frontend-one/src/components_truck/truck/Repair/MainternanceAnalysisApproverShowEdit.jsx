@@ -73,16 +73,17 @@ const MainternanceAnalysisApproverShowEdit = ({ maintenanceJob, isApproverShowDa
         }
     ]);
 
-
 useEffect(() => {
-    if (maintenanceJob && user) {
-        setAnalysisData(prev => ({
-            ...prev, // เก็บค่าที่มีอยู่แล้ว
-            request_id: maintenanceJob.request_id || "",
-            analysis_emp_id: user.id_emp || "",
-        }));
-    }
+    setDataApprover(prev => ({
+        ...prev, // เก็บค่าที่มีอยู่แล้ว
+        request_id: maintenanceJob?.request_id || "",
+        approver_emp_id: user?.id_emp || "",
+        approver_name: `${user?.fname || ""} ${user?.lname || ""}`,
+    }));
 }, [maintenanceJob, user]);
+
+
+
 
 
 
@@ -238,17 +239,19 @@ useEffect(() => {
     // ...existing code...
 
     // --- แก้ไข useEffect สำหรับ setDataApprover ให้รวม approval_status ด้วย (กัน approval_status หาย) ---
-    useEffect(() => {
-        const approver = isApproverShowData?.approvers?.[0] || {};
-        setDataApprover({
-            analysis_id: approver.analysis_id || "",
-            approver_emp_id: approver.approver_emp_id || "",
-            approver_name: approver.approver_name || "",
-            approval_date: approver.approval_date || "",
-            remark: approver.remark || "",
-            approval_status: approver.approval_status || "", // เพิ่มบรรทัดนี้
-        });
-    }, [isApproverShowData]);
+useEffect(() => {
+    const approver = isApproverShowData?.approvers?.[0] || {};
+    setDataApprover(prev => ({
+        ...prev, // เก็บค่าเดิม
+        analysis_id: approver.analysis_id || "",
+        approver_emp_id: approver.approver_emp_id || "",
+        approver_name: approver.approver_name || "",
+        approval_date: approver.approval_date || "",
+        remark: approver.remark || "",
+        approval_status: approver.approval_status || "",
+    }));
+}, [isApproverShowData]);
+
 
     // --- แก้ไข handleApprovalPass ให้เช็ค approval_status ก่อน submit ---
     const handleApprovalPass = async (e) => {
