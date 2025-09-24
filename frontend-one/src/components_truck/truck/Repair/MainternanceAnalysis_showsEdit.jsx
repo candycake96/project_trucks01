@@ -593,7 +593,7 @@ if (!data) return null;
     return (
         <div className=" mb-4 ">
 
-{analysisData.analysis_id}
+{analysisData.analysis_id ? (<><p>True</p></>): (<><p>NO</p></>)}
             {/* Display success or error message */}
             {message && (
                 <div
