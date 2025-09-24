@@ -69,14 +69,16 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
     };
 
 
-    useEffect(() => {
-        if (maintenanceJob && user) {
-            setAnalysisData({
-                request_id: maintenanceJob.request_id || "",
-                analysis_emp_id: user ? user.id_emp : "", // ใช้รหัสพนักงานจากข้อมูลผู้ใช้
-            });
-        }
-    }, [maintenanceJob, user]);
+useEffect(() => {
+    if (maintenanceJob && user) {
+        setAnalysisData(prev => ({
+            ...prev, // เก็บค่าที่มีอยู่แล้ว
+            request_id: maintenanceJob.request_id || "",
+            analysis_emp_id: user.id_emp || "",
+        }));
+    }
+}, [maintenanceJob, user]);
+
 
 
     // เพิ่ม state สำหรับใบเสนอราคาแบบ array
