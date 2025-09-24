@@ -12,376 +12,589 @@ import '../Repair/MainternanceAnalysis_showsEdit.css'
 
 const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) => {
 
-  // message
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("");
+    if (!data) return null;
+    const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState("");
 
-  // local copy of incoming data (for reset)
-  const [dataAnanlysis, setDataAnanlysis] = useState(null);
 
-  // user (from localStorage)
-  const [user, setUser] = useState(null);
-  useEffect(() => {
-    const userData = localStorage.getItem("user");
-    if (userData) setUser(JSON.parse(userData));
-  }, []);
 
-  // analysis state (form)
-  const [analysisData, setAnalysisData] = useState({
-    analysis_id: "",
-    request_id: "",
-    analysis_emp_id: "",
-    is_quotation_required: false,
-    urgent_repair: false,
-    inhouse_repair: false,
-    send_to_garage: false,
-    plan_date: "",
-    plan_time: "",
-    remark: "",
-    is_pm: false,
-    is_cm: false,
-    fname: "",
-    lname: ""
-  });
+    // ดึงข้อมูลผู้ใช้จาก localStorage
+    const [user, setUser] = useState(null);  //token
+    useEffect(() => {
+        const userData = localStorage.getItem('user');
+        if (userData) {
+            setUser(JSON.parse(userData));
+        }
+    }, []);
 
-  // quotations state
-  const [quotations, setQuotations] = useState([]);
 
-  // editing flag
-  const [isEditing, setIsEditing] = useState(false);
-
-  // load incoming `data` (props) into local states when `data` changes
-  useEffect(() => {
-    if (!data) return;
-
-    setDataAnanlysis(data); // keep original snapshot for reset
-
-    // set analysisData if present
-    if (data.analysis) {
-      const a = data.analysis;
-      setAnalysisData({
-        analysis_id: a.analysis_id ?? "",
-        request_id: a.request_id ?? (maintenanceJob?.request_id ?? ""),
-        analysis_emp_id: a.analysis_emp_id ?? (user?.id_emp ?? ""),
-        is_quotation_required: !!a.is_quotation_required,
-        urgent_repair: !!a.urgent_repair,
-        inhouse_repair: !!a.inhouse_repair,
-        send_to_garage: !!a.send_to_garage,
-        plan_date: a.plan_date ? a.plan_date.substring(0, 10) : "",
-        plan_time: a.plan_time ? a.plan_time.substring(11, 16) : "",
-        remark: a.remark ?? "",
-        is_pm: !!a.is_pm,
-        is_cm: !!a.is_cm,
-        fname: a.fname ?? "",
-        lname: a.lname ?? ""
-      });
-    } else {
-      // fallback: fill request_id from maintenanceJob
-      setAnalysisData(prev => ({ ...prev, request_id: maintenanceJob?.request_id ?? "" }));
-    }
-
-    // set quotations if present (normalize fields to the UI expected keys)
-    if (Array.isArray(data.quotations)) {
-      setQuotations(
-        data.quotations.map(q => ({
-          quotation_id: q.quotation_id ?? "",
-          analysis_id: q.analysis_id ?? (data.analysis?.analysis_id ?? ""),
-          vendor_id: q.vendor_id ?? "",
-          quotation_date: q.quotation_date ? q.quotation_date.substring(0, 10) : "",
-          quotation_file: q.quotation_file ?? null,
-          note: q.note ?? "",
-          is_selected: !!q.is_selected,
-          quotation_vat: q.quotation_vat ?? "",
-          // normalize vendor_name to single string (avoid arrays)
-          vendor_name: Array.isArray(q.vendor_name) ? (q.vendor_name[0] || "") : (q.vendor_name ?? ""),
-          parts: Array.isArray(q.parts)
-            ? q.parts.map(p => ({
-                item_id: p.item_id ?? "",
-                quotation_parts_id: p.quotation_parts_id ?? "",
-                part_id: p.part_id ?? "",
-                system_name: p.system_name ?? "",
-                part_name: p.part_name ?? "",
-                // UI uses price/qty/vat/discount names — keep these
-                price: p.part_price != null ? String(p.part_price) : "",
-                unit: p.part_unit ?? "",
-                maintenance_type: p.maintenance_type ?? "",
-                qty: p.part_qty != null ? String(p.part_qty) : "",
-                discount: p.part_discount != null ? String(p.part_discount) : "",
-                vat: p.part_vat != null ? String(p.part_vat) : "",
-                total: (function () {
-                  const price = parseFloat(p.part_price) || 0;
-                  const qty = parseFloat(p.part_qty) || 0;
-                  const discount = parseFloat(p.part_discount) || 0;
-                  const vat = parseFloat(p.part_vat) || 0;
-                  const subtotal = price * qty - discount;
-                  const vatVal = subtotal * vat / 100;
-                  return (subtotal + vatVal).toFixed(2);
-                })()
-              }))
-            : []
-        }))
-      );
-    } else {
-      // no quotations — set empty
-      setQuotations([]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, maintenanceJob, user]);
-
-  // helper: reset form to original data
-  const resetFormToInitial = () => {
-    if (!dataAnanlysis) return;
-    // trigger the same useEffect result by reusing dataAnanlysis
-    setDataAnanlysis(prev => ({ ...dataAnanlysis }));
-    // re-run the same mapping (quick way: setDataAnanlysis then let effect update)
-    // but we'll directly re-map to be immediate:
-    const a = dataAnanlysis.analysis || {};
-    setAnalysisData({
-      analysis_id: a.analysis_id ?? "",
-      request_id: a.request_id ?? (maintenanceJob?.request_id ?? ""),
-      analysis_emp_id: a.analysis_emp_id ?? (user?.id_emp ?? ""),
-      is_quotation_required: !!a.is_quotation_required,
-      urgent_repair: !!a.urgent_repair,
-      inhouse_repair: !!a.inhouse_repair,
-      send_to_garage: !!a.send_to_garage,
-      plan_date: a.plan_date ? a.plan_date.substring(0, 10) : "",
-      plan_time: a.plan_time ? a.plan_time.substring(11, 16) : "",
-      remark: a.remark ?? "",
-      is_pm: !!a.is_pm,
-      is_cm: !!a.is_cm,
-      fname: a.fname ?? "",
-      lname: a.lname ?? ""
+    const [analysisData, setAnalysisData] = React.useState({
+        analysis_id: "", // PK
+        request_id: "", // รหัสคำขอซ่อม FK
+        analysis_emp_id: "", // รหัสพนักงานที่วิเคราะห์ FK
+        is_quotation_required: false, // ต้องการใบเสนอราคา
+        urgent_repair: false,   // ซ่อมด่วน
+        inhouse_repair: false, // ซ่อมในแผนก
+        send_to_garage: false, // ส่งอู่
+        plan_date: "",   // วันที่วางแผน
+        plan_time: "", // เวลาที่วางแผน 
+        remark: "",    // หมายเหตุ
+        is_pm: false,   // ซ่อมก่อนเสีย
+        is_cm: false,   // ซ่อมหลังเสีย
+        fname: "",
+        lname: ""
     });
 
-    if (Array.isArray(dataAnanlysis.quotations)) {
-      setQuotations(dataAnanlysis.quotations.map(q => ({
-        quotation_id: q.quotation_id ?? "",
-        analysis_id: q.analysis_id ?? (dataAnanlysis.analysis?.analysis_id ?? ""),
-        vendor_id: q.vendor_id ?? "",
-        quotation_date: q.quotation_date ? q.quotation_date.substring(0, 10) : "",
-        quotation_file: q.quotation_file ?? null,
-        note: q.note ?? "",
-        is_selected: !!q.is_selected,
-        quotation_vat: q.quotation_vat ?? "",
-        vendor_name: Array.isArray(q.vendor_name) ? (q.vendor_name[0] || "") : (q.vendor_name ?? ""),
-        parts: Array.isArray(q.parts)
-          ? q.parts.map(p => ({
-              item_id: p.item_id ?? "",
-              quotation_parts_id: p.quotation_parts_id ?? "",
-              part_id: p.part_id ?? "",
-              system_name: p.system_name ?? "",
-              part_name: p.part_name ?? "",
-              price: p.part_price != null ? String(p.part_price) : "",
-              unit: p.part_unit ?? "",
-              maintenance_type: p.maintenance_type ?? "",
-              qty: p.part_qty != null ? String(p.part_qty) : "",
-              discount: p.part_discount != null ? String(p.part_discount) : "",
-              vat: p.part_vat != null ? String(p.part_vat) : "",
-              total: "" // will be recalculated on change
-            }))
-          : []
-      })));
-    } else {
-      setQuotations([]);
-    }
-  };
-
-  // editing handlers
-  const handleAnalysisInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setAnalysisData(prev => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value
-    }));
-  };
-
-  // quotations handlers
-  const handleAddQuotation = () => {
-    setQuotations(prev => ([
-      ...prev,
-      {
-        quotation_id: "",
+    // คอนฟิกข้อมูลที่จะส่งไปยัง API
+    const dataToSend = {
+        // รวมข้อมูลจาก analysisData เพื่อส่งไปยัง API
+        ...analysisData,
+        fname: analysisData.fname || "",
+        lname: analysisData.lname || "",
         analysis_id: analysisData.analysis_id || "",
-        vendor_id: "",
-        quotation_date: "",
-        quotation_file: null,
-        note: "",
-        is_selected: false,
-        quotation_vat: "",
-        vendor_name: "",
-        parts: []
-      }
-    ]));
-  };
+        request_id: analysisData.request_id || "",
+        analysis_emp_id: analysisData.analysis_emp_id || (user ? user.id_emp : ""),
+        plan_date: analysisData.plan_date || "",
+        plan_time: analysisData.plan_time || "",
+        remark: analysisData.remark || "",
 
-  const handleRemoveQuotation = (index) => {
-    setQuotations(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const handleQuotationChange = (idx, field, value) => {
-    setQuotations(prev => {
-      const copy = [...prev];
-      copy[idx] = { ...copy[idx], [field]: value };
-      return copy;
-    });
-  };
-
-  const handleAddPart = (quotationIndex) => {
-    setQuotations(prev => {
-      const copy = [...prev];
-      const p = copy[quotationIndex] || { parts: [] };
-      p.parts = p.parts || [];
-      p.parts.push({
-        item_id: "", quotation_parts_id: "", part_id: "", system_name: "", part_name: "", price: "", unit: "", maintenance_type: "", qty: "", discount: "", vat: "", total: ""
-      });
-      copy[quotationIndex] = p;
-      return copy;
-    });
-  };
-
-  const handleRemovePart = (quotationIndex, partIndex) => {
-    setQuotations(prev => {
-      const copy = [...prev];
-      copy[quotationIndex].parts.splice(partIndex, 1);
-      return copy;
-    });
-  };
-
-  const handlePartChange = (quotationIndex, partIndex, field, value) => {
-    setQuotations(prev => {
-      const copy = [...prev];
-      const part = copy[quotationIndex].parts[partIndex];
-      part[field] = value;
-
-      // recalc totals
-      const price = parseFloat(part.price) || 0;
-      const qty = parseFloat(part.qty) || 0;
-      const vat = parseFloat(part.vat) || 0;
-      const discount = parseFloat(part.discount) || 0;
-      const subtotal = price * qty - discount;
-      const vatVal = subtotal * vat / 100;
-      part.total = (subtotal + vatVal).toFixed(2);
-
-      return copy;
-    });
-  };
-
-  // prepare dataToSend at submit time (so it uses latest state)
-  const buildDataToSend = () => {
-    return {
-      ...analysisData,
-      // ensure numbers/bit-like are normalized as strings or numbers per backend expectation:
-      is_pm: analysisData.is_pm ? 1 : 0,
-      is_cm: analysisData.is_cm ? 1 : 0,
-      is_quotation_required: analysisData.is_quotation_required ? 1 : 0,
-      urgent_repair: analysisData.urgent_repair ? 1 : 0,
-      inhouse_repair: analysisData.inhouse_repair ? 1 : 0,
-      send_to_garage: analysisData.send_to_garage ? 1 : 0,
-      analysis_emp_id: analysisData.analysis_emp_id || (user?.id_emp ?? "")
+        // แปลง boolean เป็น 0/1 สำหรับ MSSQL BIT
+        is_pm: analysisData.is_pm ? 1 : 0,
+        is_cm: analysisData.is_cm ? 1 : 0,
+        is_quotation_required: analysisData.is_quotation_required ? 1 : 0,
+        urgent_repair: analysisData.urgent_repair ? 1 : 0,
+        inhouse_repair: analysisData.inhouse_repair ? 1 : 0,
+        send_to_garage: analysisData.send_to_garage ? 1 : 0,
     };
-  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      setMessage(""); setMessageType("");
 
-      // ensure we have analysis_id to send as URL param
-      const analysisIdForUrl = analysisData.analysis_id || (data?.analysis?.analysis_id);
-      if (!analysisIdForUrl) {
-        setMessage("Missing analysis_id (cannot update).");
-        setMessageType("error");
-        return;
-      }
-
-      const token = localStorage.getItem("accessToken");
-      if (!token) {
-        setMessage("Access token missing. Please login.");
-        setMessageType("error");
-        return;
-      }
-
-      const formData = new FormData();
-      const payload = buildDataToSend();
-
-      // append analysis fields
-      Object.keys(payload).forEach(key => {
-        // avoid appending objects/arrays directly
-        formData.append(key, payload[key] ?? "");
-      });
-
-      // append quotations and their parts (nested)
-      quotations.forEach((q, qi) => {
-        // vendor_name ensure string
-        const vendorName = Array.isArray(q.vendor_name)
-          ? (q.vendor_name.find(v => v && v.trim()) || "")
-          : (q.vendor_name ?? "");
-
-        formData.append(`quotations[${qi}][quotation_id]`, q.quotation_id ?? "");
-        formData.append(`quotations[${qi}][vendor_id]`, q.vendor_id ?? "");
-        formData.append(`quotations[${qi}][quotation_date]`, q.quotation_date ?? "");
-        formData.append(`quotations[${qi}][note]`, q.note ?? "");
-        formData.append(`quotations[${qi}][is_selected]`, q.is_selected ? 1 : 0);
-        formData.append(`quotations[${qi}][quotation_vat]`, q.quotation_vat ?? "");
-        formData.append(`quotations[${qi}][vendor_name]`, vendorName);
-
-        // file handling
-        if (q.quotation_file instanceof File) {
-          formData.append(`quotations[${qi}][quotation_file]`, q.quotation_file);
-        } else if (typeof q.quotation_file === "string" && q.quotation_file) {
-          // send existing file path as fallback
-          formData.append(`quotations[${qi}][quotation_file_old]`, q.quotation_file);
+    useEffect(() => {
+        if (maintenanceJob) {
+            setAnalysisData({
+                request_id: maintenanceJob.request_id || "",
+                analysis_emp_id: user ? user.id_emp : "", // ใช้รหัสพนักงานจากข้อมูลผู้ใช้
+            });
         }
+    }, [maintenanceJob, user]);
 
-        // parts
-        (q.parts || []).forEach((p, pi) => {
-          // use keys consistent with UI mapping: price, qty, vat, discount
-          formData.append(`quotations[${qi}][parts][${pi}][quotation_parts_id]`, p.quotation_parts_id ?? "");
-          formData.append(`quotations[${qi}][parts][${pi}][item_id]`, p.item_id ?? "");
-          formData.append(`quotations[${qi}][parts][${pi}][part_id]`, p.part_id ?? "");
-          formData.append(`quotations[${qi}][parts][${pi}][part_name]`, p.part_name ?? "");
-          formData.append(`quotations[${qi}][parts][${pi}][price]`, p.price ?? "");
-          formData.append(`quotations[${qi}][parts][${pi}][unit]`, p.unit ?? "");
-          formData.append(`quotations[${qi}][parts][${pi}][maintenance_type]`, p.maintenance_type ?? "");
-          formData.append(`quotations[${qi}][parts][${pi}][qty]`, p.qty ?? "");
-          formData.append(`quotations[${qi}][parts][${pi}][discount]`, p.discount ?? "");
-          formData.append(`quotations[${qi}][parts][${pi}][vat]`, p.vat ?? "");
-        });
-      });
 
-      // debugging: list entries (optional)
-      // for (let pair of formData.entries()) {
-      //   console.log(pair[0], pair[1]);
-      // }
-
-      const response = await axios.put(
-        `${apiUrl}/api/ananlysis_update/${analysisIdForUrl}`, // pass analysis id as URL param
-        formData,
+    // เพิ่ม state สำหรับใบเสนอราคาแบบ array
+    const [quotations, setQuotations] = useState([
         {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`
-          }
+            quotation_id: "",
+            analysis_id: "",
+            vendor_id: "",
+            quotation_date: "",
+            quotation_file: null,
+            note: "",
+            is_selected: false,
+            quotation_vat: "",
+            vendor_name: "",
+            parts: [
+                { item_id: "", quotation_parts_id: "", request_id: "", parts_used_id: "", part_id: "", system_name: "", part_name: "", price: "", unit: "", maintenance_type: "", qty: "", discount: "", vat: "", total: "" }
+            ],
         }
-      );
+    ]);
 
-      setMessage(response.data?.message || "Saved");
-      setMessageType("success");
-      setIsEditing(false);
-      // optionally refresh data from server or update local state from response
-      // if backend returns updated object you can setDataAnanlysis(response.data)
-    } catch (err) {
-      console.error("Save error:", err);
-      setMessage(err.response?.data?.message || "เกิดข้อผิดพลาดในการบันทึกข้อมูล");
-      setMessageType("error");
+    // ฟังก์ชันเพิ่มใบเสนอราคาใหม่
+    const handleAddQuotation = () => {
+        setQuotations([
+            ...quotations,
+            {
+                quotation_id: "",
+                analysis_id: "",
+                vendor_id: "",
+                quotation_date: "",
+                quotation_file: null,
+                note: "",
+                is_selected: false,
+                quotation_vat: "",
+                vendor_name: "",
+                parts: [
+                    { item_id: "", quotation_parts_id: "", request_id: "", parts_used_id: "", part_id: "", system_name: "", part_name: "", price: "", unit: "", maintenance_type: "", qty: "", discount: "", vat: "", total: "" }
+                ]
+            }
+        ]);
+    };
+
+    // ฟังก์ชันลบใบเสนอราคา
+    const handleRemoveQuotation = (quotationIndex) => {
+        const updatedQuotations = quotations.filter((_, index) => index !== quotationIndex);
+        setQuotations(updatedQuotations);
+    };
+
+
+    // ฟังก์ชันเพิ่มรายการอะไหล่ในใบเสนอราคา
+    const handleAddPart = (quotationIndex) => {
+        const updatedQuotations = [...quotations];
+        updatedQuotations[quotationIndex].parts.push({
+            item_id: "", request_id: "", parts_used_id: "", part_id: "", system_name: "", part_name: "", price: "", unit: "", maintenance_type: "", qty: "", discount: "", vat: "", total: ""
+        });
+        setQuotations(updatedQuotations);
+    };
+
+
+    useEffect(() => {
+        if (maintenanceJob) {
+            setAnalysisData((prevData) => ({
+                ...prevData,
+                request_id: maintenanceJob.request_id || "",
+            }));
+        }
+    }, [maintenanceJob]);
+
+
+    // ฟังก์ชันจัดการการเปลี่ยนแปลงข้อมูลในฟอร์ม
+    const handleAnalysisInputChange = (e) => {
+        if (!isEditing) return; // ไม่ให้แก้ไขถ้าไม่ได้อยู่ในโหมดแก้ไข
+        const { name, value, type, checked } = e.target;
+        setAnalysisData((prev) => ({
+            ...prev,
+            [name]: type === "checkbox" ? checked : value,
+        }));
+    };
+
+
+    // ฟังก์ชันลบข้อมูลอะไหล่
+    const handleRemovePart = (quotationIndex, partIndex) => {
+        const updated = [...quotations];
+        updated[quotationIndex].parts.splice(partIndex, 1);
+        setQuotations(updated);
+    };
+
+    // ฟังก์ชันการเปลี่ยนแปลงข้อมูลอะไหล่  
+    const handleChange = (quotationIndex, partIndex, field, value) => {
+        const updatedQuotations = [...quotations];
+        const part = updatedQuotations[quotationIndex].parts[partIndex];
+
+        part[field] = value;
+
+        const price = parseFloat(part.price) || 0;
+        const qty = parseFloat(part.qty) || 0;
+        const vat = parseFloat(part.vat) || 0;
+        const discount = parseFloat(part.discount) || 0;
+
+        // หักส่วนลดก่อนคิด VAT
+        const subtotal = price * qty - discount;
+        const vatVal = subtotal * vat / 100;
+        const total = subtotal + vatVal;
+
+        part.total = total.toFixed(2);
+
+        setQuotations(updatedQuotations);
+    };
+
+
+    // ฟังก์ชันคำนวณสรุปราคารวมของอะไหล่ในใบเสนอราคา
+    const calculateSummary = (parts, quotation_vat) => {
+        let total = 0;
+        let vatAmountPerItem = 0;
+
+        parts.forEach((part) => {
+            const price = parseFloat(part.price) || 0;
+            const qty = parseFloat(part.qty) || 0;
+            const vat = parseFloat(part.vat) || 0;
+            const discount = parseFloat(part.discount) || 0;
+
+            // หักส่วนลดออกจาก subtotal
+            const subtotal = price * qty - discount;
+            const vatVal = subtotal * vat / 100;
+
+            total += subtotal;
+            vatAmountPerItem += vatVal;
+        });
+
+        const vatRate = parseFloat(quotation_vat) || 0;
+        const extraVat = total * vatRate / 100;
+
+        const vatAmount = vatAmountPerItem + extraVat;
+
+        return {
+            total: total.toFixed(2),
+            vat: vatAmount.toFixed(2),
+            grandTotal: (total + vatAmount).toFixed(2),
+        };
+    };
+
+
+
+    // ฟังก์ชันเปลี่ยนแปลงข้อมูลใบเสนอราคา
+    const handleQuotationChange = (index, field, value) => {
+        if (!isEditing) return;
+        setQuotations(prev => {
+            const updated = [...prev];
+            if (field === 'quotation_file') {
+                updated[index][field] = value; // อาจเป็น File หรือ string
+            } else {
+                updated[index][field] = value;
+            }
+            return updated;
+        });
+    };
+
+
+    // ฟังก์ชันจัดการการเปลี่ยนแปลงข้อมูลในฟอร์ม
+    const [requestParts, setRequestParts] = useState([]);
+    useEffect(() => {
+        const fetchRequestAndParts = async () => {
+            try {
+                const response = await axios.get(
+                    `${apiUrl}/api/repair_requests_and_part_detail/${maintenanceJob?.request_id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                        },
+                    }
+                );
+                setRequestParts(response.data);
+            } catch (error) {
+                console.error("Error fetching parts:", error);
+            }
+        };
+
+        if (maintenanceJob?.request_id) {
+            fetchRequestAndParts();
+        }
+    }, [maintenanceJob]);
+
+    const [dataItem, setDataItem] = useState([]);
+
+    const fetchDataItem = async () => {
+        try {
+            const response = await axios.get(
+                `${apiUrl}/api/setting_mainternance_item_show`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                    },
+                }
+            );
+            setDataItem(response.data);
+        } catch (error) {
+            console.error("Error fetching parts:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchDataItem();
+    }, []);
+
+
+    // ฟังก์ชันดึงข้อมูลอะไหล่จาก requestParts และอัปเดตใบเสนอราคา 
+    const handleInputChangeImportParts = (quotationIndex) => {
+        if (requestParts?.request_id && Array.isArray(requestParts.parts_used)) {
+            const mappedParts = requestParts.parts_used.map((item) => {
+                const price = parseFloat(item.repair_part_price) || 0;
+                const qty = parseFloat(item.repair_part_qty) || 0;
+                const vat = parseFloat(item.repair_part_vat) || 0;
+                const subtotal = price * qty;
+                const total = subtotal + (subtotal * vat / 100);
+                return {
+                    item_id: item.item_id || "",
+                    part_id: item.part_id || "",
+                    system_name: item.system_name || "",
+                    part_name: item.repair_part_name || "",
+                    price: price.toString(),
+                    unit: item.repair_part_unit || "",
+                    maintenance_type: item.maintenance_type || "",
+                    qty: qty.toString(),
+                    discount: "",
+                    vat: vat.toString(),
+                    total: total.toFixed(2),
+                };
+            });
+            // อัปเดตใบเสนอราคาที่เลือก
+            setQuotations((prev) => {
+                const updated = [...prev];
+                if (updated[quotationIndex]) {
+                    updated[quotationIndex].parts = mappedParts;
+                }
+                return updated;
+            });
+        }
+    };
+
+
+    // Modal
+    const [isOpenModalVehicleParteDtails, setOpenModalVehicleParteDtails] = useState(false);
+    const [selectedQuotationIndex, setSelectedQuotationIndex] = useState(null);
+    const [selectedPartIndex, setSelectedPartIndex] = useState(null);
+
+    // ฟังก์ชันรับข้อมูลจาก Modal_vehicle_parts_add สำหรับหลายใบเสนอราคา
+    const handleDataFromAddModal = (quotationIndex, partIndex, data) => {
+        setQuotations(prev => {
+            const updated = [...prev];
+            if (
+                quotationIndex !== null &&
+                quotationIndex !== undefined &&
+                partIndex !== null &&
+                partIndex !== undefined
+            ) {
+                updated[quotationIndex].parts[partIndex] = {
+                    ...updated[quotationIndex].parts[partIndex],
+                    ...data
+                };
+            }
+            return updated;
+        });
+        setOpenModalVehicleParteDtails(false);
+    };
+
+    // ฟังก์ชันเปิด Modal สำหรับแสดงรายละเอียดของอะไหล่
+    const handleOpenModalVehicleParteDtails = (quotationIndex, partIndex) => {
+        setSelectedQuotationIndex(quotationIndex);
+        setSelectedPartIndex(partIndex);
+        setOpenModalVehicleParteDtails(true);
+    };
+    const handleClossModalVehicleParteDtails = () => {
+        setOpenModalVehicleParteDtails(false);
+    };
+
+
+    // ฟังก์ชันเปิด Modal สำหรับแสดงรายละเอียดของผู้จำหน่าย
+    const [isOpenModalVendorDetails, setIsOpenModalVendorDetails] = useState(false);
+    // เปิด Modal พร้อมระบุใบเสนอราคาที่ต้องการแก้ไข
+    const handleOpenModalVendorDetails = (quotationIndex) => {
+        // รักษา index ของใบเสนอราคาเพื่อใช้ใน Modal เพื่ออัปเดตชื่ออู่/ร้านค้า
+        setSelectedQuotationIndex(quotationIndex); // เก็บ index ของใบเสนอราคา
+        setIsOpenModalVendorDetails(true); // เปิด Modal 
+    };
+    const handleCloseModalVendorDetails = () => {
+        setIsOpenModalVendorDetails(false);
     }
-  };
+
+    // ฟังก์ชันรับข้อมูลจาก Modal_vendor_show_search สำหรับการอัปเดตอะไหล่
+    // ฟังก์ชันรับข้อมูลจาก Modal_vandor_show_search สำหรับการอัปเดตชื่ออู่/ร้านค้าในใบเสนอราคา
+    const handleDataFromModalVehicleShowSearch = (vendorData) => {
+        if (!vendorData || selectedQuotationIndex === null) return;
+        setQuotations(prev => {
+            const updated = [...prev];
+            // เก็บชื่ออู่/ร้านค้า
+            updated[selectedQuotationIndex].vendor_name = vendorData.vendor_name || "";
+            // ถ้าต้องการเก็บ id จริงๆ ให้ใช้ vendorData.vendor_id ด้วย
+            updated[selectedQuotationIndex].vendor_id = vendorData.vendor_id || "";
+            return updated;
+        });
+        setIsOpenModalVendorDetails(false);
+    };
+
+
+    // Edit
+
+
+    // Show {data} to input
+    useEffect(() => {
+        if (data) {
+            // กรณี data มีโครงสร้าง { analysis: {...}, quotations: [...] }
+            if (data.analysis) {
+                setAnalysisData({
+                    fname: data.analysis.fname || "",
+                    lname: data.analysis.lname || "",
+                    analysis_id: data.analysis.analysis_id || "",
+                    request_id: data.analysis.request_id || "",
+                    analysis_emp_id: data.analysis.analysis_emp_id || "",
+                    is_quotation_required: !!data.analysis.is_quotation_required,
+                    urgent_repair: !!data.analysis.urgent_repair,
+                    inhouse_repair: !!data.analysis.inhouse_repair,
+                    send_to_garage: !!data.analysis.send_to_garage,
+                    plan_date: data.analysis.plan_date ? data.analysis.plan_date.substring(0, 10) : "",
+                    plan_time: data.analysis.plan_time ? data.analysis.plan_time.substring(11, 16) : "",
+                    remark: data.analysis.remark || "",
+                    is_pm: !!data.analysis.is_pm,
+                    is_cm: !!data.analysis.is_cm,
+                });
+            }
+            if (Array.isArray(data.quotations)) {
+                setQuotations(
+                    data.quotations.map(q => ({
+                        quotation_id: q.quotation_id || "",
+                        analysis_id: q.analysis_id || "",
+                        vendor_id: q.vendor_id || "",
+                        garage_name: q.vendor_name || "",
+                        quotation_date: q.quotation_date ? q.quotation_date.substring(0, 10) : "",
+                        quotation_file: q.quotation_file || null,
+                        note: q.note || "",
+                        is_selected: !!q.is_selected,
+                        quotation_vat: q.quotation_vat || "",
+                        vendor_name: q.vendor_name || "",
+                        parts: Array.isArray(q.parts)
+                            ? q.parts.map(part => {
+                                const price = parseFloat(part.part_price) || 0;
+                                const qty = parseFloat(part.part_qty) || 0;
+                                const vat = parseFloat(part.part_vat) || 0;
+                                const discount = parseFloat(part.part_discount) || 0;
+                                const subtotal = price * qty - discount;
+                                const vatVal = subtotal * vat / 100;
+                                const total = subtotal + vatVal;
+                                return {
+                                    item_id: part.item_id || "",
+                                    quotation_parts_id: part.quotation_parts_id || "",
+                                    part_id: part.part_id || "",
+                                    system_name: part.system_name || "",
+                                    part_name: part.part_name || "",
+                                    price: part.part_price?.toString() || "",
+                                    unit: part.part_unit || "",
+                                    maintenance_type: part.maintenance_type || "",
+                                    qty: part.part_qty?.toString() || "",
+                                    discount: part.part_discount?.toString() || "",
+                                    vat: part.part_vat?.toString() || "",
+                                    total: total.toFixed(2), // set total ที่คำนวณแล้ว
+                                };
+                            })
+                            : [],
+                    }))
+                );
+            }
+        }
+    }, [data]);
+
+    // ...existing code...
+
+    // เพิ่มฟังก์ชันรีเซ็ตข้อมูล
+    const resetFormToInitial = () => {
+        if (data) {
+            if (data.analysis) {
+                setAnalysisData({
+                    fname: data.analysis.fname || "",
+                    lname: data.analysis.lname || "",
+                    request_id: data.analysis.request_id || "",
+                    analysis_emp_id: data.analysis.analysis_emp_id || "",
+                    is_quotation_required: !!data.        analysis.is_quotation_required,
+                    urgent_repair: !!data.analysis.urgent_repair,
+                    inhouse_repair: !!data.analysis.inhouse_repair,
+                    send_to_garage: !!data.analysis.send_to_garage,
+                    plan_date: data.analysis.plan_date ? data.analysis.plan_date.substring(0, 10) : "",
+                    plan_time: data.analysis.plan_time ? data.analysis.plan_time.substring(11, 16) : "",
+                    remark: data.analysis.remark || "",
+                    is_pm: !!data.analysis.is_pm,
+                    is_cm: !!data.analysis.is_cm,
+                });
+            }
+            if (Array.isArray(data.quotations)) {
+                setQuotations(
+                    data.quotations.map(q => ({
+                        quotation_id: q.quotation_id || "",
+                        analysis_id: q.analysis_id || "",
+                        vendor_id: q.vendor_id || "",
+                        garage_name: q.vendor_name || "",
+                        quotation_date: q.quotation_date ? q.quotation_date.substring(0, 10) : "",
+                        quotation_file: q.quotation_file || null,
+                        note: q.note || "",
+                        is_selected: !!q.is_selected,
+                        quotation_vat: q.quotation_vat || "",
+                        vendor_name: q.vendor_name || "",
+                        parts: Array.isArray(q.parts)
+                            ? q.parts.map(part => {
+                                const price = parseFloat(part.part_price) || 0;
+                                const qty = parseFloat(part.part_qty) || 0;
+                                const vat = parseFloat(part.part_vat) || 0;
+                                const discount = parseFloat(part.part_discount) || 0;
+                                const subtotal = price * qty - discount;
+                                const vatVal = subtotal * vat / 100;
+                                const total = subtotal + vatVal;
+                                return {
+                                    item_id: part.item_id || "",
+                                    part_id: part.part_id || "",
+                                    system_name: part.system_name || "",
+                                    part_name: part.part_name || "",
+                                    price: part.part_price?.toString() || "",
+                                    unit: part.part_unit || "",
+                                    maintenance_type: part.maintenance_type || "",
+                                    qty: part.part_qty?.toString() || "",
+                                    discount: part.part_discount?.toString() || "",
+                                    vat: part.part_vat?.toString() || "",
+                                    total: total.toFixed(2),
+                                };
+                            })
+                            : [],
+                    }))
+                );
+            }
+        }
+    };
+
+    // ...existing code...
+    const [isEditing, setIsEditing] = useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            console.log("ข้อมูลที่ส่ง:", { dataToSend });
+            console.log("ข้อมูลใบเสนอราคา:", quotations);
+            const token = localStorage.getItem("accessToken");
+            if (!token) {
+                setMessage("Access token is missing. Please log in.");
+                setMessageType("error");
+                return;
+            }
+
+            const formData = new FormData();
+
+            for (const key in dataToSend) {
+                formData.append(key, dataToSend[key]);
+            }
+
+            quotations.forEach((quotation, index) => {
+                formData.append(`quotations[${index}][vendor_id]`, quotation.vendor_id);
+                formData.append(`quotations[${index}][quotation_date]`, quotation.quotation_date);
+                formData.append(`quotations[${index}][note]`, quotation.note);
+                formData.append(`quotations[${index}][is_selected]`, quotation.is_selected ? 1 : 0);
+                formData.append(`quotations[${index}][quotation_vat]`, quotation.quotation_vat || "");
+                const vendorName =
+                    Array.isArray(quotation.vendor_name)
+                        ? quotation.vendor_name.find(name => name.trim() !== "") || ""
+                        : quotation.vendor_name || "";
+
+                formData.append(`quotations[${index}][vendor_name]`, vendorName);
+
+                if (quotation.quotation_file instanceof File) {
+                    formData.append(`quotations[${index}][quotation_file]`, quotation.quotation_file);
+                } else if (typeof quotation.quotation_file === "string") {
+                    formData.append(`quotations[${index}][quotation_file_old]`, quotation.quotation_file);
+                }
+
+
+                quotation.parts.forEach((part, partIndex) => {
+                    for (const key in part) {
+                        formData.append(`quotations[${index}][parts][${partIndex}][${key}]`, part[key]);
+                    }
+                });
+            });
+
+            // ดูค่าทั้งหมดใน formData
+            for (let pair of formData.entries()) {
+                console.log('', pair[0], pair[1]);
+            }
+
+            const response = await axios.put(
+                `${apiUrl}/api/ananlysis_update/${user?.id_emp}`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            console.log("บันทึกข้อมูลสำเร็จ:", response.data);
+            setMessage(response.data.message);
+            setMessageType("success");
+            setIsEditing(false);
+
+        } catch (error) {
+            console.error("เกิดข้อผิดพลาดในการบันทึกข้อมูล:", error);
+            setMessage("เกิดข้อผิดพลาด");
+            setMessageType("error");
+        }
+    };
 
 
     return (
         <div className=" mb-4 ">
 
-            {analysisData?.analysis_id}
+{analysisData.analysis_id}
             {/* Display success or error message */}
             {message && (
                 <div
