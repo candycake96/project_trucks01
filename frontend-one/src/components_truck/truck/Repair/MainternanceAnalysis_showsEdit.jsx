@@ -449,12 +449,11 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
 
     // ...existing code...
 
+            console.log("DEBUG → data:", data);
+console.log("DEBUG → data.analysis:", data?.analysis);
     // เพิ่มฟังก์ชันรีเซ็ตข้อมูล
     const resetFormToInitial = () => {
         if (data) {
-
-            console.log("DEBUG → data:", data);
-console.log("DEBUG → data.analysis:", data?.analysis);
 
 
             if (data?.analysis) {
