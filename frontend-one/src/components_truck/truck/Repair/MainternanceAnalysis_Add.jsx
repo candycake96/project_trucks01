@@ -755,7 +755,7 @@ const MainternanceAnanlysis_Add = ({ maintenanceJob, onSaved }) => {
                                                     </div>
 
                                                     <div className="col-lg-1">
-                                                        <label className="form-label text-sm compact-label">ตัดรอบ PM <span style={{ color: "red" }}>*</span></label>
+                                                        <label className="form-label text-sm compact-label">ตัดรอบ PM </label>
                                                         <select
                                                             className="form-select form-select-sm compact-select"
                                                             value={part.item_id}

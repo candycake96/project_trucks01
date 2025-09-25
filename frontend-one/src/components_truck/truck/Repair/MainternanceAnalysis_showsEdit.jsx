@@ -1017,7 +1017,7 @@ useEffect(() => {
 
 
                                             <div className="col-lg-1">
-                                                <label className="form-label text-sm">ตัดรอบ PM <span className="" style={{ color: "red" }}>*</span></label>
+                                                <label className="form-label text-sm">ตัดรอบ PM </label>
                                                 <select
                                                     className="form-select  mb-3  form-select-sm"
                                                     aria-label="Large select example"
