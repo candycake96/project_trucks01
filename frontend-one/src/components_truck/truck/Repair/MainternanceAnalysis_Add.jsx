@@ -706,8 +706,6 @@ const MainternanceAnanlysis_Add = ({ maintenanceJob, onSaved }) => {
                                     ></textarea>
                                 </div>
                                 <div className="mb-3" style={{ overflowX: "auto" }}>
-                                    <div style={{ overflowX: "auto" }}>
-                                        <div className="d-flex align-items-start" style={{ minWidth: "1400px" }}>
                                             {q.parts.map((part, partIdx) => (
                                                 <div className="row mb-1" key={partIdx}>
                                                     <input type="hidden" value={part.part_id} readOnly />
@@ -843,9 +841,7 @@ const MainternanceAnanlysis_Add = ({ maintenanceJob, onSaved }) => {
                                                 </div>
                                             ))}
                                         </div>
-                                    </div>
-
-
+            
                                     <div className="d-flex justify-content-end mb-3">
                                         <button
                                             className="btn btn-outline-primary"
@@ -855,7 +851,7 @@ const MainternanceAnanlysis_Add = ({ maintenanceJob, onSaved }) => {
                                             เพิ่มรายการอะไหล่ <i className="bi bi-plus-square-fill"></i>
                                         </button>
                                     </div>
-                                </div>
+                                
 
                                 <div className="text-end">
                                     {(() => {
