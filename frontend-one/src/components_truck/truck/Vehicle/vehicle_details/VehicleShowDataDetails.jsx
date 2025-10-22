@@ -2,14 +2,14 @@ import React, { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { apiUrl } from "../../../../config/apiConfig";
 import axios from "axios";
-import ReactModal from "react-modal";
-import Modal_show_vehicle_image from "./Modal/Modal_show_vehicle_image";
-import Modal_vehicle_book from "../expanded/modal/Modal_vehicle_book";
+import Card_vehicle_mainternance from "./card/Card_Vehicle_mainternance";
 import Card_vehicle_data from "./card/Card_Vehicle_data";
+import Table_vehicle_tax from "./table/Table_vehicle_tax";
 import Insurance_table_truck_id from "../../Car_insurance/table/Insurance_table_truck_id";
-import Table_vehicle_tax from "../table/Table_vehicle_tax";
 import Table_vehicle_act from "./act/Table_vehicle_act";
-import Card_vehicle_mainternance from "./card/Card_Vehicle_use";
+import Modal_show_vehicle_image from "./Modal/Modal_show_vehicle_image";
+import Modal_vehicl_book from "../expanded/modal/Modal_vehicle_book";
+import ReactModal from "react-modal";
 
 ReactModal.setAppElement("#root");
 
@@ -26,6 +26,7 @@ const VehicleShowDataDetails = () => {
 
   // ref สำหรับ container ของรูป
   const imageContainerRef = useRef(null);
+  
 
   // Fetch Vehicle Details
   const fetchRequestVehicle = async () => {
@@ -44,37 +45,48 @@ const VehicleShowDataDetails = () => {
     }
   };
 
-  // Fetch Vehicle Images
-  const fetchVehicleImages = async () => {
-    if (!VehicleState?.reg_id) return;
-    try {
-      const response = await axios.get(
-        `${apiUrl}/api/img_vehicle_show/${VehicleState.reg_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
-      const images = response.data.images || [];
-      setVehicleData((prev) => {
-        if (prev.length > 0) {
-          return [{ ...prev[0], images }];
-        } else {
-          return [{ images }];
-        }
-      });
-    } catch (error) {
-      console.error("Fetch Vehicle Images Error:", error);
-    }
-  };
-
-  useEffect(() => {
+    useEffect(() => {
     if (VehicleState?.reg_id) {
       fetchRequestVehicle();
-      fetchVehicleImages();
     }
-  }, [VehicleState?.reg_id]);
+  }, [VehicleState?.reg_id, location]);
+
+
+  // Fetch Vehicle Images
+const fetchVehicleImages = async () => {
+  if (!VehicleState?.reg_id) return;
+  try {
+    const response = await axios.get(
+      `${apiUrl}/api/img_vehicle_show/${VehicleState.reg_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    const images = response.data.images || [];
+
+    setVehicleData((prev) => {
+      if (prev.length > 0) {
+        // รวมข้อมูลเก่า + อัปเดตรูป
+        return prev.map((item, idx) =>
+          idx === 0 ? { ...item, images } : item
+        );
+      } else {
+        return [{ images }];
+      }
+    });
+  } catch (error) {
+    console.error("Fetch Vehicle Images Error:", error);
+  }
+};
+
+
+
+
+   useEffect(()=>{
+      fetchVehicleImages();
+   }, [vehicleData]);
 
   // Modal Handlers
   const handleOpenModalImage = () => setOpenModalImage(true);
@@ -202,6 +214,7 @@ const VehicleShowDataDetails = () => {
                 ))}
               </div>
             </div>
+            
           ) : (
             <div className="text-center py-5">
               <p>ยังไม่มีรูปภาพ</p>
@@ -263,8 +276,17 @@ const VehicleShowDataDetails = () => {
         }}
       />
 
+
       {/* ปุ่มปิด */}
+      
       <button
+        className="btn btn-light position-absolute top-0 end-12 m-2"
+        onClick={closeGallery}
+        style={{ zIndex: 10 }}
+      >
+        <i class="bi bi-trash3-fill"></i>
+      </button>
+            <button
         className="btn btn-light position-absolute top-0 end-0 m-2"
         onClick={closeGallery}
         style={{ zIndex: 10 }}
@@ -313,6 +335,7 @@ const VehicleShowDataDetails = () => {
           { key: "Tax", icon: "bi-cash-stack", label: "ภาษีรถ" },
           { key: "Act", icon: "bi-shield-check", label: "พรบ.รถ" },
           { key: "Repair", icon: "bi-tools", label: "ข้อมูลซ่อมรถ" },
+          { key: "Loan", icon: "bi bi-credit-card", label: "สินเชื่อรถ" },
           { key: "DriverUsage", icon: "bi-person-lines-fill", label: "ข้อมูลการใช้รถ พขร." },
         ].map((item) => (
           <div className="col-md-3" key={item.key}>
@@ -335,12 +358,12 @@ const VehicleShowDataDetails = () => {
 
       {/* Add Image Modal */}
       {isOpenModalImage && (
-        <Modal_show_vehicle_image isOpen={isOpenModalImage} onClose={handleCloseModalImage} onData={VehicleState} />
+        <Modal_show_vehicle_image isOpen={isOpenModalImage} onClose={handleCloseModalImage} onData={vehicleData} />
       )}
 
       {/* Vehicle Book Modal */}
       {isOpenModalBook && (
-        <Modal_vehicle_book isOpen={isOpenModalBook} onClose={handleCloseModalBook} dataTruck={isOpenModalBookData} />
+        <Modal_vehicl_book isOpen={isOpenModalBook} onClose={handleCloseModalBook} dataTruck={isOpenModalBookData} />
       )}
     </div>
   );

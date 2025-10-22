@@ -1,4 +1,5 @@
 const { executeQueryEmployeeAccessDB } = require('../../../config/db');
+const baseUrl = process.env.BASE_URL;
 
 module.exports = {
   img_vehicle_show: async (req, res) => {
@@ -17,13 +18,14 @@ module.exports = {
         // สร้าง URL ให้แต่ละรูป
         const fileUrl = result.map(img => ({
           ...img,
-          img_url: `${req.protocol}://${req.get("host")}/api/uploads/vehicle_img/${img.img_name}`
+          img_url: `${baseUrl}/api/uploads/vehicle_img/${img.img_name}`
         }));
 
         return res.status(200).json({ images: fileUrl });
       } else {
         return res.status(404).json({ message: "No images found" });
       }
+      
     } catch (error) {
       console.error("Fetch Image Error:", error);
       res.status(500).json({ message: "Error fetching image", error: error.message });
