@@ -270,6 +270,11 @@ const maintenanceInvoiceRoutes = require("./routes/truck/maintenance/invoice");
 app.use("/api", maintenanceInvoiceRoutes);
 
 
+
+// รายงาน
+const manternance_reportRoutes = require("./routes/truck/maintenance/manternance_report");
+app.use("/api", manternance_reportRoutes);
+
 //  รายงาน
 const repairsRoutes = require("./routes/report/maintenance/repair");
 app.use("/api", repairsRoutes);
