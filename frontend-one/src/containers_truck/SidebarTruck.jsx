@@ -38,22 +38,24 @@ useEffect(() => {
           { submenu_id: 10, submenu_name: "รายงานเลขไมล์รถ", path: "/truck/CarMileageShow", code: "MILEAGES_VIEW" },
           { submenu_id: 11, submenu_name: "รายงานรถ ม.79/ม.89", path: "/truck/CarStopTaxRemittanc", code: "CAR_STOP_VIEW" },
           { submenu_id: 12, submenu_name: "ตั้งค่าข้อมูลรถ", path: "/truck/Vehicle_models", code: "" }, // รอ
-          // { submenu_id: 12, submenu_name: "ตั้งค่าแผน PM", path: "/truck/PM_setting", code: "" } // รอ
+          { submenu_id: 13, submenu_name: "รายงานสรุปยานพาหนะและประกันภัย", path: "/truck/ReportVehicleAndInsurancy", code: "" } // รอ
         ],
         4: [
-          { submenu_id: 13, submenu_name: "ผู้จำหน่ายสินค้า/อู่ซ่อม", path: "/truck/Vendor", code: "VENDER_VIEW" },
-          { submenu_id: 14, submenu_name: "ราคากลางอะไหล่รถ", path: "/truck/Vehicle_parts_details", code: "" }
+          { submenu_id: 14, submenu_name: "ผู้จำหน่ายสินค้า/อู่ซ่อม", path: "/truck/Vendor", code: "VENDER_VIEW" },
+          { submenu_id: 15, submenu_name: "ราคากลางอะไหล่รถ", path: "/truck/Vehicle_parts_details", code: "" }
         ],
         5: [
-          { submenu_id: 15, submenu_name: "แจ้งซ่อม/งานซ่อม", path: "/truck/MaintenanceRequest", code: "REQUEST_VIEW" },
-          { submenu_id: 16, submenu_name: "ตรวจสอบความพร้อม", path: "/truck/MaintenancPlanning", code: "CHECK_REQUEST_CAR_VIEW" },
-          { submenu_id: 17, submenu_name: "วิเคราะห์แผนซ่อมบำรุง", path: "/truck/MainternanceAnalysisRequestJob", code: "MA-COST-VEHICCLE_VIEW" },
-          { submenu_id: 18, submenu_name: "ตรวจสอบแผนซ่อมบำรุง", path: "/truck/MainternanceAnalysisApprover_table_main", code: "VIEW_CAR_CHECK_DETAIL" },
-          { submenu_id: 19, submenu_name: "อนุมัติงานซ่อมบำรุง", path: "/truck/MainternanceApprovalManager", code: "VIEW_MANAGER_APPROVAL" },
-          { submenu_id: 20, submenu_name: "ปิดงานซ่อมบำรุง", path: "/truck/RepairCloseList", code: "CANCEL_REPAIR_VIEW" }
+          { submenu_id: 16, submenu_name: "แจ้งซ่อม/งานซ่อม", path: "/truck/MaintenanceRequest", code: "REQUEST_VIEW" },
+          { submenu_id: 17, submenu_name: "ตรวจสอบความพร้อม", path: "/truck/MaintenancPlanning", code: "CHECK_REQUEST_CAR_VIEW" },
+          { submenu_id: 18, submenu_name: "วิเคราะห์แผนซ่อมบำรุง", path: "/truck/MainternanceAnalysisRequestJob", code: "MA-COST-VEHICCLE_VIEW" },
+          { submenu_id: 19, submenu_name: "ตรวจสอบแผนซ่อมบำรุง", path: "/truck/MainternanceAnalysisApprover_table_main", code: "VIEW_CAR_CHECK_DETAIL" },
+          { submenu_id: 20, submenu_name: "อนุมัติงานซ่อมบำรุง", path: "/truck/MainternanceApprovalManager", code: "VIEW_MANAGER_APPROVAL" },
+          { submenu_id: 21, submenu_name: "ใบแจ้งหนี้", path: "/truck/MainternanceInvoice_main", code: "" },
+          { submenu_id: 22, submenu_name: "ปิดงานซ่อมบำรุง", path: "/truck/RepairCloseList", code: "CANCEL_REPAIR_VIEW" },
+          { submenu_id: 23, submenu_name: "รายงานซ่อมบำรุง", path: "/truck/Mainternance_report", code: "" }
         ],
         6: [
-          { submenu_id: 21, submenu_name: "ข้อมูลคนขับ", path: "/truck/driver", code: "VEHICLE_PAIR_DRIVER" }
+          { submenu_id: 24, submenu_name: "ข้อมูลคนขับ", path: "/truck/driver", code: "VEHICLE_PAIR_DRIVER" }
         ]
       };
 
@@ -100,7 +102,7 @@ useEffect(() => {
       <ul className="nav flex-column mb-auto sidebar-nav">
         <li className="nav-item">
           <Link to="/truck" className={`nav-link ${location.pathname === "/truck" ? "active" : ""}`}>
-            <i className="bi bi-robot"></i> หน้าแรก 000
+            <i className="bi bi-robot"></i> หน้าแรก
           </Link>
         </li>
 
