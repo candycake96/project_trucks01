@@ -75,6 +75,9 @@ import RepairCloseList from "./components_truck/truck/Repair/CloseList/RepairClo
 import Vehicle_models from "./components_truck/truck/Vehicle/setting_vehicle/vehicle_models/vehicle_models";
 import Vehicle_pm_start from "./components_truck/truck/PreventiveMaintenance/Vehicle_pm/Vehicle_pm_start";
 import VehicleShowDataDetails from "./components_truck/truck/Vehicle/vehicle_details/VehicleShowDataDetails";
+import Mainternance_report from "./components_truck/truck/Repair/Mainternance_report/Mainternance_report";
+import ReportVehicleAndInsurancy from "./components_truck/truck/Report/ReportVehicleAndInsurancy/ReportVehicleAndInsurancy";
+
 
 Modal.setAppElement("#root");
 
@@ -165,6 +168,8 @@ function App() {
           <Route path="Vehicle_models" element={<Vehicle_models/>} /> {/* ปิดงานซ่อม */}
           <Route path="Vehicle_pm_start" element={<Vehicle_pm_start/>} /> {/* เพิ่มข้อมูลรถ PM  */}
           <Route path="VehicleShowDataDetails" element={<VehicleShowDataDetails/>} /> {/* แสดงข้อมูลรถทั้งหมด รายละเอียดรถ */}
+          <Route path="Mainternance_report" element={<Mainternance_report /> } />
+          <Route path="ReportVehicleAndInsurancy" element={<ReportVehicleAndInsurancy />} />  {/* รายงานรถและประกัน */}
           
           </Route> 
         </Routes> 
