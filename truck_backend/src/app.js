@@ -261,6 +261,14 @@ const img_vehicleRoutes = require("./routes/truck/img_vehicle/img_vehicle");
 app.use("/api", img_vehicleRoutes);
 
 
+// ประกันรถ
+const report_vehicle_insurancyRoutes = require("./routes/truck/report_vehicle_insurancy");
+app.use("/api", report_vehicle_insurancyRoutes);
+
+// invoice
+const maintenanceInvoiceRoutes = require("./routes/truck/maintenance/invoice");
+app.use("/api", maintenanceInvoiceRoutes);
+
 
 //  รายงาน
 const repairsRoutes = require("./routes/report/maintenance/repair");
