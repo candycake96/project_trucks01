@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Tab, Nav } from "react-bootstrap";
-import Table_mainternance_timeline from "./table/Table_mainternance_Timeline";
+import Table_mainternance_timeline from "./table/Table_mainternance_timeline";
 
 const Mainternance_report = () => {
   const [activeKey, setActiveKey] = useState("summary");
