@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Tab, Nav } from "react-bootstrap";
 import Table_mainternance_timeline from "./table/Table_mainternance_Timeline";
 
-const MaintenanceReport = () => {
+const Mainternance_report = () => {
   const [activeKey, setActiveKey] = useState("summary");
 
   return (
@@ -141,4 +141,4 @@ const MaintenanceReport = () => {
   );
 };
 
-export default MaintenanceReport;
+export default Mainternance_report;
