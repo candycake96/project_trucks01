@@ -80,7 +80,6 @@ module.exports = {
             if (Array.isArray(parts) && parts.length > 0) {
                 const sqlPartsUp = `UPDATE Truck_repair_parts_used SET
                     part_id = @part_id, 
-                    // item_id = @item_id,
                     repair_part_name = @repair_part_name, 
                     maintenance_type = @maintenance_type, 
                     repair_part_price = @repair_part_price, 
@@ -104,7 +103,6 @@ module.exports = {
 
                 for (const part of parts) {
                     const valueParts = {
-                        // item_id: part.item_id,
                         part_id: part.part_id,
                         repair_part_name: part.part_name,
                         maintenance_type: part.maintenance_type,

@@ -60,27 +60,27 @@ const RepairRequestFormEdit = () => {
     }, [dataRepairID]);
 
 
-    const [dataItem, setDataItem] = useState([]);
+    // const [dataItem, setDataItem] = useState([]);
 
-    const fetchDataItem = async () => {
-        try {
-            const response = await axios.get(
-                `${apiUrl}/api/setting_mainternance_item_show`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-                    },
-                }
-            );
-            setDataItem(response.data);
-        } catch (error) {
-            console.error("Error fetching parts:", error);
-        }
-    };
+    // const fetchDataItem = async () => {
+    //     try {
+    //         const response = await axios.get(
+    //             `${apiUrl}/api/setting_mainternance_item_show`,
+    //             {
+    //                 headers: {
+    //                     Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    //                 },
+    //             }
+    //         );
+    //         setDataItem(response.data);
+    //     } catch (error) {
+    //         console.error("Error fetching parts:", error);
+    //     }
+    // };
 
-    useEffect(() => {
-        fetchDataItem();
-    }, []);
+    // useEffect(() => {
+    //     fetchDataItem();
+    // }, []);
 
 
     // เมื่อ requestParts มีข้อมูลแล้ว ค่อย setFormData
@@ -106,7 +106,7 @@ const RepairRequestFormEdit = () => {
                     const subtotal = price * qty;
                     const total = subtotal + (subtotal * vat / 100);
                     return {
-                        // item_id: item.item_id || "",
+                        item_id: item.item_id || "",
                         request_id: item.request_id || "",
                         parts_used_id: item.parts_used_id || "",
                         part_id: item.part_id || "",
@@ -139,11 +139,11 @@ const RepairRequestFormEdit = () => {
     const [selectedPartIndex, setSelectedPartIndex] = useState(null);
 
     const [parts, setParts] = useState([
-        {  request_id: "", parts_used_id: "", part_id: "", system_name: "", part_name: "", price: "", unit: "", maintenance_type: "", qty: "", discount: "", vat: "", total: "" },
+        { request_id: "", parts_used_id: "", part_id: "", system_name: "", part_name: "", price: "", unit: "", maintenance_type: "", qty: "", discount: "", vat: "", total: "" },
     ]);
 
     const handleAddPart = () => {
-        setParts([...parts, {  request_id: "", parts_used_id: "", part_id: "", system_name: "", part_name: "", price: "", unit: "", maintenance_type: "", qty: "", discount: "", vat: "", total: "" }]);
+        setParts([...parts, { request_id: "", parts_used_id: "", part_id: "", system_name: "", part_name: "", price: "", unit: "", maintenance_type: "", qty: "", discount: "", vat: "", total: "" }]);
     };
 
 
@@ -247,6 +247,7 @@ const RepairRequestFormEdit = () => {
         }
 
         try {
+            console.log('test : ', formData)
             const response = await axios.put(
                 `${apiUrl}/api/repair_requests_edit/${formData.request_id}`,
                 {
@@ -434,7 +435,7 @@ const RepairRequestFormEdit = () => {
                                             </select>
                                         </div>
 
-                                        <div className="col-lg-2">
+                                        {/* <div className="col-lg-2">
                                             <label className="form-label text-sm">ตัดรอบ PM <span className="" style={{ color: "red" }}>*</span></label>
                                             <select
                                                 className="form-select  mb-3  form-select-sm"
@@ -448,7 +449,7 @@ const RepairRequestFormEdit = () => {
                                                 ))}
                                                 
                                             </select>
-                                        </div>
+                                        </div> */}
 
                                         <div className="col-lg-1">
                                             <label className="form-label text-sm">ราคา <span className="" style={{ color: "red" }}>*</span></label>
