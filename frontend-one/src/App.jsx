@@ -112,7 +112,7 @@ function App() {
             {/* <Route path="employeesadddata" element={<EmployeesAddData />} /> */}
             <Route path="memopage" element={<MemoPage />} />
             <Route path="memodetails" element={<MemoDetails />} />
-            <Route path="memomanagerrights" element={<เ />} />
+            <Route path="memomanagerrights" element={<MemoManagerRights />} />
             <Route path="jobposition" element={<JobPosition />} />
             <Route path="department" element={<Department />} />
             <Route path="jobsection" element={<JobSection />} />
