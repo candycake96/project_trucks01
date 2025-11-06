@@ -706,152 +706,152 @@ const MainternanceAnanlysis_Add = ({ maintenanceJob, onSaved }) => {
                                     ></textarea>
                                 </div>
                                 <div className="mb-3" style={{ overflowX: "auto" }}>
-                                            {q.parts.map((part, partIdx) => (
-                                                <div className="row mb-1" key={partIdx}>
-                                                    <input type="hidden" value={part.part_id} readOnly />
+                                    {q.parts.map((part, partIdx) => (
+                                        <div className="row mb-1" key={partIdx}>
+                                            <input type="hidden" value={part.part_id} readOnly />
 
-                                                    <div className="col-lg-1">
-                                                        <label className="form-label text-sm compact-label">ระบบ</label>
-                                                        <input
-                                                            type="text"
-                                                            className="form-control form-control-sm compact-input"
-                                                            value={part.system_name}
-                                                            onChange={e => handleChange(idx, partIdx, "system_name", e.target.value)}
-                                                            disabled
-                                                        />
-                                                    </div>
+                                            <div className="col-lg-1">
+                                                <label className="form-label text-sm compact-label">ระบบ</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control form-control-sm compact-input"
+                                                    value={part.system_name}
+                                                    onChange={e => handleChange(idx, partIdx, "system_name", e.target.value)}
+                                                    disabled
+                                                />
+                                            </div>
 
-                                                    <div className="col-lg-2">
-                                                        <label className="form-label text-sm compact-label">อะไหล่ <span style={{ color: "red" }}>*</span></label>
-                                                        <div className="input-group input-group-sm">
-                                                            <input
-                                                                type="text"
-                                                                className="form-control compact-input"
-                                                                value={part.part_name}
-                                                                onChange={e => handleChange(idx, partIdx, "part_name", e.target.value)}
-                                                                placeholder="ค้นหาอะไหล่..."
-                                                            />
-                                                            <button
-                                                                className="btn btn-outline-secondary btn-sm"
-                                                                type="button"
-                                                                onClick={() => handleOpenModalVehicleParteDtails(idx, partIdx)}
-                                                            >
-                                                                <i className="bi bi-search"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="col-lg-1">
-                                                        <label className="form-label text-sm compact-label">ประเภท <span style={{ color: "red" }}>*</span></label>
-                                                        <select
-                                                            className="form-select form-select-sm compact-select"
-                                                            value={part.maintenance_type}
-                                                            onChange={e => handleChange(idx, partIdx, "maintenance_type", e.target.value)}
-                                                        >
-                                                            <option value=""></option>
-                                                            <option value="CM">CM</option>
-                                                            <option value="PM">PM</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div className="col-lg-1">
-                                                        <label className="form-label text-sm compact-label">ตัดรอบ PM </label>
-                                                        <select
-                                                            className="form-select form-select-sm compact-select"
-                                                            value={part.item_id}
-                                                            onChange={(e) => handleChange(idx, partIdx, "item_id", e.target.value)}
-                                                        >
-                                                            <option value=""></option>
-                                                            {dataItem.map((row, ndx) => (
-                                                                <option value={row.item_id} key={ndx}> {row.item_name}</option>
-                                                            ))}
-                                                            <option value="อื่นๆ">อื่นๆ</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div className="col-lg-1">
-                                                        <label className="form-label text-sm compact-label">ราคา <span style={{ color: "red" }}>*</span></label>
-                                                        <input
-                                                            type="number"
-                                                            className="form-control form-control-sm compact-input"
-                                                            value={part.price}
-                                                            onChange={e => handleChange(idx, partIdx, "price", e.target.value)}
-                                                        />
-                                                    </div>
-
-                                                    <div className="col-lg-1">
-                                                        <label className="form-label text-sm compact-label">หน่วย <span style={{ color: "red" }}>*</span></label>
-                                                        <input
-                                                            type="text"
-                                                            className="form-control form-control-sm compact-input"
-                                                            value={part.unit}
-                                                            onChange={e => handleChange(idx, partIdx, "unit", e.target.value)}
-                                                        />
-                                                    </div>
-
-                                                    <div className="col-lg-1">
-                                                        <label className="form-label text-sm compact-label">จำนวน <span style={{ color: "red" }}>*</span></label>
-                                                        <input
-                                                            type="number"
-                                                            className="form-control form-control-sm compact-input"
-                                                            value={part.qty}
-                                                            onChange={e => handleChange(idx, partIdx, "qty", e.target.value)}
-                                                        />
-                                                    </div>
-
-                                                    <div className="col-lg-1">
-                                                        <label className="form-label text-sm compact-label">ส่วนลด</label>
-                                                        <input
-                                                            type="number"
-                                                            className="form-control form-control-sm compact-input"
-                                                            value={part.discount || ""}
-                                                            onChange={e => handleChange(idx, partIdx, "discount", e.target.value)}
-                                                        />
-                                                    </div>
-
-                                                    <div className="col" style={{ flex: "0 0 7.5%", maxWidth: "7.5%" }}>
-                                                        <label className="form-label text-sm compact-label">VAT%</label>
-                                                        <input
-                                                            type="number"
-                                                            className="form-control form-control-sm compact-input"
-                                                            value={part.vat}
-                                                            onChange={e => handleChange(idx, partIdx, "vat", e.target.value)}
-                                                        />
-                                                    </div>
-
-                                                    <div className="col" style={{ flex: "0 0 12.5%", maxWidth: "12.5%" }}>
-                                                        <label className="form-label text-sm compact-label">ราคารวม</label>
-                                                        <input
-                                                            type="number"
-                                                            className="form-control form-control-sm compact-input"
-                                                            value={part.total || ""}
-                                                            disabled
-                                                        />
-                                                    </div>
-
-                                                    <div className="col-lg-1 d-flex justify-content-center align-items-center" style={{ flex: "0 0 4.5%", maxWidth: "4.5%" }}>
-                                                        <button
-                                                            className="btn btn-sm btn-danger"
-                                                            type="button"
-                                                            onClick={() => handleRemovePart(idx, partIdx)}
-                                                        >
-                                                            <i className="bi bi-trash3-fill"></i>
-                                                        </button>
-                                                    </div>
+                                            <div className="col-lg-2">
+                                                <label className="form-label text-sm compact-label">อะไหล่ <span style={{ color: "red" }}>*</span></label>
+                                                <div className="input-group input-group-sm">
+                                                    <input
+                                                        type="text"
+                                                        className="form-control compact-input"
+                                                        value={part.part_name}
+                                                        onChange={e => handleChange(idx, partIdx, "part_name", e.target.value)}
+                                                        placeholder="ค้นหาอะไหล่..."
+                                                    />
+                                                    <button
+                                                        className="btn btn-outline-secondary btn-sm"
+                                                        type="button"
+                                                        onClick={() => handleOpenModalVehicleParteDtails(idx, partIdx)}
+                                                    >
+                                                        <i className="bi bi-search"></i>
+                                                    </button>
                                                 </div>
-                                            ))}
+                                            </div>
+
+                                            <div className="col-lg-1">
+                                                <label className="form-label text-sm compact-label">ประเภท <span style={{ color: "red" }}>*</span></label>
+                                                <select
+                                                    className="form-select form-select-sm compact-select"
+                                                    value={part.maintenance_type}
+                                                    onChange={e => handleChange(idx, partIdx, "maintenance_type", e.target.value)}
+                                                >
+                                                    <option value=""></option>
+                                                    <option value="CM">CM</option>
+                                                    <option value="PM">PM</option>
+                                                </select>
+                                            </div>
+
+                                            <div className="col-lg-1">
+                                                <label className="form-label text-sm compact-label">ตัดรอบ PM <span style={{ color: "red" }}>*</span></label>
+                                                <select
+                                                    className="form-select form-select-sm compact-select"
+                                                    value={part.item_id}
+                                                    onChange={(e) => handleChange(idx, partIdx, "item_id", e.target.value)}
+                                                >
+                                                    <option value=""></option>
+                                                    {dataItem.map((row, ndx) => (
+                                                        <option value={row.item_id} key={ndx}> {row.item_name}</option>
+                                                    ))}
+                                                    <option value="อื่นๆ">อื่นๆ</option>
+                                                </select>
+                                            </div>
+
+                                            <div className="col-lg-1">
+                                                <label className="form-label text-sm compact-label">ราคา <span style={{ color: "red" }}>*</span></label>
+                                                <input
+                                                    type="number"
+                                                    className="form-control form-control-sm compact-input"
+                                                    value={part.price}
+                                                    onChange={e => handleChange(idx, partIdx, "price", e.target.value)}
+                                                />
+                                            </div>
+
+                                            <div className="col-lg-1">
+                                                <label className="form-label text-sm compact-label">หน่วย <span style={{ color: "red" }}>*</span></label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control form-control-sm compact-input"
+                                                    value={part.unit}
+                                                    onChange={e => handleChange(idx, partIdx, "unit", e.target.value)}
+                                                />
+                                            </div>
+
+                                            <div className="col-lg-1">
+                                                <label className="form-label text-sm compact-label">จำนวน <span style={{ color: "red" }}>*</span></label>
+                                                <input
+                                                    type="number"
+                                                    className="form-control form-control-sm compact-input"
+                                                    value={part.qty}
+                                                    onChange={e => handleChange(idx, partIdx, "qty", e.target.value)}
+                                                />
+                                            </div>
+
+                                            <div className="col-lg-1">
+                                                <label className="form-label text-sm compact-label">ส่วนลด</label>
+                                                <input
+                                                    type="number"
+                                                    className="form-control form-control-sm compact-input"
+                                                    value={part.discount || ""}
+                                                    onChange={e => handleChange(idx, partIdx, "discount", e.target.value)}
+                                                />
+                                            </div>
+
+                                            <div className="col" style={{ flex: "0 0 7.5%", maxWidth: "7.5%" }}>
+                                                <label className="form-label text-sm compact-label">VAT%</label>
+                                                <input
+                                                    type="number"
+                                                    className="form-control form-control-sm compact-input"
+                                                    value={part.vat}
+                                                    onChange={e => handleChange(idx, partIdx, "vat", e.target.value)}
+                                                />
+                                            </div>
+
+                                            <div className="col" style={{ flex: "0 0 12.5%", maxWidth: "12.5%" }}>
+                                                <label className="form-label text-sm compact-label">ราคารวม</label>
+                                                <input
+                                                    type="number"
+                                                    className="form-control form-control-sm compact-input"
+                                                    value={part.total || ""}
+                                                    disabled
+                                                />
+                                            </div>
+
+                                            <div className="col-lg-1 d-flex justify-content-center align-items-center" style={{ flex: "0 0 4.5%", maxWidth: "4.5%" }}>
+                                                <button
+                                                    className="btn btn-sm btn-danger"
+                                                    type="button"
+                                                    onClick={() => handleRemovePart(idx, partIdx)}
+                                                >
+                                                    <i className="bi bi-trash3-fill"></i>
+                                                </button>
+                                            </div>
                                         </div>
-            
-                                    <div className="d-flex justify-content-end mb-3">
-                                        <button
-                                            className="btn btn-outline-primary"
-                                            type="button"
-                                            onClick={() => handleAddPart(idx)}
-                                        >
-                                            เพิ่มรายการอะไหล่ <i className="bi bi-plus-square-fill"></i>
-                                        </button>
-                                    </div>
-                                
+                                    ))}
+                                </div>
+
+                                <div className="d-flex justify-content-end mb-3">
+                                    <button
+                                        className="btn btn-outline-primary"
+                                        type="button"
+                                        onClick={() => handleAddPart(idx)}
+                                    >
+                                        เพิ่มรายการอะไหล่ <i className="bi bi-plus-square-fill"></i>
+                                    </button>
+                                </div>
+
 
                                 <div className="text-end">
                                     {(() => {

@@ -36,7 +36,7 @@ const MainternanceAnalysisApproverShowEdit = ({ maintenanceJob, isApproverShowDa
         remark: "",
 
 
-        
+
     });
 
     // เพิ่ม state สำหรับใบเสนอราคาแบบ array
@@ -73,14 +73,14 @@ const MainternanceAnalysisApproverShowEdit = ({ maintenanceJob, isApproverShowDa
         }
     ]);
 
-useEffect(() => {
-    setDataApprover(prev => ({
-        ...prev, // เก็บค่าที่มีอยู่แล้ว
-        request_id: maintenanceJob?.request_id || "",
-        approver_emp_id: user?.id_emp || "",
-        approver_name: `${user?.fname || ""} ${user?.lname || ""}`,
-    }));
-}, [maintenanceJob, user]);
+    useEffect(() => {
+        setDataApprover(prev => ({
+            ...prev, // เก็บค่าที่มีอยู่แล้ว
+            request_id: maintenanceJob?.request_id || "",
+            approver_emp_id: user?.id_emp || "",
+            approver_name: `${user?.fname || ""} ${user?.lname || ""}`,
+        }));
+    }, [maintenanceJob, user]);
 
 
 
@@ -239,18 +239,18 @@ useEffect(() => {
     // ...existing code...
 
     // --- แก้ไข useEffect สำหรับ setDataApprover ให้รวม approval_status ด้วย (กัน approval_status หาย) ---
-useEffect(() => {
-    const approver = isApproverShowData?.approvers?.[0] || {};
-    setDataApprover(prev => ({
-        ...prev, // เก็บค่าเดิม
-        analysis_id: approver.analysis_id || "",
-        approver_emp_id: approver.approver_emp_id || "",
-        approver_name: approver.approver_name || "",
-        approval_date: approver.approval_date || "",
-        remark: approver.remark || "",
-        approval_status: approver.approval_status || "",
-    }));
-}, [isApproverShowData]);
+    useEffect(() => {
+        const approver = isApproverShowData?.approvers?.[0] || {};
+        setDataApprover(prev => ({
+            ...prev, // เก็บค่าเดิม
+            analysis_id: approver.analysis_id || "",
+            approver_emp_id: approver.approver_emp_id || "",
+            approver_name: approver.approver_name || "",
+            approval_date: approver.approval_date || "",
+            remark: approver.remark || "",
+            approval_status: approver.approval_status || "",
+        }));
+    }, [isApproverShowData]);
 
 
     // --- แก้ไข handleApprovalPass ให้เช็ค approval_status ก่อน submit ---
@@ -293,7 +293,6 @@ useEffect(() => {
                 setMessage(response.data.message);
                 setMessageType("success");
                 setIsEditing(false);
-                setIsEditing(false);
             } else {
                 alert("❌ ไม่สามารถอนุมัติได้");
             }
@@ -315,32 +314,56 @@ useEffect(() => {
             <div className="md-2">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <p className="mb-0 fw-bold text-dark ">รายการตรวจสอบการแจ้งซ่อมและใบเสนอราคาเพื่ออนุมัติ</p>
-                    {!isEditing ? (
-                        <div className="col-lg-4 mb-3 d-flex justify-content-lg-end justify-content-start">
-                            {hasPermission("ADD_TECH_APPROVAL") && (
-                            <button
-                                type="button"
-                                className="btn btn-success btn-sm"
-                                onClick={() => setIsEditing(true)}
-                                style={{ whiteSpace: 'nowrap' }}
-                            >
-                                <i className="bi bi-pencil-fill me-1"></i> แก้ไข
-                            </button>
-                            )}
-                        </div>
-                    ) : (
-                        <div className="col-lg-4 mb-3 d-flex justify-content-lg-end justify-content-start">
-                            <button
-                                type="button"
-                                className="btn btn-danger btn-sm"
-                                onClick={() => setIsEditing(false)}
-                                style={{ whiteSpace: 'nowrap' }}
-                            >
-                                <i className="bi bi-pencil-square"></i> ยกเลิก
-                            </button>
-                        </div>
-                    )}
 
+
+
+                    {maintenanceJob?.request_informer_emp_id === user?.id_emp && (
+                        <>
+                            {/* ถ้าได้รับการอนุมัติจากผู้จัดการแล้ว */}
+                            {["ผู้จัดการอนุมัติ", "ใบแจ้งหนี้"].includes(maintenanceJob?.status) ? (
+                                <button
+                                    className="btn btn-secondary btn-sm"
+                                    disabled
+                                    title="ไม่สามารถแก้ไขได้เนื่องจากผู้จัดการอนุมัติแล้ว"
+                                >
+                                    <i className="bi bi-lock-fill me-1"></i> แก้ไขไม่ได้
+                                </button>
+                            ) : maintenanceJob?.status === 'รอคำขอแก้ไขหลังอนุมัติ' ? (
+                                <button className="btn btn-warning btn-sm" disabled>
+                                    <i className="bi bi-hourglass-split me-1"></i> รออนุมัติคำขอแก้ไข
+                                </button>
+                            ) : (
+                                // ปุ่มแก้ไขปกติ
+                                <>
+                                    {!isEditing ? (
+                                        <div className="col-lg-4 mb-3 d-flex justify-content-lg-end justify-content-start">
+                                            {hasPermission("ADD_TECH_APPROVAL") && (
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-success btn-sm"
+                                                    onClick={() => setIsEditing(true)}
+                                                    style={{ whiteSpace: 'nowrap' }}
+                                                >
+                                                    <i className="bi bi-pencil-fill me-1"></i> แก้ไข
+                                                </button>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <div className="col-lg-4 mb-3 d-flex justify-content-lg-end justify-content-start">
+                                            <button
+                                                type="button"
+                                                className="btn btn-danger btn-sm"
+                                                onClick={() => setIsEditing(false)}
+                                                style={{ whiteSpace: 'nowrap' }}
+                                            >
+                                                <i className="bi bi-pencil-square"></i> ยกเลิก
+                                            </button>
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                        </>
+                    )}
                 </div>
                 <div className="">
 

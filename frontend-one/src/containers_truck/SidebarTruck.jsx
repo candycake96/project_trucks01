@@ -50,7 +50,7 @@ useEffect(() => {
           { submenu_id: 18, submenu_name: "วิเคราะห์แผนซ่อมบำรุง", path: "/truck/MainternanceAnalysisRequestJob", code: "MA-COST-VEHICCLE_VIEW" },
           { submenu_id: 19, submenu_name: "ตรวจสอบแผนซ่อมบำรุง", path: "/truck/MainternanceAnalysisApprover_table_main", code: "VIEW_CAR_CHECK_DETAIL" },
           { submenu_id: 20, submenu_name: "อนุมัติงานซ่อมบำรุง", path: "/truck/MainternanceApprovalManager", code: "VIEW_MANAGER_APPROVAL" },
-          { submenu_id: 21, submenu_name: "ใบแจ้งหนี้", path: "/truck/MainternanceInvoice_main", code: "" },
+          { submenu_id: 21, submenu_name: "ใบแจ้งหนี้", path: "/truck/MainternanceInvoice_main", code: "REQUEST_INVOICE" },
           { submenu_id: 22, submenu_name: "ปิดงานซ่อมบำรุง", path: "/truck/RepairCloseList", code: "CANCEL_REPAIR_VIEW" },
           { submenu_id: 23, submenu_name: "รายงานซ่อมบำรุง", path: "/truck/Mainternance_report", code: "" }
         ],

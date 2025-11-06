@@ -69,15 +69,15 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
     };
 
 
-useEffect(() => {
-    if (maintenanceJob && user) {
-        setAnalysisData(prev => ({
-            ...prev, // เก็บค่าที่มีอยู่แล้ว
-            request_id: maintenanceJob.request_id || "",
-            analysis_emp_id: user.id_emp || "",
-        }));
-    }
-}, [maintenanceJob, user]);
+    useEffect(() => {
+        if (maintenanceJob && user) {
+            setAnalysisData(prev => ({
+                ...prev, // เก็บค่าที่มีอยู่แล้ว
+                request_id: maintenanceJob.request_id || "",
+                analysis_emp_id: user.id_emp || "",
+            }));
+        }
+    }, [maintenanceJob, user]);
 
 
 
@@ -317,6 +317,39 @@ useEffect(() => {
         }
     };
 
+    useEffect(() => {
+        if (requestParts?.parts_used && requestParts.parts_used.length > 0) {
+            setQuotations(prev => {
+                const updated = [...prev];
+                // ถ้ามี quotation แรก ให้ใส่ parts เข้าไป
+                if (updated[0]) {
+                    updated[0].parts = requestParts.parts_used.map(item => {
+                        const price = parseFloat(item.repair_part_price) || 0;
+                        const qty = parseFloat(item.repair_part_qty) || 0;
+                        const vat = parseFloat(item.repair_part_vat) || 0;
+                        const subtotal = price * qty;
+                        const total = subtotal + (subtotal * vat / 100);
+                        return {
+                            item_id: item.item_id || "",
+                            parts_used_id: item.parts_used_id || "",
+                            part_id: item.part_id || "",
+                            system_name: item.system_name || "",
+                            part_name: item.repair_part_name || "",
+                            price: price.toString(),
+                            unit: item.repair_part_unit || "",
+                            maintenance_type: item.maintenance_type || "",
+                            qty: qty.toString(),
+                            discount: "",
+                            vat: vat.toString(),
+                            total: total.toFixed(2),
+                        };
+                    });
+                }
+                return updated;
+            });
+        }
+    }, [requestParts]);
+
 
     // Modal
     const [isOpenModalVehicleParteDtails, setOpenModalVehicleParteDtails] = useState(false);
@@ -381,77 +414,6 @@ useEffect(() => {
         setIsOpenModalVendorDetails(false);
     };
 
-
-    // Edit
-
-
-    // Show {data} to input
-    // useEffect(() => {
-    //     if (data) {
-    //         // กรณี data มีโครงสร้าง { analysis: {...}, quotations: [...] }
-    //         if (data?.analysis) {
-    //             setAnalysisData({
-    //                 fname: data?.analysis?.fname || "",
-    //                 lname: data?.analysis?.lname || "",
-    //                 analysis_id: data?.analysis?.analysis_id || "",
-    //                 request_id: data?.analysis?.request_id || "",
-    //                 analysis_emp_id: data?.analysis?.analysis_emp_id || "",
-    //                 is_quotation_required: !!data?.analysis?.is_quotation_required,
-    //                 urgent_repair: !!data?.analysis?.urgent_repair,
-    //                 inhouse_repair: !!data?.analysis?.inhouse_repair,
-    //                 send_to_garage: !!data?.analysis?.send_to_garage,
-    //                 plan_date: data?.analysis?.plan_date ? data?.analysis.plan_date.substring(0, 10) : "",
-    //                 plan_time: data?.analysis?.plan_time ? data?.analysis.plan_time.substring(11, 16) : "",
-    //                 remark: data?.analysis?.remark || "",
-    //                 is_pm: !!data?.analysis?.is_pm,
-    //                 is_cm: !!data?.analysis?.is_cm,
-    //             });
-    //         }
-    //         if (Array.isArray(data?.quotations)) {
-    //             setQuotations(
-    //                 data?.quotations.map(q => ({
-    //                     quotation_id: q.quotation_id || "",
-    //                     analysis_id: q.analysis_id || "",
-    //                     vendor_id: q.vendor_id || "",
-    //                     garage_name: q.vendor_name || "",
-    //                     quotation_date: q.quotation_date ? q.quotation_date.substring(0, 10) : "",
-    //                     quotation_file: q.quotation_file || null,
-    //                     note: q.note || "",
-    //                     is_selected: !!q.is_selected,
-    //                     quotation_vat: q.quotation_vat || "",
-    //                     vendor_name: q.vendor_name || "",
-    //                     parts: Array.isArray(q.parts)
-    //                         ? q.parts.map(part => {
-    //                             const price = parseFloat(part.part_price) || 0;
-    //                             const qty = parseFloat(part.part_qty) || 0;
-    //                             const vat = parseFloat(part.part_vat) || 0;
-    //                             const discount = parseFloat(part.part_discount) || 0;
-    //                             const subtotal = price * qty - discount;
-    //                             const vatVal = subtotal * vat / 100;
-    //                             const total = subtotal + vatVal;
-    //                             return {
-    //                                 item_id: part.item_id || "",
-    //                                 quotation_parts_id: part.quotation_parts_id || "",
-    //                                 part_id: part.part_id || "",
-    //                                 system_name: part.system_name || "",
-    //                                 part_name: part.part_name || "",
-    //                                 price: part.part_price?.toString() || "",
-    //                                 unit: part.part_unit || "",
-    //                                 maintenance_type: part.maintenance_type || "",
-    //                                 qty: part.part_qty?.toString() || "",
-    //                                 discount: part.part_discount?.toString() || "",
-    //                                 vat: part.part_vat?.toString() || "",
-    //                                 total: total.toFixed(2), // set total ที่คำนวณแล้ว
-    //                             };
-    //                         })
-    //                         : [],
-    //                 }))
-    //             );
-    //         }
-    //     }
-    // }, [data]);
-
-    // ...existing code...
 
     console.log("DEBUG → data:", data);
     console.log("DEBUG → data.analysis:", data?.analysis);
@@ -607,7 +569,7 @@ useEffect(() => {
     return (
         <div className=" mb-4 ">
 
-            {analysisData ? (<><p>True</p></>) : (<><p>NO</p></>)}
+            {/* {analysisData ? (<><p>True</p></>) : (<><p>NO</p></>)} */}
             {/* Display success or error message */}
             {message && (
                 <div
@@ -627,19 +589,45 @@ useEffect(() => {
 
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <p className="mb-0 fw-bold text-dark ">รายการตรวจเช็ครถและใบเสนอราคารายการซ่อม</p>
-                {hasPermission("EDIT_CAR_CHECK") && (
-                    !isEditing && (
-                        <div className="">
+
+
+
+                {maintenanceJob?.request_informer_emp_id === user?.id_emp && (
+                    <>
+                        {/* ถ้าได้รับการอนุมัติจากผู้จัดการแล้ว */}
+                        {["ผู้จัดการอนุมัติ", "ใบแจ้งหนี้"].includes(maintenanceJob?.status) ? (
                             <button
-                                type="button"
-                                className="btn btn-success btn-sm"
-                                onClick={() => setIsEditing(true)}
-                                style={{ whiteSpace: 'nowrap' }}
+                                className="btn btn-secondary btn-sm"
+                                disabled
+                                title="ไม่สามารถแก้ไขได้เนื่องจากผู้จัดการอนุมัติแล้ว"
                             >
-                                <i className="bi bi-pencil-fill me-1"></i>  แก้ไข
+                                <i className="bi bi-lock-fill me-1"></i> แก้ไขไม่ได้
                             </button>
-                        </div>
-                    )
+                        ) : maintenanceJob?.status === 'รอคำขอแก้ไขหลังอนุมัติ' ? (
+                            <button className="btn btn-warning btn-sm" disabled>
+                                <i className="bi bi-hourglass-split me-1"></i> รออนุมัติคำขอแก้ไข
+                            </button>
+                        ) : (
+                            // ปุ่มแก้ไขปกติ
+                            <>
+                                {hasPermission("EDIT_CAR_CHECK") && (
+                                    !isEditing && (
+                                        <div className="">
+                                            {/* <button className="btn btn-primary btn-sm">เพิ่มข้อมูลเพื่อขออนุมัติใหม่</button> */}
+                                            <button
+                                                type="button"
+                                                className="btn btn-success btn-sm"
+                                                onClick={() => setIsEditing(true)}
+                                                style={{ whiteSpace: 'nowrap' }}
+                                            >
+                                                <i className="bi bi-pencil-fill me-1"></i>  แก้ไข
+                                            </button>
+                                        </div>
+                                    )
+                                )}
+                            </>
+                        )}
+                    </>
                 )}
             </div>
 
@@ -1017,7 +1005,7 @@ useEffect(() => {
 
 
                                             <div className="col-lg-1">
-                                                <label className="form-label text-sm">ตัดรอบ PM </label>
+                                                <label className="form-label text-sm">ตัดรอบ PM <span className="" style={{ color: "red" }}>*</span></label>
                                                 <select
                                                     className="form-select  mb-3  form-select-sm"
                                                     aria-label="Large select example"

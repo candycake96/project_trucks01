@@ -29,11 +29,9 @@ const MainternanceAnanlysis_ShowDetails = ({ maintenanceJob }) => {
       );
 
       setDataAnanlysis(response.data);
-
-      const isValid = Boolean(
-        response.data?.analysis?.analysis_id || response.data?.quotations?.length
-      );
-
+const isValid = Boolean(
+  response.data?.analysis?.analysis_id || response.data?.quotations?.length
+);
 
 
       setHasAnalysis(isValid);
@@ -84,7 +82,7 @@ const MainternanceAnanlysis_ShowDetails = ({ maintenanceJob }) => {
       }
 
     case "ตรวจเช็ครถ":
-      return (
+       return (
         <MainternanceAnalysis_showEdit
           maintenanceJob={maintenanceJob}
           data={dataAnanlysis}

@@ -14,9 +14,10 @@ import { Table, Button, Spinner } from "react-bootstrap";
 import Modal_Closing from "./CloseList/modal/Modal_Closing";
 import Modal_repair_cancel_ganaral from "./Cancel/Modal/Modal_repair_canael_genaral";
 import MainternanceApprover_mgr_main from "./MainternanceApprover_mgr_main";
+import Modal_repair_change_approval from "./Mobal/Modal_repair_change_approval";
+import Modal_repair_change_approval_active from "./Mobal/Modal_repair_change_approval_active";
 
 const MaintenanceJob = () => {
-
 
     const [loading, setLoading] = useState(false);
     // ข้อมูลการปิดงานแจ้งซ่อม
@@ -33,8 +34,6 @@ const MaintenanceJob = () => {
         lname: "",
         reg_number: "",
     });
-
-
 
     const location = useLocation();
     const [dataRepairID] = useState(location.state || {}); // รับค่าจาก state ที่ส่งมาผ่าน Link
@@ -221,7 +220,7 @@ const MaintenanceJob = () => {
         setLoading(true); // เริ่มโหลด
         try {
             const response = await axios.post(
-                `http://localhost:3333/api/report-createRepair/${dataRepairID?.request_id}`,
+                `${apiUrl}/api/report-createRepair/${dataRepairID?.request_id}`,
                 {},
                 { responseType: 'blob' }
             );
@@ -285,6 +284,28 @@ const MaintenanceJob = () => {
     };
 
 
+    const [isOpenModalChangeApproval, setOpenModalChangeApproval] = useState(false);
+    const [dataOpenModalChangeApproval, setDataOpenModalChangeApproval] = useState(null);
+    const handleOpenModalChangeApproval = (data) => {
+        setOpenModalChangeApproval(true);
+        setDataOpenModalChangeApproval(data);
+    };
+    const handleClosModalChangeApproval = (data) => {
+        setOpenModalChangeApproval(false);
+        setDataOpenModalChangeApproval(null);
+    };
+
+    const [isOpenModalChangeApprovalActive, setOpenModalChangeApprovalActive] = useState(false);
+    const [dataOpenModalChangeApprovalActive, setDataOpenModalChangeApprovalActive] = useState(null);
+    const handleOpenModalChangeApprovalActive = (data) => {
+        setOpenModalChangeApprovalActive(true);
+        setDataOpenModalChangeApprovalActive(data);
+    };
+    const handleClosModalChangeApprovalActive = (data) => {
+        setOpenModalChangeApprovalActive(false);
+        setDataOpenModalChangeApprovalActive(null);
+    };
+
     // ข้อมูลการปิดงานแจ้งซ่อม
     const fetchDataClosingJob = async () => {
         try {
@@ -304,9 +325,34 @@ const MaintenanceJob = () => {
         fetchDataClosingJob()
     }, []);
 
-useEffect(() => {
-  console.log("dataClosingJob:", dataClosingJob);
-}, [dataClosingJob]);
+    useEffect(() => {
+        console.log("dataClosingJob:", dataClosingJob);
+    }, [dataClosingJob]);
+
+
+    const [requester, setRequester] = useState(null);
+
+    // ✅ ฟังก์ชันโหลดข้อมูลจาก backend
+    const fetchChangeRequest = async () => {
+        try {
+            const token = localStorage.getItem("accessToken");
+            const res = await axios.get(`${apiUrl}/api/change_show_top/${dataRepairID?.request_id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (res.data.data) {
+                setRequester(res.data.data); // ✅ รับ object เดียว
+            }
+        } catch (err) {
+            console.error("Error fetching change request:", err);
+        }
+    };
+
+    useEffect(() => {
+        if (dataRepairID?.request_id) {
+            fetchChangeRequest();
+        }
+    }, [dataRepairID?.request_id]);
 
 
     return (
@@ -335,6 +381,84 @@ useEffect(() => {
                         </span>
                     ))}
                 </p>
+
+                <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <p className="d-flex align-items-center gap-3 mb-2">
+
+                        <span>
+                            {["แจ้งซ่อม", "จัดรถ", "ตรวจเช็ครถ", "อนุมัติผลตรวจรถ"].includes(formData?.status) ? (
+                                <></>
+                            ) : (
+                                <button
+                                    className="btn btn-primary btn-sm"
+                                    onClick={() => handleOpenModalChangeApproval(dataRepairID?.request_id)}
+                                >
+                                    คำขอแก้ไขใบแจ้งซ่อม
+                                </button>
+                            )}
+                            
+                        </span>
+                        {requester && (<>
+                            <span>
+                                ข้อมูลคำขอแก้ไขล่าสุด
+                            </span>
+                            <span>
+                                ผู้ขอ: {requester.requester_name || "-"} วันที่: {new Date(requester.requester_date).toLocaleDateString()}
+                            </span>
+                            <span>
+                                {requester.approver_status === "approved" ? (
+                                    <button
+                                        className="btn w-100 btn-status btn-success btn-sm text-white d-flex align-items-center justify-content-center gap-2"
+                                        style={{
+                                            fontSize: "0.7rem",
+                                            borderRadius: "50px",
+                                            padding: "2px 10px",
+                                            marginBottom: "6px",
+                                            alignSelf: "flex-end",
+                                            color: "#060606"
+                                        }}
+                                        onClick={() => handleOpenModalChangeApprovalActive(requester.id)}
+                                    >
+                                        <i className="bi bi-check-circle-fill"></i>
+                                        <span>อนุมัติ</span>
+                                    </button>
+                                ) : requester.approver_status === "rejected" ? (
+                                    <button
+                                        className="btn w-100 btn-status btn-danger btn-sm text-white d-flex align-items-center justify-content-center gap-2"
+                                        style={{
+                                            fontSize: "0.7rem",
+                                            borderRadius: "50px",
+                                            padding: "2px 10px",
+                                            marginBottom: "6px",
+                                            alignSelf: "flex-end",
+                                            color: "#060606"
+                                        }}
+                                        onClick={() => handleOpenModalChangeApprovalActive(requester.id)}
+                                    >
+                                        <i className="bi bi-x-circle-fill"></i>
+                                        <span>ไม่อนุมัติ</span>
+                                    </button>
+                                ) : (
+                                    <button
+                                        className="btn w-100 btn-status btn-warning btn-sm text-dark d-flex align-items-center justify-content-center gap-2"
+                                        style={{
+                                            fontSize: "0.7rem",
+                                            borderRadius: "50px",
+                                            padding: "2px 10px",
+                                            marginBottom: "6px",
+                                            alignSelf: "flex-end",
+                                            color: "#060606"
+                                        }}
+                                        onClick={() => handleOpenModalChangeApprovalActive(requester.id)}
+                                    >
+                                        <i className="bi bi-hourglass-split"></i>
+                                        <span>รอการอนุมัติ</span>
+                                    </button>
+                                )}
+                            </span>
+                        </>)}
+                    </p>
+                </div>
 
                 <hr className="mb-3" />
                 <div className="mb-2">
@@ -370,6 +494,8 @@ useEffect(() => {
 
                             <div className=" gap-2">
 
+                                {/* <Button className="btn btn-warning btn-sm me-1" style={{ color: "#ffffff" }}>ขอแก้ไขข้อมูลตรวจเช็ครถ</Button> */}
+
                                 {hasPermission("ACCESS_BRANCH_BUTTON") && (
                                     <Button className="btn-primary btn-sm me-1" onClick={() => handleOpenModolClosing(dataRepairID)}>
                                         ปิดงานซ่อม
@@ -395,15 +521,18 @@ useEffect(() => {
                                 </Button>
 
                                 {dataClosingJob.length <= 0 ? (
-                                    <Button
-                                        className="btn-danger btn-sm me-1"
-                                        onClick={() => handleOpenModalCancelgenaral(dataRepairID)}
-                                    >
-                                        <i className="bi bi-x-octagon-fill me-1"></i> ยกเลิก
-                                    </Button>
+                                    ["แจ้งซ่อม", "จัดรถ", "ตรวจเช็ครถ", "อนุมัติผลตรวจรถ", "แก้ไขข้อมูลหลังการอนุมัติ"].includes(formData?.status) && (
+                                        <Button
+                                            className="btn-danger btn-sm me-1"
+                                            onClick={() => handleOpenModalCancelgenaral(dataRepairID)}
+                                        >
+                                            <i className="bi bi-x-octagon-fill me-1"></i> ยกเลิก
+                                        </Button>
+                                    )
                                 ) : (
                                     <></>
                                 )}
+
 
                             </div>
 
@@ -476,6 +605,7 @@ useEffect(() => {
                             ผู้จัดการอนุมัติ
                         </button>
                     </li>
+
                 </ul>
 
                 <div className="card shadow-sm border-0">
@@ -492,9 +622,8 @@ useEffect(() => {
                         )}
 
                         {activeForm === 'PlanningForm' && (
-                            <PlanningRepair 
-                            maintenanceJob={formData} 
-                           
+                            <PlanningRepair
+                                maintenanceJob={formData}
                             />
                         )}
 
@@ -515,6 +644,7 @@ useEffect(() => {
                     </div>
                 </div>
             </div>
+
             {/* Modal */}
             {isOpenModolClosing && (
                 <Modal_Closing isOpen={isOpenModolClosing} onClose={handleCloseModolClosing} user={user} dataClosing={dataOpenModolClosing} />
@@ -522,6 +652,15 @@ useEffect(() => {
 
             {isOpenModalCancelgenaral && (
                 <Modal_repair_cancel_ganaral isOpen={isOpenModalCancelgenaral} onClose={handleClosModalCancelgenaral} user={user} dataClosing={dataOpenModalCancelgenaral} />
+            )}
+
+            {isOpenModalChangeApproval && (
+                <Modal_repair_change_approval isOpen={isOpenModalChangeApproval} onClose={handleClosModalChangeApproval} repairId={dataOpenModalChangeApproval} />
+            )}
+
+
+            {isOpenModalChangeApprovalActive && (
+                <Modal_repair_change_approval_active isOpen={isOpenModalChangeApprovalActive} onClose={handleClosModalChangeApprovalActive} changID={dataOpenModalChangeApprovalActive} />
             )}
         </div>
 

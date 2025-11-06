@@ -266,20 +266,43 @@ const PlanningRepair = ({ maintenanceJob }) => {
                                 <p className="mb-0 fw-bold text-dark ">ความเห็นของแผนกจัดรถ</p>
                                 {/* สิทธ์เข้าถึงแก้ไขผู้ตรวจสอบ */}
 
-                                {hasPermission("VEHICLE_PAIR_DRIVER_SETTING") && (
-                                    Array.isArray(detailPlanning) &&
-                                    detailPlanning.length > 0 &&
-                                    detailPlanning[0].planning_emp_id === user.id_emp && !isEditing && (
-                                        <button
-                                            type="button"
-                                            className="btn btn-success btn-sm"
-                                            onClick={() => setIsEditing(true)}
-                                            style={{ whiteSpace: 'nowrap' }}
-                                        >
-                                            <i className="bi bi-pencil-fill me-1"></i> แก้ไข
-                                        </button>
-                                    )
+                                {maintenanceJob?.request_informer_emp_id === user?.id_emp && (
+                                    <>
+                                        {/* ถ้าได้รับการอนุมัติจากผู้จัดการแล้ว */}
+                                        {["ผู้จัดการอนุมัติ", "ใบแจ้งหนี้"].includes(maintenanceJob?.status) ? (
+                                            <button
+                                                className="btn btn-secondary btn-sm"
+                                                disabled
+                                                title="ไม่สามารถแก้ไขได้เนื่องจากผู้จัดการอนุมัติแล้ว"
+                                            >
+                                                <i className="bi bi-lock-fill me-1"></i> แก้ไขไม่ได้
+                                            </button>
+                                        ) : maintenanceJob?.status === 'รอคำขอแก้ไขหลังอนุมัติ' ? (
+                                            <button className="btn btn-warning btn-sm" disabled>
+                                                <i className="bi bi-hourglass-split me-1"></i> รออนุมัติคำขอแก้ไข
+                                            </button>
+                                        ) : (
+                                            // ปุ่มแก้ไขปกติ
+                                            <>
+                                                {hasPermission("VEHICLE_PAIR_DRIVER_SETTING") && (
+                                                    Array.isArray(detailPlanning) &&
+                                                    detailPlanning.length > 0 &&
+                                                    detailPlanning[0].planning_emp_id === user.id_emp && !isEditing && (
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-success btn-sm"
+                                                            onClick={() => setIsEditing(true)}
+                                                            style={{ whiteSpace: 'nowrap' }}
+                                                        >
+                                                            <i className="bi bi-pencil-fill me-1"></i> แก้ไข
+                                                        </button>
+                                                    )
+                                                )}
+                                            </>
+                                        )}
+                                    </>
                                 )}
+
                             </div>
 
                             <form action="" onSubmit={handleSubmitEdit}>
@@ -546,7 +569,7 @@ const PlanningRepair = ({ maintenanceJob }) => {
                 </>
             ) : (
                 <>
-                <Status_Mainternance requestID={maintenanceJob}  />
+                    <Status_Mainternance requestID={maintenanceJob} />
                 </>
             )}
 

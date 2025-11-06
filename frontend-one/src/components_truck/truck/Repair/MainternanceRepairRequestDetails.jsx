@@ -40,13 +40,14 @@ const MainternanceRepairRequestDetails = ({ parts, summary, formData, user, perm
 
 
 
+
     return (
         <>
             <div className=" mb-3">
                 <div className="">
                     <div className="d-flex justify-content-between align-items-center mb-3">
-                        <p className="mb-0 fw-bold text-dark ">รายการเปิดงานซ่อมบำรุง</p>
-
+                        <p className="mb-0 fw-bold text-dark ">รายการเปิดงานซ่อมบำรุง </p>
+                        {/* {formData?.status !== ''} 
                         {formData?.request_informer_emp_id === user?.id_emp && (
                             <Link
                                 to="/truck/RepairRequestFormEdit"
@@ -55,13 +56,41 @@ const MainternanceRepairRequestDetails = ({ parts, summary, formData, user, perm
                             >
                                 <i className="bi bi-pencil-fill me-1"></i> แก้ไข
                             </Link>
+                        )} */}
+                        {formData?.request_informer_emp_id === user?.id_emp && (
+                            <>
+                                {/* ถ้าได้รับการอนุมัติจากผู้จัดการแล้ว */}
+                                {["ผู้จัดการอนุมัติ", "ใบแจ้งหนี้"].includes(formData?.status) ? (
+                                    <button
+                                        className="btn btn-secondary btn-sm"
+                                        disabled
+                                        title="ไม่สามารถแก้ไขได้เนื่องจากผู้จัดการอนุมัติแล้ว"
+                                    >
+                                        <i className="bi bi-lock-fill me-1"></i> แก้ไขไม่ได้
+                                    </button>
+                                ) : formData?.status === 'รอคำขอแก้ไขหลังอนุมัติ' ? (
+                                    <button className="btn btn-warning btn-sm" disabled>
+                                        <i className="bi bi-hourglass-split me-1"></i> รออนุมัติคำขอแก้ไข
+                                    </button>
+                                ) : (
+                                    // ปุ่มแก้ไขปกติ
+                                    <Link
+                                        to="/truck/RepairRequestFormEdit"
+                                        state={dataRepairID}
+                                        className="btn btn-success btn-sm"
+                                    >
+                                        <i className="bi bi-pencil-fill me-1"></i> แก้ไข
+                                    </Link>
+                                )}
+                            </>
                         )}
+
                     </div>
 
                     <form>
                         <div className="row">
                             <div className="col-lg-3 mb-3">
-                                <label className="form-label">เลขที่ใบแจ้งซ่อม</label>
+                                <label className="form-label">เลขที่ใบแจ้งซ่อม </label>
                                 <input type="text" className="form-control" value={formData?.request_no || ""} disabled />
                             </div>
                             <div className="col-lg-3 mb-3">
@@ -142,7 +171,7 @@ const MainternanceRepairRequestDetails = ({ parts, summary, formData, user, perm
                                             <option value="PM">PM</option>
                                         </select>
                                     </div>
-                                    
+
 
                                     <div className="col-lg-2">
                                         <label className="form-label text-sm">ตัดรอบ PM <span className="" style={{ color: "red" }}>*</span></label>

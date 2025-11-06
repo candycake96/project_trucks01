@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { apiUrl } from "../../../config/apiConfig";
 import Modal_show_vehicle_details from "./Mobal/Modal_show_vehicle_details";
+import Modal_invoice_mismatch from "./Mobal/Modal_invoice_mismatch";
 
 const MainternanceInvoice_detail = () => {
     const fileInputRef = useRef(null);
@@ -411,6 +412,16 @@ const MainternanceInvoice_detail = () => {
         }
     };
 
+    const [isOpenModalInvoiceMismatch, setOpenModalInvoiceMismatch] = useState(false);
+    const [dataOpenModalInvoiceMismatch, setDataOpenModalInvoiceMismatch] = useState(null);
+    const handleOpenModalInvoiceMismatch = (data) => {
+        setOpenModalInvoiceMismatch(true);
+        setDataOpenModalInvoiceMismatch(data);
+    };
+    const handleCloseModalInvoiceMismatch = () => {
+        setDataOpenModalInvoiceMismatch(null);
+        setOpenModalInvoiceMismatch(false);
+    };
 
     return (
 
@@ -425,7 +436,8 @@ const MainternanceInvoice_detail = () => {
                         </p>
                     </div>
                     <div className="">
-                        <button className="btn btn-primary btn-sm">ข้อมูลไม่ตรงกับใบแจ้งหนี้ (Invoice)</button>
+                        <button className="btn btn-primary btn-sm"
+                       onClick={()=>handleOpenModalInvoiceMismatch()} >ข้อมูลไม่ตรงกับใบแจ้งหนี้ (Invoice)</button>
                     </div>
                 </div>
             </div>
@@ -753,7 +765,9 @@ const MainternanceInvoice_detail = () => {
                 requestId={dataOpenModaleVehicleDtail}
             />
 
-
+<Modal_invoice_mismatch
+isOpen={isOpenModalInvoiceMismatch}
+onClose={handleCloseModalInvoiceMismatch} />
 
         </div>
 

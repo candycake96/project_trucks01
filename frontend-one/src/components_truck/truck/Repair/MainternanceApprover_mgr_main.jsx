@@ -80,8 +80,18 @@ const MainternanceApprover_mgr_main = ({ maintenanceJob }) => {
     case "ผู้จัดการอนุมัติ":
     case "ซ่อมสำเร็จ":
     case "ยกเลิกงาน":
-      return renderApproverOrStatus();
-
+      return (
+      <MainternanceApprover_mgr_add
+        maintenanceJob={maintenanceJob}
+        data={dataAnanlysis}
+        hasPermission={hasPermission}
+        onSaved={(newData) => {
+          setDataAnanlysis(newData);
+          setHasAnalysis(true);
+        }}
+      />
+    ) ;
+    
     // --- fallback ---
     default:
       return (

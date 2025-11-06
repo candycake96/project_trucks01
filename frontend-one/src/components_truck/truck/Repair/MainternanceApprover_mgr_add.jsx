@@ -3,17 +3,17 @@ import React, { useEffect, useState } from "react";
 import { apiUrl } from "../../../config/apiConfig";
 import Modal_Edit_Approval_End from "./Mobal/Modal_Edit_Approval_End";
 
-const MainternanceApprover_mgr_add = ({ maintenanceJob,  hasPermission }) => {
+const MainternanceApprover_mgr_add = ({ maintenanceJob, hasPermission }) => {
 
     const [isDataRequestAll, setDataRequestAll] = useState([]);
     const [quotations, setQuotations] = useState([]);
 
-  const [user, setUser] = useState(null);
+    const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const userData = localStorage.getItem("user");
-    if (userData) setUser(JSON.parse(userData));
-  }, []);
+    useEffect(() => {
+        const userData = localStorage.getItem("user");
+        if (userData) setUser(JSON.parse(userData));
+    }, []);
 
     const fetchDataRequestAll = async () => {
         try {
@@ -411,17 +411,20 @@ const MainternanceApprover_mgr_add = ({ maintenanceJob,  hasPermission }) => {
                         </div>
                     </div>
                     {/* Action Buttons */}
-                    {hasPermission('MANAGER_APPROVE_REPAIR') && (
+                    {hasPermission("MANAGER_APPROVE_REPAIR") && (
                         <div className="text-center mt-4 d-flex justify-content-center gap-3">
+
+                            {/* ✅ กรณีมีผลอนุมัติแล้ว → แสดงปุ่มแก้ไข */}
                             {dataRequest?.approval_status_end ? (
                                 <button
                                     className="btn btn-warning btn-lg px-5 shadow"
                                     onClick={() => handleOpenModaleApprovalEdit(dataRequest)}
                                     style={{ color: "#ffffff" }}
                                 >
-                                    <i className="bi bi-check-circle me-2"></i>แก้ไข
+                                    <i className="bi bi-pencil-square me-2"></i>แก้ไข
                                 </button>
                             ) : (
+                                /* ✅ กรณียังไม่มีผลอนุมัติ → แสดงปุ่มอนุมัติ / ไม่อนุมัติ */
                                 <>
                                     <button
                                         className="btn btn-danger btn-lg px-5 shadow"
@@ -429,6 +432,7 @@ const MainternanceApprover_mgr_add = ({ maintenanceJob,  hasPermission }) => {
                                     >
                                         <i className="bi bi-x-circle me-2"></i>ไม่อนุมัติ
                                     </button>
+
                                     <button
                                         className="btn btn-primary btn-lg px-5 shadow"
                                         onClick={() => handleApprovalAdd("อนุมัติ")}
@@ -440,6 +444,7 @@ const MainternanceApprover_mgr_add = ({ maintenanceJob,  hasPermission }) => {
 
                         </div>
                     )}
+
                 </div>
             </div>
 

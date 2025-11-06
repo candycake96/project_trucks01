@@ -63,7 +63,7 @@ import Vendor_add from "./components_truck/truck/Vandor/Vendor_add";
 import VendorInfo from "./components_truck/truck/Vandor/VendorInfo";
 import Vehicle_parts_details from "./components_truck/truck/Parts/Vehicle_parts_dtails";
 import Vehicle_parts_add from "./components_truck/truck/Parts/Vehicle_parts_add";
-import MainternanceRequest from './components_truck/truck/Repair/MainternanceRequest';
+import MainternanceRequest from './components_truck/truck/Repair/MaintenanceRequest';
 import MaintenanceJob from "./components_truck/truck/Repair/MaintenanceJob";
 import RepairRequestFormEdit from "./components_truck/truck/Repair/RepairRequestFormEdit";
 import MaintenancPlanning from "./components_truck/truck/Repair/MaintenancePlanning";
@@ -112,7 +112,7 @@ function App() {
             {/* <Route path="employeesadddata" element={<EmployeesAddData />} /> */}
             <Route path="memopage" element={<MemoPage />} />
             <Route path="memodetails" element={<MemoDetails />} />
-            <Route path="memomanagerrights" element={<MemoManagerRights />} />
+            <Route path="memomanagerrights" element={<เ />} />
             <Route path="jobposition" element={<JobPosition />} />
             <Route path="department" element={<Department />} />
             <Route path="jobsection" element={<JobSection />} />
