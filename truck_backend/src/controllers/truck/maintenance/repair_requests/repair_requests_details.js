@@ -71,6 +71,7 @@ module.exports = {
         }
     },
 
+
     repair_requests_and_part_detail: async (req, res) => {
         const {id} = req.params;
         try {

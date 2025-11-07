@@ -4,23 +4,27 @@ module.exports = {
     waiting_closing_list_table: async (req, res) => {
         try {
             const sqlInsert = `
-                SELECT 
-                r1.request_id, 
-                r1.request_informer_emp_id, 
-                r1.request_no, 
-                r1.request_date, 
-                r1.status, 
-                r1.reg_id, 
-                r1.car_mileage,
-                emp.fname ,
-                emp.lname,
-                v.reg_number
-                 FROM Truck_repair_requests r1
-                 INNER JOIN employees emp ON emp.id_emp = r1.request_informer_emp_id
-                 INNER JOIN Truck_vehicle_registration v ON v.reg_id = r1.reg_id
-                 WHERE r1.status = 'ตรวจสอบโดยผู้จัดการฝ่าย'
-                 ORDER BY r1.request_id DESC
-            `;
+                            SELECT 
+                                r1.request_id, 
+                                r1.request_informer_emp_id, 
+                                r1.request_no, 
+                                r1.request_date, 
+                                r1.status AS invoiceStatus,
+                                CASE 
+                                    WHEN r1.status = 'ใบแจ้งหนี้' THEN 'รออนุมัติใบแจ้งหนี้'
+                                    ELSE r1.status
+                                END AS status_display,
+                                r1.reg_id, 
+                                r1.car_mileage,
+                                emp.fname,
+                                emp.lname,
+                                v.reg_number
+                            FROM Truck_repair_requests r1
+                            INNER JOIN employees emp ON emp.id_emp = r1.request_informer_emp_id
+                            INNER JOIN Truck_vehicle_registration v ON v.reg_id = r1.reg_id
+                            WHERE r1.status = 'ใบแจ้งหนี้'
+                            ORDER BY r1.request_id DESC;
+                            `;
 
             const result = await executeQueryEmployeeAccessDB(sqlInsert);
             if (result && result.length > 0) {

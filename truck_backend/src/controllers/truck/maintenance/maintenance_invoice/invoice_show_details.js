@@ -5,22 +5,31 @@ module.exports = {
     un_invoice_maintenance: async (req, res) => {
         try {
             const sqlInsert = `
-                SELECT 
-                r1.request_id, 
-                r1.request_informer_emp_id, 
-                r1.request_no, 
-                r1.request_date, 
-                r1.status, 
-                r1.reg_id, 
-                r1.car_mileage,
-                emp.fname ,
-                emp.lname,
-                v.reg_number
-                 FROM Truck_repair_requests r1
-                 INNER JOIN employees emp ON emp.id_emp = r1.request_informer_emp_id
-                 INNER JOIN Truck_vehicle_registration v ON v.reg_id = r1.reg_id
-                 WHERE r1.status = 'ผู้จัดการอนุมัติ'
-                 ORDER BY r1.request_id DESC
+               SELECT 
+    r1.request_id, 
+    r1.request_informer_emp_id, 
+    r1.request_no, 
+    r1.request_date, 
+    r1.status, 
+    r1.reg_id, 
+    r1.car_mileage,
+    emp.fname,
+    emp.lname,
+    v.reg_number
+FROM Truck_repair_requests r1
+INNER JOIN employees emp ON emp.id_emp = r1.request_informer_emp_id
+INNER JOIN Truck_vehicle_registration v ON v.reg_id = r1.reg_id
+WHERE 
+    r1.status = 'ผู้จัดการอนุมัติ'
+    AND NOT EXISTS (
+        SELECT 1
+        FROM Truck_Mainternance_invoice t1
+        WHERE 
+            t1.request_id = r1.request_id
+            AND t1.status = 'draft'
+    )
+ORDER BY r1.request_id DESC;
+
             `;
 
             const result = await executeQueryEmployeeAccessDB(sqlInsert);

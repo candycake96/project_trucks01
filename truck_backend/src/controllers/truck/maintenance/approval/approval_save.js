@@ -29,12 +29,12 @@ module.exports = {
             )`;
 
             await executeQueryEmployeeAccessDB(sql, {
-                request_id,
+                request_id: request_id,
                 approver_emp_id: id,
-                approver_name,
-                approval_status,
-                approval_date,
-                remark
+                approver_name: approver_name,
+                approval_status: approval_status,
+                approval_date: approval_date,
+                remark: remark
             });
 
             const sqlRQ = `UPDATE Truck_repair_requests SET status = @status WHERE  request_id = @request_id`;

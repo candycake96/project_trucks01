@@ -37,9 +37,11 @@ module.exports = {
                     p1.part_discount,
                     p1.is_approved_part,
                     p1.approval_checked,
+                    p.system_id,
                     s.system_name
                 FROM Truck_repair_quotation_parts p1
-                INNER JOIN Truck_vehicle_systems s ON s.system_id = p1.part_id
+                INNER JOIN Truck_vehicle_parts p ON p.part_id = p1.part_id
+                INNER JOIN Truck_vehicle_systems s ON s.system_id = p.system_id
              WHERE p1.quotation_id = @quotation_id`;
 
             // 3. ใส่ parts ลงในแต่ละ quotation
@@ -78,8 +80,8 @@ module.exports = {
 
             // 2. ดึง parts ของแต่ละ quotation
             const sqlParts = `SELECT 
-            p1.item_id,
               p1.quotation_parts_id,
+                    p1.item_id,
                     p1.quotation_id,
                     p1.part_id,
                     p1.part_name,
@@ -91,9 +93,11 @@ module.exports = {
                     p1.part_discount,
                     p1.is_approved_part,
                     p1.approval_checked,
+                    p.system_id,
                     s.system_name
                 FROM Truck_repair_quotation_parts p1
-                INNER JOIN Truck_vehicle_systems s ON s.system_id = p1.part_id
+                INNER JOIN Truck_vehicle_parts p ON p.part_id = p1.part_id
+                INNER JOIN Truck_vehicle_systems s ON s.system_id = p.system_id
              WHERE p1.quotation_id = @quotation_id`;
 
             // 3. ดึงข้อมูล approver
