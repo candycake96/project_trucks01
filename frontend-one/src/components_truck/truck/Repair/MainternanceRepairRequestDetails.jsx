@@ -60,7 +60,7 @@ const MainternanceRepairRequestDetails = ({ parts, summary, formData, user, perm
                         {formData?.request_informer_emp_id === user?.id_emp && (
                             <>
                                 {/* ถ้าได้รับการอนุมัติจากผู้จัดการแล้ว */}
-                                {["ผู้จัดการอนุมัติ", "ใบแจ้งหนี้"].includes(formData?.status) ? (
+                                {["ผู้จัดการอนุมัติ", "ใบแจ้งหนี้", "ปิดงานซ่อม"].includes(formData?.status) ? (
                                     <button
                                         className="btn btn-secondary btn-sm"
                                         disabled
