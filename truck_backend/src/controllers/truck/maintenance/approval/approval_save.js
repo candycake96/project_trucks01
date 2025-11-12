@@ -1,4 +1,5 @@
 const { executeQueryEmployeeAccessDB } = require('../../../../config/db');
+const sql = require('mssql');
 
 module.exports = {
     approval_save: async (req, res) => {
@@ -12,58 +13,67 @@ module.exports = {
             } = req.body;
             const { id } = req.params;
 
-            const sql = `INSERT INTO Truck_repair_approver (
-                request_id,
-                approver_emp_id,
-                approver_name,
-                approval_status,
-                approval_date,
-                remark
-            ) VALUES (
-                @request_id,
-                @approver_emp_id,
-                @approver_name,
-                @approval_status,
-                @approval_date,
-                @remark
-            )`;
+            const sqlInsert = `
+                INSERT INTO Truck_repair_approver (
+                    request_id,
+                    approver_emp_id,
+                    approver_name,
+                    approval_status,
+                    approval_date,
+                    remark
+                ) VALUES (
+                    @request_id,
+                    @approver_emp_id,
+                    @approver_name,
+                    @approval_status,
+                    @approval_date,
+                    @remark
+                )`;
 
-            await executeQueryEmployeeAccessDB(sql, {
-                request_id: request_id,
-                approver_emp_id: id,
-                approver_name: approver_name,
-                approval_status: approval_status,
-                approval_date: approval_date,
-                remark: remark
-            });
+            const paramsInsert = {
+                request_id: { type: sql.Int, value: Number(request_id) },
+                approver_emp_id: { type: sql.Int, value: Number(id) },
+                approver_name: { type: sql.NVarChar, value: approver_name || "" },
+                approval_status: { type: sql.NVarChar, value: approval_status || "" },
+                approval_date: { type: sql.NVarChar, value: approval_date || "" }, // หรือ sql.DateTime ถ้า column เป็น DateTime
+                remark: { type: sql.NVarChar, value: remark || "" },
+            };
 
-            const sqlRQ = `UPDATE Truck_repair_requests SET status = @status WHERE  request_id = @request_id`;
-            const valueRQ = { status: "ผู้จัดการอนุมัติ", request_id: request_id };
+            await executeQueryEmployeeAccessDB(sqlInsert, paramsInsert);
+
+            // --- Update request status ---
+            const sqlRQ = `UPDATE Truck_repair_requests SET status = @status WHERE request_id = @request_id`;
+            const valueRQ = {
+                status: { type: sql.NVarChar, value: "ผู้จัดการอนุมัติ" },
+                request_id: { type: sql.Int, value: Number(request_id) },
+            };
             await executeQueryEmployeeAccessDB(sqlRQ, valueRQ);
 
-            const sqlLog = `INSERT INTO Truck_repair_logs ( 
-                                request_id,
-                                action,
-                                action_by,
-                                action_by_role,
-                                status,
-                                remarks
-                            ) VALUES (
-                                @request_id,
-                                @action,
-                                @action_by,
-                                @action_by_role,
-                                @status,
-                                @remarks
-                            )`;
+            // --- Insert log ---
+            const sqlLog = `
+                INSERT INTO Truck_repair_logs ( 
+                    request_id,
+                    action,
+                    action_by,
+                    action_by_role,
+                    status,
+                    remarks
+                ) VALUES (
+                    @request_id,
+                    @action,
+                    @action_by,
+                    @action_by_role,
+                    @status,
+                    @remarks
+                )`;
 
             const valueLog = {
-                request_id: id,
-                action: 'ผู้จัดการฝ่ายแก้ไข',
-                action_by: id,
-                action_by_role: 'ผู้จัดการฝ่าย ',
-                status: 'ตรวจสอบโดยผู้จัดการฝ่าย',
-                remarks: 'แก้ไขจากผู้จัดการ'
+                request_id: { type: sql.Int, value: Number(request_id) },
+                action: { type: sql.NVarChar, value: 'ผู้จัดการฝ่ายแก้ไข' },
+                action_by: { type: sql.Int, value: Number(id) },
+                action_by_role: { type: sql.NVarChar, value: 'ผู้จัดการฝ่าย' },
+                status: { type: sql.NVarChar, value: 'ตรวจสอบโดยผู้จัดการฝ่าย' },
+                remarks: { type: sql.NVarChar, value: 'แก้ไขจากผู้จัดการ' },
             };
 
             await executeQueryEmployeeAccessDB(sqlLog, valueLog);
@@ -75,4 +85,3 @@ module.exports = {
         }
     }
 };
-
