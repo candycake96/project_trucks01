@@ -5,7 +5,7 @@ module.exports = {
   ananlysis_add: async (req, res) => {
     try {
       // --------------------------------------------------
-      // Utility function
+      // Utility functions
       // --------------------------------------------------
       const clean = (v) => {
         if (v === undefined || v === null) return null;
@@ -16,21 +16,28 @@ module.exports = {
       const toBit = (val) =>
         val === '1' || val === 1 || val === true ? 1 : 0;
 
+      const safeInt = (v) => {
+        if (v === undefined || v === null || v === "") return null;
+        const n = Number(v);
+        return isNaN(n) ? null : n;
+      };
+
+      const safeDecimal = (v) => {
+        if (v === undefined || v === null || v === "") return 0;
+        const n = Number(v);
+        return isNaN(n) ? 0 : n;
+      };
+
       // --------------------------------------------------
       // Validate main ID
       // --------------------------------------------------
-      const id = parseInt(req.params.id, 10);
-      if (isNaN(id)) throw new Error("Invalid request ID");
+      const id = safeInt(req.params.id);
+      if (!id) throw new Error("Invalid request ID");
 
       // --------------------------------------------------
       // Validate emp id
       // --------------------------------------------------
-      let analysis_emp_id = req.body.analysis_emp_id
-        ? parseInt(req.body.analysis_emp_id, 10)
-        : null;
-
-      if (analysis_emp_id !== null && isNaN(analysis_emp_id))
-        throw new Error("Invalid analysis_emp_id");
+      const analysis_emp_id = safeInt(req.body.analysis_emp_id);
 
       console.log("Received request ID:", id);
       console.log("Received analysis_emp_id:", analysis_emp_id);
@@ -76,7 +83,7 @@ module.exports = {
       `;
 
       const analysisParams = {
-        request_id:          { type: sql.Int, value: Number(id)},
+        request_id:          { type: sql.Int, value: id },
         analysis_emp_id:     { type: sql.Int, value: analysis_emp_id },
         plan_date:           { type: sql.NVarChar, value: clean(req.body.plan_date) },
         plan_time:           { type: sql.NVarChar, value: clean(req.body.plan_time) },
@@ -128,10 +135,10 @@ module.exports = {
       for (const [idx, quotation] of quotations.entries()) {
         const quotationParams = {
           analysis_id:   { type: sql.Int, value: analysis_id },
-          vendor_id:     { type: sql.Int, value: quotation.vendor_id ? Number(quotation.vendor_id) : null },
+          vendor_id:     { type: sql.Int, value: safeInt(quotation.vendor_id) },
           quotation_file:{ type: sql.NVarChar, value: clean(quotation.quotation_file) },
           quotation_date:{ type: sql.NVarChar, value: clean(quotation.quotation_date) },
-          quotation_vat: { type: sql.Decimal, precision: 10, scale: 2, value: Number(clean(quotation.quotation_vat) || 0) },
+          quotation_vat: { type: sql.Decimal, precision: 10, scale: 2, value: safeDecimal(quotation.quotation_vat) },
           note:          { type: sql.NVarChar, value: clean(quotation.note) },
           is_selected:   { type: sql.Bit, value: toBit(quotation.is_selected) },
           vendor_name:   { type: sql.NVarChar, value: clean(quotation.vendor_name) },
@@ -151,15 +158,15 @@ module.exports = {
         if (quotation.parts && Array.isArray(quotation.parts)) {
           for (const [pIdx, part] of quotation.parts.entries()) {
             const partParams = {
-              item_id:         { type: sql.Int, value: part.item_id ? Number(part.item_id) : null },
+              item_id:         { type: sql.Int, value: safeInt(part.item_id) },
               quotation_id:    { type: sql.Int, value: quotation_id },
               part_id:         { type: sql.NVarChar, value: clean(part.part_id) },
               part_name:       { type: sql.NVarChar, value: clean(part.part_name) },
               maintenance_type:{ type: sql.NVarChar, value: clean(part.maintenance_type) },
-              part_price:      { type: sql.Decimal, precision: 10, scale: 2, value: Number(clean(part.price) || 0) },
-              part_vat:        { type: sql.Decimal, precision: 10, scale: 2, value: Number(clean(part.vat) || 0) },
+              part_price:      { type: sql.Decimal, precision: 10, scale: 2, value: safeDecimal(part.price) },
+              part_vat:        { type: sql.Decimal, precision: 10, scale: 2, value: safeDecimal(part.vat) },
               part_unit:       { type: sql.NVarChar, value: clean(part.unit) },
-              part_qty:        { type: sql.Int, value: part.qty ? Number(part.qty) : 0 },
+              part_qty:        { type: sql.Int, value: safeInt(part.qty) },
             };
 
             console.log(`Part Params[${idx}][${pIdx}]:`, partParams);
@@ -178,7 +185,7 @@ module.exports = {
          WHERE request_id = @request_id`,
         {
           status:      { type: sql.NVarChar, value: "ตรวจเช็ครถ" },
-          request_id:  { type: sql.Int, value: Number(id)}
+          request_id:  { type: sql.Int, value: id }
         }
       );
 
@@ -192,7 +199,7 @@ module.exports = {
           @request_id, @action, @action_by, @action_by_role, @status, @remarks
         )`,
         {
-          request_id:     { type: sql.Int, value: Number(id)},
+          request_id:     { type: sql.Int, value: id },
           action:         { type: sql.NVarChar, value: 'วิเคราะห์แผนกซ่อมบำรุง' },
           action_by:      { type: sql.Int, value: analysis_emp_id },
           action_by_role: { type: sql.NVarChar, value: 'แผนกช่าง' },
