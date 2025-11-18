@@ -76,7 +76,7 @@ module.exports = {
       `;
 
       const analysisParams = {
-        request_id:          { type: sql.Int, value: id },
+        request_id:          { type: sql.Int, value: Number(id)},
         analysis_emp_id:     { type: sql.Int, value: analysis_emp_id },
         plan_date:           { type: sql.NVarChar, value: clean(req.body.plan_date) },
         plan_time:           { type: sql.NVarChar, value: clean(req.body.plan_time) },
@@ -178,7 +178,7 @@ module.exports = {
          WHERE request_id = @request_id`,
         {
           status:      { type: sql.NVarChar, value: "ตรวจเช็ครถ" },
-          request_id:  { type: sql.Int, value: id }
+          request_id:  { type: sql.Int, value: Number(id)}
         }
       );
 
@@ -192,7 +192,7 @@ module.exports = {
           @request_id, @action, @action_by, @action_by_role, @status, @remarks
         )`,
         {
-          request_id:     { type: sql.Int, value: id },
+          request_id:     { type: sql.Int, value: Number(id)},
           action:         { type: sql.NVarChar, value: 'วิเคราะห์แผนกซ่อมบำรุง' },
           action_by:      { type: sql.Int, value: analysis_emp_id },
           action_by_role: { type: sql.NVarChar, value: 'แผนกช่าง' },
