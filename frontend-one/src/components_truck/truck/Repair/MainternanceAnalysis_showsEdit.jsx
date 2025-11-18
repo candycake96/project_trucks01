@@ -592,7 +592,7 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
 
 
 
-                {maintenanceJob?.request_informer_emp_id === user?.id_emp && (
+                {/* {maintenanceJob?.request_informer_emp_id === user?.id_emp && (<></>)} */}
                     <>
                         {/* ถ้าได้รับการอนุมัติจากผู้จัดการแล้ว */}
                         {["ผู้จัดการอนุมัติ", "ใบแจ้งหนี้", "ปิดงานซ่อม"].includes(maintenanceJob?.status) ? (
@@ -628,7 +628,7 @@ const MainternanceAnalysis_showEdit = ({ maintenanceJob, data, hasPermission }) 
                             </>
                         )}
                     </>
-                )}
+                
             </div>
 
             <form onSubmit={handleSubmit} className="">

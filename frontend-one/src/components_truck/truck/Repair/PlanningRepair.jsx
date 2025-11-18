@@ -266,7 +266,7 @@ const PlanningRepair = ({ maintenanceJob }) => {
                                 <p className="mb-0 fw-bold text-dark ">ความเห็นของแผนกจัดรถ</p>
                                 {/* สิทธ์เข้าถึงแก้ไขผู้ตรวจสอบ */}
 
-                                {maintenanceJob?.request_informer_emp_id === user?.id_emp && (
+                       
                                     <>
                                         {/* ถ้าได้รับการอนุมัติจากผู้จัดการแล้ว */}
                                         {["ผู้จัดการอนุมัติ", "ใบแจ้งหนี้", "ปิดงานซ่อม"].includes(maintenanceJob?.status) ? (
@@ -301,7 +301,7 @@ const PlanningRepair = ({ maintenanceJob }) => {
                                             </>
                                         )}
                                     </>
-                                )}
+                               
 
                             </div>
 
