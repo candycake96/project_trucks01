@@ -37,10 +37,15 @@ const executeQueryEmployeeAccessDB = async (query, params = {}, debug = false) =
 
     const request = pool.request();
 
+
     // Add parameters if present
-    for (const [key, value] of Object.entries(params)) {
-      request.input(key, value);
-    }
+for (const [key, param] of Object.entries(params)) {
+  if (param && typeof param === "object" && "type" in param && "value" in param) {
+    request.input(key, param.type, param.value);
+  } else {
+    request.input(key, param); // fallback สำหรับ value ธรรมดา
+  }
+}
 
     const result = await request.query(query);
     if (debug) console.log("Query executed successfully:", result);
