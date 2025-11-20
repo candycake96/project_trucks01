@@ -208,18 +208,27 @@ LEFT JOIN (
       const resultRepuests = await executeSelectQuery(sqlRequests, valuesRepuests);
 
 const sqlSystems = `
-    SELECT 
+SELECT 
+    s.system_id,
+    s.system_name,
+    STUFF(
+        (
+            SELECT ', ' + qp2.part_name
+            FROM Truck_repair_quotation_parts qp2
+            WHERE qp2.part_id = s.system_id 
+              AND qp2.quotation_id = @quotation_id
+            FOR XML PATH(''), TYPE
+        ).value('.', 'NVARCHAR(MAX)')
+    , 1, 2, '') AS part_names
+FROM 
+    Truck_vehicle_systems s
+LEFT JOIN 
+    Truck_repair_quotation_parts qp 
+    ON s.system_id = qp.part_id 
+    AND qp.quotation_id = @quotation_id
+GROUP BY 
+    s.system_id, s.system_name;
 
-        s.system_id, 
-        s.system_name, 
-        STRING_AGG(qp.part_name, ', ') AS part_names 
-    FROM 
-        Truck_vehicle_systems s 
-    LEFT JOIN 
-        Truck_repair_quotation_parts qp 
-        ON s.system_id = qp.part_id AND qp.quotation_id = @quotation_id 
-    GROUP BY 
-        s.system_id, s.system_name; 
 `;
 const repairData = resultRepuests?.[0] || {};
 const valueSystems = { quotation_id: repairData.quotation_id };
