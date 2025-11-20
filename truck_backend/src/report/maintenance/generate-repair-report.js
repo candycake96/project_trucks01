@@ -145,7 +145,7 @@ async function generateRepairReport(data, resultRepuests, resultSystems) {
       total_approved_cost: repairData.total_approved_cost,
       total_with_vat: repairData.total_with_vat ? Number(repairData.total_with_vat).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-',
       systemsName: systemsHtml,
-      request_signature: repairData.request_signature  ? `<img src="${process.env.BASE_URL}/uploads/signature/${repairData.request_signature}" alt="ลายเซ็น"/>` : ``,
+      request_signature: repairData.request_signature  ? `<img src="http://202.183.178.248:59599/uploads/signature/${repairData.request_signature}" alt="ลายเซ็น"/>` : ``,
       planning_signature: repairData.planning_signature  ? `<img src="${process.env.BASE_URL}/uploads/signature/${repairData.planning_signature}" alt="ลายเซ็น"/>` : ``,
       analysis_signature: repairData.analysis_signature  ? `<img src="${process.env.BASE_URL}/uploads/signature/${repairData.analysis_signature}" alt="ลายเซ็น"/>` : ``,
       ana_approver_signature: repairData.ana_approver_signature  ? `<img src="${process.env.BASE_URL}/uploads/signature/${repairData.ana_approver_signature}" alt="ลายเซ็น"/>` : ``,
