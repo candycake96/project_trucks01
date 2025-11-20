@@ -102,7 +102,7 @@ async function generateRepairReport(data, resultRepuests, resultSystems) {
       reg_number: repairData.reg_number,
       branch_name: repairData.branch_name,
       company_name: repairData.company_name,
-      company_logo: repairData.company_logo ?  `<img src="${process.env.BASE_URL}/company/imglogo/${repairData.company_logo}" alt="LogoCompany"/>` : ``,
+      company_logo: repairData.company_logo ?  `<img src="http://localhost:3333/company/imglogo/${repairData.company_logo}" alt="LogoCompany"/>` : ``,
       company_name_en: repairData.company_name_en,
       car_type_name: repairData.car_type_name,
       planning_id: repairData.planning_id,
