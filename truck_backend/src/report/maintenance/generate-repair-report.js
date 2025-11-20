@@ -163,7 +163,10 @@ async function generateRepairReport(data, resultRepuests, resultSystems) {
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
-    await page.setContent(finalHtml, { waitUntil: 'networkidle0' });
+    await page.goto(`data:text/html;charset=UTF-8,${encodeURIComponent(finalHtml)}`, {
+  waitUntil: 'networkidle0'
+});
+
 
     const pdfPath = path.join(__dirname, 'repair-report.pdf');
     await page.pdf({ path: pdfPath, format: 'A4' });
