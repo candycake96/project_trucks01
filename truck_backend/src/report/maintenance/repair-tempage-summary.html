@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>รายงานแจ้งซ่อม</title>
+  <style>
+    body {
+      font-family: "TH SarabunPSK", Arial, sans-serif;
+      font-size: 16px;
+      margin: 30px;
+      color: #000;
+    }
+    h2, h3 {
+      text-align: center;
+      margin: 0;
+    }
+    .report-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .summary-box {
+      border: 1px solid #000;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+    .summary-box p {
+      margin: 3px 0;
+    }
+    .section-title {
+      font-weight: bold;
+      margin: 15px 0 8px;
+      border-bottom: 2px solid #000;
+      padding-bottom: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+    table th, table td {
+      border: 1px solid #000;
+      padding: 6px;
+      text-align: center;
+    }
+    table th {
+      background: #f2f2f2;
+    }
+    .totals {
+      text-align: right;
+      margin-bottom: 20px;
+    }
+    .totals p {
+      margin: 2px 0;
+    }
+    .page-break {
+      page-break-after: always;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ส่วนหัวรายงาน -->
+  <div class="report-header">
+    <h2>บริษัท เอ็นซีแอล อินเตอร์เนชั่นแนล โลจิสติกส์ จำกัด (มหาชน)</h2>
+    <h3>รายงานแจ้งซ่อม</h3>
+    <p>ช่วงวันที่ 00/00/0000 – 00/00/0000</p>
+  </div>
+
+  <!-- สรุปภาพรวม -->
+  <div class="summary-box">
+    <p><b>รายการแจ้งซ่อมทั้งหมด:</b> 0 รายการ</p>
+    <p><b>รายการอะไหล่ทั้งหมด:</b> 0 รายการ</p>
+    <p><b>ยอดรวม:</b> 00.00 บาท</p>
+  </div>
+
+  <!-- ข้อมูลใบแจ้งซ่อมแต่ละรายการ -->
+  <div class="repair-section">
+    <div class="section-title">เลขที่ใบแจ้งซ่อม 00000001</div>
+    <p><b>วันที่แจ้งซ่อม:</b> 00/00/0000</p>
+    <p><b>ทะเบียนรถ:</b> 60-1679 | <b>เลขไมล์:</b> 120,000 กม. | <b>สาขา:</b> สำนักงานใหญ่ | <b>ประเภทรถ:</b> หัวลาก</p>
+    <p><b>สถานะ:</b> ดำเนินการเสร็จสิ้น</p>
+    <p><b>อู่ซ่อม/บริษัท:</b> อู่ A</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ระบบ</th>
+          <th>อะไหล่</th>
+          <th>ประเภท</th>
+          <th>จำนวน</th>
+          <th>หน่วย</th>
+          <th>ราคาต่อหน่วย</th>
+          <th>ส่วนลด</th>
+          <th>VAT%</th>
+          <th>ราคารวม</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>เครื่องยนต์</td>
+          <td>น้ำมันเครื่อง</td>
+          <td>PM</td>
+          <td>10</td>
+          <td>ลิตร</td>
+          <td>200.00</td>
+          <td>0</td>
+          <td>7%</td>
+          <td>2,140.00</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="totals">
+      <p><b>ราคารวม:</b> 00.00 บาท</p>
+      <p><b>VAT:</b> 0.00 บาท</p>
+      <p><b>ราคารวมสุทธิ:</b> 00.00 บาท</p>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- อีกใบแจ้งซ่อม -->
+  <div class="repair-section">
+    <div class="section-title">เลขที่ใบแจ้งซ่อม 00000002</div>
+    <p><b>วันที่แจ้งซ่อม:</b> 00/00/0000</p>
+    <p><b>ทะเบียนรถ:</b> 80-2451 | <b>เลขไมล์:</b> 85,000 กม. | <b>สาขา:</b> บางนา | <b>ประเภทรถ:</b> พ่วง</p>
+    <p><b>สถานะ:</b> อยู่ระหว่างดำเนินการ</p>
+    <p><b>อู่ซ่อม/บริษัท:</b> อู่ B</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ระบบ</th>
+          <th>อะไหล่</th>
+          <th>ประเภท</th>
+          <th>จำนวน</th>
+          <th>หน่วย</th>
+          <th>ราคาต่อหน่วย</th>
+          <th>ส่วนลด</th>
+          <th>VAT%</th>
+          <th>ราคารวม</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ระบบไฟฟ้า</td>
+          <td>แบตเตอรี่</td>
+          <td>CM</td>
+          <td>1</td>
+          <td>ลูก</td>
+          <td>3,500.00</td>
+          <td>0</td>
+          <td>7%</td>
+          <td>3,745.00</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="totals">
+      <p><b>ราคารวม:</b> 00.00 บาท</p>
+      <p><b>VAT:</b> 0.00 บาท</p>
+      <p><b>ราคารวมสุทธิ:</b> 00.00 บาท</p>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -7,7 +7,7 @@ module.exports = {
       const { id } = req.params;
 
       const sqlRequests = `
-                          SELECT 
+                                                    SELECT 
                             r1.request_id,
                             r1.request_informer_emp_id,
                             r1.request_no,
@@ -22,6 +22,11 @@ module.exports = {
 
                             r2.reg_number,
                             b.branch_name, 
+							b.company_id,
+							c.company_address,
+							c.company_logo,
+							c.company_name,
+							c.company_name_en,
                             ct.car_type_name,
 
                             p.planning_id,
@@ -90,7 +95,9 @@ module.exports = {
                         FROM Truck_repair_requests r1
                         INNER JOIN employees e1 ON r1.request_informer_emp_id = e1.id_emp
                         INNER JOIN Truck_vehicle_registration r2 ON r1.reg_id = r2.reg_id
+
                         INNER JOIN branches b ON r2.id_branch = b.id_branch
+						INNER JOIN company c ON c.company_id = b.company_id 
                         INNER JOIN Truck_car_types ct ON r2.car_type_id = ct.car_type_id
 
                         LEFT JOIN Truck_repair_planning p ON r1.request_id = p.request_id
@@ -131,62 +138,68 @@ module.exports = {
                             GROUP BY analysis_id
                         ) all_vendors ON a.analysis_id = all_vendors.analysis_id
 
-                        -- ลายเซ็น 1
-                        LEFT JOIN (
-                            SELECT emp_id, signature, signature_id
-                            FROM emp_signature s1
-                            WHERE created_at = (
-                                SELECT MAX(created_at)
-                                FROM emp_signature s2
-                                WHERE s1.emp_id = s2.emp_id
-                            )
-                        ) sig_request ON sig_request.emp_id = r1.request_informer_emp_id 
-                            
-                         -- ลายเซ็น 2
-                         LEFT JOIN (
-                           SELECT emp_id, signature, signature_id
-                            FROM emp_signature s1
-                            WHERE created_at = (
-                                SELECT MAX(created_at)
-                                FROM emp_signature s2
-                                WHERE s1.emp_id = s2.emp_id
-                            )  
-                         ) sig_planning ON sig_planning.emp_id =  p.planning_emp_id
+                       -- ลายเซ็นผู้แจ้งงาน
+LEFT JOIN (
+    SELECT emp_id, signature, signature_id
+    FROM emp_signature s1
+    WHERE created_at = (
+        SELECT MAX(created_at)
+        FROM emp_signature s2
+        WHERE s1.emp_id = s2.emp_id
+    )
+) sig_request ON sig_request.emp_id = r1.request_informer_emp_id 
 
-                        -- ลายเซ็น 3
-                         LEFT JOIN (
-                           SELECT emp_id, signature, signature_id
-                            FROM emp_signature s1
-                            WHERE created_at = (
-                                SELECT MAX(created_at)
-                                FROM emp_signature s2
-                                WHERE s1.emp_id = s2.emp_id
-                            )  
-                         ) sig_analysis ON sig_planning.emp_id = a.analysis_emp_id
 
-                        -- ลายเซ็น 4
-                         LEFT JOIN (
-                           SELECT emp_id, signature, signature_id
-                            FROM emp_signature s1
-                            WHERE created_at = (
-                                SELECT MAX(created_at)
-                                FROM emp_signature s2
-                                WHERE s1.emp_id = s2.emp_id
-                            )  
-                         ) sig_ana_approver ON sig_planning.emp_id = ap.approver_emp_id
+-- ลายเซ็นผู้วางแผน
+LEFT JOIN (
+    SELECT emp_id, signature, signature_id
+    FROM emp_signature s1
+    WHERE created_at = (
+        SELECT MAX(created_at)
+        FROM emp_signature s2
+        WHERE s1.emp_id = s2.emp_id
+    )
+) sig_planning ON sig_planning.emp_id = p.planning_emp_id
 
-                        -- ลายเซ็น 5
-                         LEFT JOIN (
-                           SELECT emp_id, signature, signature_id
-                            FROM emp_signature s1
-                            WHERE created_at = (
-                                SELECT MAX(created_at)
-                                FROM emp_signature s2
-                                WHERE s1.emp_id = s2.emp_id
-                            )  
-                         ) sig_approver ON sig_planning.emp_id = av.approver_emp_id
 
-                        WHERE r1.request_id = @request_id; 
+-- ลายเซ็นผู้วิเคราะห์
+LEFT JOIN (
+    SELECT emp_id, signature, signature_id
+    FROM emp_signature s1
+    WHERE created_at = (
+        SELECT MAX(created_at)
+        FROM emp_signature s2
+        WHERE s1.emp_id = s2.emp_id
+    )
+) sig_analysis ON sig_analysis.emp_id = a.analysis_emp_id
+
+
+-- ลายเซ็นผู้ตรวจสอบ/อนุมัติการวิเคราะห์
+LEFT JOIN (
+    SELECT emp_id, signature, signature_id
+    FROM emp_signature s1
+    WHERE created_at = (
+        SELECT MAX(created_at)
+        FROM emp_signature s2
+        WHERE s1.emp_id = s2.emp_id
+    )
+) sig_ana_approver ON sig_ana_approver.emp_id = ap.approver_emp_id
+
+
+-- ลายเซ็นผู้อนุมัติสุดท้าย
+LEFT JOIN (
+    SELECT emp_id, signature, signature_id
+    FROM emp_signature s1
+    WHERE created_at = (
+        SELECT MAX(created_at)
+        FROM emp_signature s2
+        WHERE s1.emp_id = s2.emp_id
+    )
+) sig_approver ON sig_approver.emp_id = av.approver_emp_id
+
+
+                        WHERE r1.request_id = @request_id ; 
+
 
                                 `;
 

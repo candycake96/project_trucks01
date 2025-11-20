@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ใบอนุมัติซ่อม</title>
+    <style>
+        body {
+            font-family: "TH SarabunPSK", Arial, sans-serif;
+            font-size: 16px;
+            margin: 15mm 10mm;
+            /* 🔹 ลดจาก 30px เหลือ 10mm */
+            color: #000;
+        }
+
+        h2,
+        h3 {
+            /* text-align: center; */
+            margin: 0;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .summary-box {
+            border: 1px solid #000;
+            padding: 8px;
+            margin-bottom: 20px;
+        }
+
+        .summary-box p {
+            margin: 3px 0;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin: 15px 0 8px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 12px;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #000;
+            padding: 4px;
+        }
+
+        table th {
+            background: #f2f2f2;
+            text-align: center;
+        }
+
+        td.force-line {
+            line-height: 22px;
+            background: repeating-linear-gradient(to bottom,
+                    #fff 0,
+                    #fff 21px,
+                    #000 22px);
+        }
+
+        .page-break {
+            page-break-after: always;
+        }
+
+        /* ✅ กล่องลายเซ็นสองฝั่ง */
+        .signature-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+
+        .signature-box div {
+            width: 45%;
+            line-height: 1.4;
+        }
+
+        @page {
+            size: A4;
+            margin: 15mm 15mm 15mm 10mm;
+            /* 🔹 ลด margin บนจาก 30mm เหลือ 15mm */
+
+            /* เผื่อพื้นที่ด้านล่าง */
+            @bottom-center {
+                content: "หน้า " counter(page) " จาก " counter(pages);
+                font-family: "TH SarabunPSK", Arial, sans-serif;
+                font-size: 14px;
+            }
+        }
+
+        body {
+            counter-reset: page;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ส่วนหัวรายงาน -->
+    <div class="report-header">
+        <h2>NCL INTERNATIONAL LOGISTICS PUBLIC COMPANY LIMITED</h2>
+        <h3>56, SOI SOMDET PHRA CHAO TAK SIN 12/1, TAKSIN ROAD, BUKKHALO, THONBURI, BANGKOK 10600</h3>
+        <h3>TEL: 02-459-4945, FAX: 02-459-494</h3>
+        <br>
+        <h2>ใบขออนุมัติแจ้งซ่อมรถ</h2>
+    </div>
+
+    <div class="" style="text-align: right;">
+        <h3 class=""> ครั้งที่ {{invoice_no}}</h3>
+    </div>
+    <!-- สรุปภาพรวม -->
+    <div class="summary-box">
+        <br>
+        <h3>สาขา/แผนก {{branch_name}}</h3>
+        <br>
+    </div>
+
+    <!-- ข้อมูลใบแจ้งซ่อม -->
+    <div class="repair-section">
+        <table style="font-size: 14px;">
+            <thead>
+                <tr>
+                    <th>ลำดับ</th>
+                    <th>รายการ</th>
+                    <th>จำนวน</th>
+                    <th>หน่วยละ</th>
+                    <th>ส่วนลด</th>
+                    <th>จำนวนเงิน</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{section_rows}}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ✅ กล่องลายเซ็นสองฝั่ง -->
+    <div class="summary-box signature-box">
+        <div>
+            <p>..................................................</p>
+            <p><b>ผู้ขอ:</b> {{created_fname}} {{created_lname}}</p>
+            <p><b>วันที่:</b> {{invoice_date}}</p>
+        </div>
+        <div style="text-align: right;">
+            <p>..................................................</p>
+            <p><b>ผู้อนุมัติ:</b> {{approved_fname}} {{approved_lname}}</p>
+            <p><b>วันที่:</b> {{invoice_approver_date}}</p>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+</body>
+
+</html>

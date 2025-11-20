@@ -1,6 +1,6 @@
 const { executeQueryEmployeeAccessDB } = require('../../config/db');
 const bcrypt = require('bcryptjs'); // Import bcrypt for password hashing
-const baseUrl = process.env.BASE_URL;
+
 
 module.exports = {
 
@@ -16,7 +16,7 @@ module.exports = {
                 const fileUrl = result.map(reg => ({
                     ...reg, // คัดลอกข้อมูลเดิม
                     company_logo: reg.company_logo
-                        ? `${baseUrl}/api/company/imglogo/${reg.company_logo}`
+                        ? `${req.protocol}://${req.get('host')}/company/imglogo/${reg.company_logo}`
                         : null, // ตรวจสอบว่ามีรูปภาพหรือไม่
                 }));
 
@@ -48,7 +48,7 @@ module.exports = {
                 const fileUrl = result.map(reg => ({
                     ...reg, // คัดลอกข้อมูลเดิม
                     company_logo: reg.company_logo
-                        ? `${baseUrl}/api/company/imglogo/${reg.company_logo}`
+                        ? `${req.protocol}://${req.get('host')}/company/imglogo/${reg.company_logo}`
                         : null, // ตรวจสอบว่ามีรูปภาพหรือไม่
                 }));
 
@@ -114,6 +114,7 @@ module.exports = {
             let updateQuery = `
                 UPDATE company 
                 SET company_name = @company_name, 
+                    company_name_en = @company_name_en, 
                     company_address = @company_address
             `;
     
@@ -127,6 +128,7 @@ module.exports = {
             // สร้างออบเจ็กต์สำหรับ parameterized query
             const params = {
                 company_name: formData.company_name,
+                company_name_en: formData.company_name_en,
                 company_address: formData.company_address,
                 company_id: company_id
             };

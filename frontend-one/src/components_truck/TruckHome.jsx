@@ -7,10 +7,11 @@ const TruckHome = () => {
     // <div className="login-container">
     //         <h1>test Truck</h1>
     // </div>
-<Container className="mt-4">
+  <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
+{/* <Container className="mt-4">
       <h3 className="text-center">Dashboard</h3>
       <Row className="mt-3">
-        {/* การ์ดข้อมูลสรุป */}
+
         <Col md={4}>
           <Card className="shadow-sm">
             <Card.Body>
@@ -39,7 +40,34 @@ const TruckHome = () => {
           </Card>
         </Col>
       </Row>
-    </Container>
+    </Container> */}
+
+      
+      <div className="text-center p-4 shadow-sm rounded-3 bg-white">
+        {/* Illustration */}
+        <div className="mb-3">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/2910/2910768.png"
+            alt="welcome"
+            width={120}
+          />
+        </div>
+
+        {/* ข้อความต้อนรับ */}
+        <h2 className="fw-bold mb-2">ยินดีต้อนรับสู่ระบบซ่อมบำรุง!</h2>
+
+        {/* ข้อความแนวทาง / แนะนำ */}
+        <p className="text-muted mb-3">
+          ที่นี่คุณสามารถจัดการงานซ่อมและบำรุงรถของคุณได้อย่างง่ายดาย
+        </p>
+
+        {/* ปุ่ม Quick Action */}
+        <button className="btn btn-primary btn-lg">
+          ➕ เริ่มเพิ่มงานซ่อม
+        </button>
+      </div>
+    </div>
+
   );
 };
 

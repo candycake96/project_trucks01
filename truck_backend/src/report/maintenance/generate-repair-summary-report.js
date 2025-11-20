@@ -1,8 +1,6 @@
-require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer');
-
 
 function replaceAll(template, replacements) {
   let result = template;
@@ -13,34 +11,7 @@ function replaceAll(template, replacements) {
   return result;
 }
 
-function generateSystemsHtml(systemsData) {
-  if (!systemsData || systemsData.length === 0) return '<p>ไม่มีข้อมูลระบบที่ซ่อม</p>';
 
-  return systemsData.map((sys, systemIndex) => {
-    const parts = (sys.part_names || '')
-      .split(',')
-      .map(name => name.trim())
-      .filter(name => name);
-
-    const partItems = parts.map(name => `${name}`).join('');
-    const isChecked = partItems ? 'checked' : '';
-
-    return `
-     <div style="margin-bottom: 0.5em;">
-        <div style="display: flex; align-items: center; gap: 0.5em;">
-          <span style="width: 100px;">1.${systemIndex + 1}. ${sys.system_name}:</span>
-          <label class="custom-checkbox">
-            <input type="checkbox" ${isChecked} />
-            <span class="checkmark"></span>
-          </label>
-          <div style="flex: 1; border-bottom: 1px dashed #000; padding-bottom: 2px;">
-            ${partItems || '-'}
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
 
 
 // แปลงวันที่
@@ -72,24 +43,21 @@ function formatThaiTime(dateStr) {
 }
 
 
-async function generateRepairReport(data, resultRepuests, resultSystems) {
+async function generateRepairReport(data, resultRepuests) {
   try {
-    const templatePath = path.join(__dirname, '../maintenance/repair-tempage.html');
+    const templatePath = path.join(__dirname, '../maintenance/repair-tempage-summary.html');
     let templateHtml = fs.readFileSync(templatePath, 'utf8');
 
-    // ตรวจสอบว่า template มี meta charset แล้วหรือยัง (ถ้ายังให้ใส่)
     if (!templateHtml.includes('<meta charset="UTF-8">')) {
       templateHtml = templateHtml.replace(/<head>/i, '<head><meta charset="UTF-8">');
     }
 
-    const repairData = resultRepuests?.[0] || {};
+    let allHtml = "";
 
-    // แปลงข้อมูลระบบเป็น HTML
-    const systemsHtml = generateSystemsHtml(resultSystems);
+    for (const repairData of resultRepuests) {
 
-    // แทนที่ตัวแปรทั้งหมดใน HTML
-    const finalHtml = replaceAll(templateHtml, {
-      request_id: repairData.request_id,
+      const finalHtml = replaceAll(templateHtml, {
+ request_id: repairData.request_id,
       request_informer_emp_id: repairData.request_informer_emp_id,
       request_no: repairData.request_no,
       request_date: formatThaiDateShort(repairData.request_date),
@@ -101,9 +69,6 @@ async function generateRepairReport(data, resultRepuests, resultSystems) {
       request_emp_name: repairData.request_emp_name,
       reg_number: repairData.reg_number,
       branch_name: repairData.branch_name,
-      company_name: repairData.company_name,
-      company_logo: repairData.company_logo ?  `<img src="${process.env.BASE_URL}/company/imglogo/${repairData.company_logo}" alt="LogoCompany"/>` : ``,
-      company_name_en: repairData.company_name_en,
       car_type_name: repairData.car_type_name,
       planning_id: repairData.planning_id,
       planning_emp_id: repairData.planning_emp_id,
@@ -144,26 +109,27 @@ async function generateRepairReport(data, resultRepuests, resultSystems) {
       vendor_names_all: repairData.vendor_names_all || '-',
       total_approved_cost: repairData.total_approved_cost,
       total_with_vat: repairData.total_with_vat ? Number(repairData.total_with_vat).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-',
-      systemsName: systemsHtml,
-      request_signature: repairData.request_signature  ? `<img src="${process.env.BASE_URL}/uploads/signature/${repairData.request_signature}" alt="ลายเซ็น"/>` : ``,
-      planning_signature: repairData.planning_signature  ? `<img src="${process.env.BASE_URL}/uploads/signature/${repairData.planning_signature}" alt="ลายเซ็น"/>` : ``,
-      analysis_signature: repairData.analysis_signature  ? `<img src="${process.env.BASE_URL}/uploads/signature/${repairData.analysis_signature}" alt="ลายเซ็น"/>` : ``,
-      ana_approver_signature: repairData.ana_approver_signature  ? `<img src="${process.env.BASE_URL}/uploads/signature/${repairData.ana_approver_signature}" alt="ลายเซ็น"/>` : ``,
-      request_approver: repairData.request_approver  ? `<img src="${process.env.BASE_URL}/uploads/signature/${repairData.request_approver}" alt="ลายเซ็น"/>` : ``,
+      request_signature: repairData.request_signature  ? `<img src="http://localhost:3333/uploads/signature/${repairData.request_signature}" alt="ลายเซ็น"/>` : ``,
+      planning_signature: repairData.planning_signature  ? `<img src="http://localhost:3333/uploads/signature/${repairData.planning_signature}" alt="ลายเซ็น"/>` : ``,
+      analysis_signature: repairData.analysis_signature  ? `<img src="http://localhost:3333/uploads/signature/${repairData.analysis_signature}" alt="ลายเซ็น"/>` : ``,
+      ana_approver_signature: repairData.ana_approver_signature  ? `<img src="http://localhost:3333/uploads/signature/${repairData.ana_approver_signature}" alt="ลายเซ็น"/>` : ``,
+      request_approver: repairData.request_approver  ? `<img src="http://localhost:3333/uploads/signature/${repairData.request_approver}" alt="ลายเซ็น"/>` : ``,
 
       isChecked_Planning_available: repairData.planning_vehicle_availability === 'available' ? 'checked' : '',
       isChecked_Planning_not_available: repairData.planning_vehicle_availability === 'not_available' ? 'checked' : '',
       approval_true: repairData.approval_status_end === 'อนุมัติ' ? 'checked' : '',
       approval_false: repairData.approval_status_end === 'ไม่อนุมัติ' ? 'checked' : '',
+      });
 
-    });
+      // ✅ แยกแต่ละ report ด้วย page break
+      allHtml += `<div class="report-section">${finalHtml}</div><div style="page-break-after: always;"></div>`;
+    }
 
-    // สร้าง PDF ด้วย Puppeteer
     const browser = await puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
-    await page.setContent(finalHtml, { waitUntil: 'networkidle0' });
+    await page.setContent(allHtml, { waitUntil: 'networkidle0' });
 
     const pdfPath = path.join(__dirname, 'repair-report.pdf');
     await page.pdf({ path: pdfPath, format: 'A4' });
@@ -176,6 +142,7 @@ async function generateRepairReport(data, resultRepuests, resultSystems) {
     throw err;
   }
 }
+
 
 module.exports = generateRepairReport;
 

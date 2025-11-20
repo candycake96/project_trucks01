@@ -8,6 +8,7 @@ const Modal_Company_Edit = ({ isOpen, onClose, dataCompany }) => {
 
   const [isCompany, setCompany] = useState({
     company_name: "",
+    company_name_en: "",
     company_address: "",
     company_logo: null, 
   });
@@ -20,6 +21,7 @@ const Modal_Company_Edit = ({ isOpen, onClose, dataCompany }) => {
     if (dataCompany) {
       setCompany({
         company_name: dataCompany.company_name || "",
+        company_name_en: dataCompany.company_name_en || "",
         company_address: dataCompany.company_address || "",
         company_logo: dataCompany.company_logo || null,
       });
@@ -137,7 +139,7 @@ const Modal_Company_Edit = ({ isOpen, onClose, dataCompany }) => {
         <form onSubmit={handleSubmitCompanyEdit}>
           <div className="col-lg-12 mb-3">
             <label htmlFor="input_company_name" className="form-label fw-medium">
-              ชื่อองค์กร
+              ชื่อองค์กร (ไทย)
             </label>
             <input
               name="company_name"
@@ -149,6 +151,22 @@ const Modal_Company_Edit = ({ isOpen, onClose, dataCompany }) => {
               required
             />
           </div>
+
+          <div className="col-lg-12 mb-3">
+            <label htmlFor="input_company_name_en" className="form-label fw-medium">
+              ชื่อองค์กร (อังกฤษ)
+            </label>
+            <input
+              name="company_name_en"
+              type="text"
+              id="input_company_name_en"
+              className="form-control"
+              value={isCompany.company_name_en}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
 
           <div className="col-lg-12 mb-3">
             <label htmlFor="input_company_address" className="form-label fw-medium">
