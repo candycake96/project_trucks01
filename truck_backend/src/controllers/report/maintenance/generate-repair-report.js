@@ -208,7 +208,7 @@ LEFT JOIN (
       const resultRepuests = await executeSelectQuery(sqlRequests, valuesRepuests);
 
 const sqlSystems = `
-SELECT 
+   SELECT 
     s.system_id,
     s.system_name,
     STUFF(
@@ -228,7 +228,6 @@ LEFT JOIN
     AND qp.quotation_id = @quotation_id
 GROUP BY 
     s.system_id, s.system_name;
-
 `;
 const repairData = resultRepuests?.[0] || {};
 const valueSystems = { quotation_id: repairData.quotation_id };
