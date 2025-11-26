@@ -215,8 +215,8 @@ const sqlSystems = `
         (
             SELECT ', ' + qp2.part_name
             FROM Truck_repair_quotation_parts qp2
-            WHERE qp2.part_id = s.system_id 
-              AND qp2.quotation_id = @quotation_id
+             JOIN Truck_vehicle_parts p2 ON p2.part_id = qp2.part_id AND p2.system_id  = s.system_id 
+            WHERE qp2.quotation_id = @quotation_id
             FOR XML PATH(''), TYPE
         ).value('.', 'NVARCHAR(MAX)')
     , 1, 2, '') AS part_names
