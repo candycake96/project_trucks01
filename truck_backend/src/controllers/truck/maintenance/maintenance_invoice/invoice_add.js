@@ -92,21 +92,15 @@ module.exports = {
             };
 
             // แปลง doc_order เป็น array แล้วประกอบตามลำดับ
-            // let invoice_no = "";
-            // if (doc_order) {
-            //     invoice_no = doc_order
-            //         .split(",")          // แยกด้วย comma
-            //         .map(num => parts[num.trim()])  // แปลงเป็นค่าจริง
-            //         .filter(Boolean)     // กรองค่า null หรือ undefined
-            //         .join("-");          // ต่อด้วย "-"
-            // } else {
-            //     // fallback ถ้าไม่มี doc_order
-            //     invoice_no = `${doc_set_prefix}-${formattedDatePart}-${runningNumber}`;
-            // }
-
-            const orderArray = doc_order ? doc_order.split(",") : [];
-            invoice_no = orderArray.map(num => parts[num.trim()] || '').filter(Boolean).join("-");
-            if (!invoice_no) {
+            let invoice_no = "";
+            if (doc_order) {
+                invoice_no = doc_order
+                    .split(",")          // แยกด้วย comma
+                    .map(num => parts[num.trim()])  // แปลงเป็นค่าจริง
+                    .filter(Boolean)     // กรองค่า null หรือ undefined
+                    .join("-");          // ต่อด้วย "-"
+            } else {
+                // fallback ถ้าไม่มี doc_order
                 invoice_no = `${doc_set_prefix}-${formattedDatePart}-${runningNumber}`;
             }
 
